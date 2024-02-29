@@ -1,4 +1,4 @@
-# payezy
+# Payezy Mobile App
 
 A new Flutter project.
 
