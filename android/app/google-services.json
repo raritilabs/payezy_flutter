@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "7964827841",
+    "project_id": "payezy-project",
+    "storage_bucket": "payezy-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:7964827841:android:26f567239e1e01125d3440",
+        "android_client_info": {
+          "package_name": "com.example.payezy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzsWf6Ta3JPsMp4VHe_FU1IhR2b5C_TUQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
