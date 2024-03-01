@@ -4,6 +4,7 @@ import 'package:payezy/components/custom_container.dart'; // custom main body ca
 import 'package:payezy/pages/enter_amount.dart';
 import 'package:payezy/pages/enter_details.dart';
 import 'package:payezy/providers/send_provider.dart';
+import 'package:payezy/themes/string_constants.dart';
 import 'package:provider/provider.dart';
 import '../../components/bottom_nav_bar.dart'; //custom bottom nav bar
 import 'package:payezy/themes/colors.dart'; //colors
@@ -25,7 +26,7 @@ class _HomePageState extends State<HomePage> {
 return Scaffold(
       backgroundColor: mainBackgroundColor,
       //appBar begins
-      appBar: const CustomAppBar(),
+      appBar:  const CustomAppBar(title: send,value: true,),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
         child: Column(

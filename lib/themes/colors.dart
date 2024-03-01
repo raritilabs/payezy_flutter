@@ -21,3 +21,6 @@ const white=Colors.white;
 //alertdialogue
 const blurColor=Color.fromRGBO(196, 196, 196, 0.15);
 const cancelButton=Color.fromRGBO(253, 82, 82, 1);
+
+//getstarted
+const grey = Color.fromRGBO(42, 56, 74, 1);

@@ -99,11 +99,14 @@ class EnterAmount extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(
                             bottom: 5, top: 0, left: 15, right: 15),
-                        child: customButton(
-                          (){
+                        child: CustomButton(
+                         onPressed:  (){
                             sendPageProvider.setSendPage(SendPage.enterDetails);
                           },
-                          proceed,22,true,white
+                          text:proceed,
+                          size:22,
+                          color:white,
+                          rightAssetValue: 'assets/nextIcon.png',
                         ),
                       ),
                     ],

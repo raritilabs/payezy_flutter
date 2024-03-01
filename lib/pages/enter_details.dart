@@ -35,7 +35,7 @@ class EnterDetails extends StatelessWidget {
         Padding(
           padding:
               const EdgeInsets.only(bottom: 10, top: 15, left: 15, right: 15),
-          child: customButton(() {
+          child: CustomButton(onPressed:() {
             showDialog(
                 barrierColor: blurColor,
                 context: context,
@@ -56,25 +56,25 @@ class EnterDetails extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Expanded(
-                                child: customButton(() {
+                                child: CustomButton(onPressed: () {
                                   Navigator.pushNamed(context, './cybrid');
-                                }, confirm, 15, false,
+                                }, text:confirm,size: 15,color:
                                     lightBlueThemeColor),
                               ),
                               const SizedBox(
                                 width: 15,
                               ),
                               Expanded(
-                                child: customButton(() {
+                                child: CustomButton(onPressed: () {
                                   Navigator.pop(context);
-                                }, cancel, 15, false, cancelButton),
+                                }, text:cancel, size:15, color:cancelButton,),
                               ),
                             ],
                           )
                         ],
                       ),
                     ));
-          }, proceed, 22, true, white),
+          }, text:proceed, size:22, color:white,rightAssetValue: "assets/nextIcon.png",),
         ),
       ],
     );

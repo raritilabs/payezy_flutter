@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:payezy/pages/home_page.dart';
+import 'package:payezy/pages/get_started.dart';
 import 'package:payezy/themes/colors.dart';
 
 class IntroPage extends StatefulWidget {
@@ -77,7 +77,7 @@ class _IntroPageState extends State<IntroPage> {
           GestureDetector(
             onTap: (){
               if(currentIndex == contents.length -1){
-                  Navigator.push(context,MaterialPageRoute(builder: (_)=> const HomePage()));
+                  Navigator.push(context,MaterialPageRoute(builder: (_)=> const GetStarted()));
               }
                 _controller.nextPage(
                   duration: const Duration(milliseconds: 100), 

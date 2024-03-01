@@ -27,4 +27,9 @@ const areyousure='Are you sure you want to proceed?';
 const note='Note:Please confirm all the information about the recipient. Platform is not responsible if the recipient details given are incorrect.';
 const confirm='Confirm';
 const cancel='Cancel';
+
+//GetStarted
+
+const getStarted = 'Get started';
+const smsConfirmation='We will send you an SMS with confirmation code';
                         

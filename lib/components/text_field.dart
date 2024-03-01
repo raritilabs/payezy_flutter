@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:payezy/themes/colors.dart';
 
-Widget customTextField(String text,String label){
+Widget customTextField(String text,[String? label,TextEditingController? controller]){
 
 return Container(
                         width: double.maxFinite,
@@ -33,12 +33,13 @@ return Container(
                                SizedBox(
                                 height: 35,
                                 child: TextField(
+                                  controller: controller,
                                   style: const TextStyle(color: white),
                                   autocorrect: false,
                                   decoration: InputDecoration(
                                     floatingLabelStyle: const TextStyle(color: white),
                                       
-                                      label:Text(label),
+                                      label:Text(label!),
                                       labelStyle: const TextStyle(
                                           color: white, fontSize: 20)),
                                 ),
