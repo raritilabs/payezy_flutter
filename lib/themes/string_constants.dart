@@ -32,4 +32,16 @@ const cancel='Cancel';
 
 const getStarted = 'Get started';
 const smsConfirmation='We will send you an SMS with confirmation code';
-                        
+const loginorsignup='Login/Sign up';
+const signup='Sign Up';
+const email='Email';
+const continu='Continue';
+const or='Or';
+const loginquickly='Log in quickly using one of your social accounts';
+const google='Google';
+const meta='Meta';
+const signinwith='Sign in with';
+const password='Password';
+
+
+

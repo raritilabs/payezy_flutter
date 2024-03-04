@@ -14,7 +14,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget{
         leadingWidth: 250,
         //payezylogo
         leading: Padding(
-          padding: const EdgeInsets.only(left:30),
+          padding: const EdgeInsets.only(left:15),
           child: Text(title,
               style: GoogleFonts.michroma(color: Colors.white, fontSize: 25)),
         ),

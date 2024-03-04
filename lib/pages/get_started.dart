@@ -1,13 +1,12 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:payezy/components/app_bar.dart';
 import 'package:payezy/components/custom_button.dart';
 import 'package:payezy/components/text_field.dart';
-import 'package:payezy/firebase_options.dart';
+import 'package:payezy/providers/get_started_provider.dart';
 import 'package:payezy/themes/colors.dart';
 import 'package:payezy/themes/fonts.dart';
 import 'package:payezy/themes/string_constants.dart';
+import 'package:provider/provider.dart';
 
 class GetStarted extends StatefulWidget {
   const GetStarted({super.key});
@@ -18,9 +17,7 @@ class GetStarted extends StatefulWidget {
 
 class _GetStartedState extends State<GetStarted> {
   late final TextEditingController _email;
-    late final TextEditingController _password;
-
-  @override
+  late final TextEditingController _password;
 
    @override
   void initState() {
@@ -35,87 +32,88 @@ class _GetStartedState extends State<GetStarted> {
 _email.dispose();
 _password.dispose();
   }
-
+  
   @override
   Widget build(BuildContext context) {
-    
+    final emailProvider=Provider.of<GetStartedProvider>(context);
     return Scaffold(
       backgroundColor: mainBackgroundColor,
       appBar: const CustomAppBar(title: getStarted, value: false),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15),
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 30,
-            ),
-            Align(
-                alignment: Alignment.centerLeft,
-                child: spaceBetween(alertText('Login/Sign up', white, 18))),
-            spaceBetween(
-              customTextField('Email','',_email),
-            ),
-            spaceBetween(CustomButton(
-              onPressed: () { //async
-              //await Firebase.initializeApp( options: DefaultFirebaseOptions.currentPlatform,);
-                Navigator.pushNamed(context, '/homepage');
-              //  final email=_email.text;
-              //final userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-              //email:email,
-              //password:password,)
-
-                },
-              text: 'Continue',
-              size: 20,
-              color: white,
-            )),
-            spaceBetween(
-              Center(
-                child: alertText('Or', white, 20),
-              ),
-            ),
-            spaceBetween(
-              Center(
-                child: alertText(
-                    'Log in quickly using one of your social accounts',
-                    white,
-                    15),
-              ),
-            ),
-            spaceBetween(
-              CustomButton(
-                onPressed: () {
-
-                },
-                text: 'Google',
-                size: 20,
-                color: white,
-                leftAssetValue: 'assets/googleIcon.png',
-              ),
-            ),
-            spaceBetween(
-              CustomButton(
-                  onPressed: () {},
-                  text: 'Meta',
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 30,
+                ),
+                Align(
+                    alignment: Alignment.centerLeft,
+                    child: spaceBetween(alertText(loginorsignup, white, 18))),
+                spaceBetween(
+                  customTextField(email,'',_email,
+                  (value)=>emailProvider.setEmail(value),false,TextInputType.emailAddress),            
+                ),
+                spaceBetween(CustomButton(
+                  onPressed: () { 
+                   
+                   Navigator.pushNamed(context, '/signup'); 
+                    
+                  
+                    
+                   },
+                  text: continu,
                   size: 20,
                   color: white,
-                  leftAssetValue: 'assets/metaIcon.png'),
+                )),
+                spaceBetween(
+                  Center(
+                    child: alertText(or, white, 20),
+                  ),
+                ),
+                spaceBetween(
+                  Center(
+                    child: alertText(
+                        loginquickly,
+                        white,
+                        15),
+                  ),
+                ),
+                spaceBetween(
+                  CustomButton(
+                    onPressed: () {
+            
+                    },
+                    text: google,
+                    size: 20,
+                    color: white,
+                    leftAssetValue: 'assets/googleIcon.png',
+                  ),
+                ),
+                spaceBetween(
+                  CustomButton(
+                      onPressed: () {},
+                      text: meta,
+                      size: 20,
+                      color: white,
+                      leftAssetValue: 'assets/metaIcon.png'),
+                ),
+                spaceBetween(
+                  CustomButton(
+                    onPressed: () {},
+                    text: signinwith,
+                    size: 20,
+                    color: white,
+                    rightAssetValue: 'assets/XIcon.png',
+                  ),
+                ),
+              ],
             ),
-            spaceBetween(
-              CustomButton(
-                onPressed: () {},
-                text: 'Sign in with',
-                size: 20,
-                color: white,
-                rightAssetValue: 'assets/XIcon.png',
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+          ),
+        ));
+        }
   }
-}
+
 
 Widget spaceBetween(child) {
   return Padding(

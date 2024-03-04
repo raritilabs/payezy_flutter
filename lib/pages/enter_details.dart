@@ -57,7 +57,7 @@ class EnterDetails extends StatelessWidget {
                             children: [
                               Expanded(
                                 child: CustomButton(onPressed: () {
-                                  Navigator.pushNamed(context, './cybrid');
+                                  Navigator.pushNamed(context, '/cybrid');
                                 }, text:confirm,size: 15,color:
                                     lightBlueThemeColor),
                               ),

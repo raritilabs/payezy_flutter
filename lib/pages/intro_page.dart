@@ -127,9 +127,6 @@ List<IntroPageContent> contents = [
       title: 'Get money to where it matters',
       description: 'Instant payments to your friends and family back home'),
   IntroPageContent(
-      title: 'Get money to where it matters',
-      description: 'Instant payments to your friends and family back home'),
-  IntroPageContent(
-      title: 'Get money to where it matters',
+      title: 'Page 2',
       description: 'Instant payments to your friends and family back home'),
 ];

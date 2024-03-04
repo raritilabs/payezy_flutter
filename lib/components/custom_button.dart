@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:payezy/themes/colors.dart';
 
 class CustomButton extends StatelessWidget {
-  final onPressed;
+  final dynamic onPressed;
   final String text;
   final double size;
   final Color color;

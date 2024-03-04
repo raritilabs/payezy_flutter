@@ -1,4 +1,6 @@
 
 const homePage ='/homepage';
 const enterDetailsPage='/enterdetailspage';
-const cybrid = './cybrid';
+const cybrid = '/cybrid';
+const signupPage = '/signup';
+const getStarted='/getstarted';
