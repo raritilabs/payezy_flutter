@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:payezy/themes/colors.dart';
+import 'package:sizer/sizer.dart';
 
 Widget customTextField(String text,[String? label='',TextEditingController? controller,onChanged,bool? readOnly=false,TextInputType? textInputType, bool? obscure=false]){
 
 return Container(
-                        width: double.maxFinite,
-                        height: 80,
+                        width: double.infinity,
+                     
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
                             color: Colors.transparent,
@@ -22,16 +23,16 @@ return Container(
                                   alignment: Alignment.centerLeft,
                                   child: Text(
                                     text,
-                                    style: const TextStyle(
+                                    style:  TextStyle(
                                         color: greyFontThemeColor,
-                                        fontSize: 15),
+                                        fontSize: 16.sp),
                                   )),
                             
 
                               //TextField
 
                                SizedBox(
-                                height: 35,
+                                height: 4.h,
                                 child: TextField(
                                   obscureText: obscure!,
                                   onChanged:onChanged,
@@ -40,10 +41,10 @@ return Container(
                                   autocorrect: false,
                                   decoration: InputDecoration(
                                     floatingLabelStyle: const TextStyle(color: white),
-                                      
+                                      border: InputBorder.none,
                                       label:Text(label!,),
-                                      labelStyle: const TextStyle(
-                                          color: white, fontSize: 20)),
+                                      labelStyle:  TextStyle(
+                                          color: white, fontSize: 20.sp)),
                                 ),
                               )
                             ],

@@ -11,6 +11,7 @@ import 'package:payezy/providers/get_started_provider.dart';
 import 'package:payezy/themes/colors.dart';
 import 'package:payezy/themes/string_constants.dart';
 import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -47,7 +48,7 @@ class _SignUpState extends State<SignUp> {
           switch (snapshot.connectionState){
             case ConnectionState.done:
              return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
+            padding:  EdgeInsets.symmetric(horizontal: 5.w),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -55,8 +56,8 @@ class _SignUpState extends State<SignUp> {
                 customTextField(email, emailProvider.email, null, null, true,
                     TextInputType.emailAddress),
           
-                const SizedBox(
-                  height: 15,
+                 SizedBox(
+                  height: 1.h,
                 ),
                 customTextField(
                     password,
@@ -67,8 +68,8 @@ class _SignUpState extends State<SignUp> {
                     TextInputType.text,
                     true),
           
-                const SizedBox(
-                  height: 15,
+                 SizedBox(
+                  height: 1.h,
                 ),
                  customTextField(
                     'Confirm Password',
@@ -79,8 +80,8 @@ class _SignUpState extends State<SignUp> {
                     TextInputType.text,
                     true),
           
-                const SizedBox(
-                  height: 15,
+                 SizedBox(
+                  height: 2.h,
                 ),
           
                 CustomButton(
@@ -89,11 +90,10 @@ class _SignUpState extends State<SignUp> {
                       final user=emailProvider.email;
                       final password=emailProvider.password;
                       final userCredential=await FirebaseAuth.instance.createUserWithEmailAndPassword(email: user, password: password);
-                      print(userCredential);
+                     // print(userCredential);
                     },
                     text: signup,
-                    size: 16,
-                    color: white),
+                    size: 18.sp,),
                     
                 TextButton(
                   onPressed: () {
@@ -107,7 +107,7 @@ class _SignUpState extends State<SignUp> {
               ],
             ),
           );
-          default:return LinearProgressIndicator();
+          default:return const LinearProgressIndicator();
           }
           
         }

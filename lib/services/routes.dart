@@ -4,3 +4,4 @@ const enterDetailsPage='/enterdetailspage';
 const cybrid = '/cybrid';
 const signupPage = '/signup';
 const getStarted='/getstarted';
+const profile='/profile';

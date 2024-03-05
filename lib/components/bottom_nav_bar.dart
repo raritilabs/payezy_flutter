@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:payezy/themes/colors.dart';
+import 'package:sizer/sizer.dart';
 
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({super.key});
@@ -8,7 +9,7 @@ class BottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: EdgeInsets.symmetric(horizontal: 2.w),
         child: Container(
               decoration: BoxDecoration(
                   gradient: const LinearGradient(
@@ -17,20 +18,33 @@ class BottomNavBar extends StatelessWidget {
                       end: Alignment.bottomCenter),
                   borderRadius: BorderRadius.circular(5)),
               width: double.maxFinite,
-              height: 45,
+              height: 7.h,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              IconButton(
-                onPressed: () {},
-                icon:Image.asset('assets/bottomNavIcon1.png'),
+              Padding(
+                padding: EdgeInsets.all(1.h),
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.popAndPushNamed(context, '/homepage');
+                  },
+                  icon:Image.asset('assets/bottomNavIcon1.png'),
+                ),
               ),
-              IconButton(
-                onPressed: () {},
-                icon:Image.asset('assets/bottomNavIcon2.png'),
-              ),IconButton(
-                onPressed: () {},
-                icon:Image.asset('assets/bottomNavIcon3.png'),
+              Padding(
+                padding: EdgeInsets.all(1.h),
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.popAndPushNamed(context,'/profile');
+                  },
+                  icon:Image.asset('assets/bottomNavIcon2.png'),
+                ),
+              ),Padding(
+                padding:  EdgeInsets.all(1.h),
+                child: IconButton(
+                  onPressed: () {},
+                  icon:Image.asset('assets/bottomNavIcon3.png'),
+                ),
               ),
             ],
           ),

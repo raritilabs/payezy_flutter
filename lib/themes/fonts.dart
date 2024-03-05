@@ -21,12 +21,16 @@ Widget subtitleText(String text) {
   );
 }
 
-Widget alertText(String text,Color color,double size){
+Widget metrophobicText(String text,{Color color=white,double size=16,TextAlign textAlign=TextAlign.left,double spacing = -0.3}){
     return Text(
+
+    textAlign: textAlign,
     text,
     style: GoogleFonts.metrophobic(
       color: color,
       fontSize: size,
+      letterSpacing:spacing, 
+      
     ),
   );
 }

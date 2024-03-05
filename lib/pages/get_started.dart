@@ -7,6 +7,7 @@ import 'package:payezy/themes/colors.dart';
 import 'package:payezy/themes/fonts.dart';
 import 'package:payezy/themes/string_constants.dart';
 import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 
 class GetStarted extends StatefulWidget {
   const GetStarted({super.key});
@@ -38,18 +39,18 @@ _password.dispose();
     final emailProvider=Provider.of<GetStartedProvider>(context);
     return Scaffold(
       backgroundColor: mainBackgroundColor,
-      appBar: const CustomAppBar(title: getStarted, value: false),
+      appBar: const CustomAppBar(title: getStarted, isVisible: false),
       body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
+          padding:  EdgeInsets.symmetric(horizontal: 5.w),
           child: SingleChildScrollView(
             child: Column(
               children: [
-                const SizedBox(
-                  height: 30,
+                 SizedBox(
+                  height: 1.h,
                 ),
                 Align(
                     alignment: Alignment.centerLeft,
-                    child: spaceBetween(alertText(loginorsignup, white, 18))),
+                    child: spaceBetween(metrophobicText(loginorsignup,size: 15.sp))),
                 spaceBetween(
                   customTextField(email,'',_email,
                   (value)=>emailProvider.setEmail(value),false,TextInputType.emailAddress),            
@@ -58,25 +59,24 @@ _password.dispose();
                   onPressed: () { 
                    
                    Navigator.pushNamed(context, '/signup'); 
-                    
-                  
-                    
-                   },
+                                       },
                   text: continu,
-                  size: 20,
+                  size: 18.sp,
                   color: white,
                 )),
-                spaceBetween(
-                  Center(
-                    child: alertText(or, white, 20),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 2.h),
+                  child:Center(
+                    child: metrophobicText(or, size: 20.sp),
                   ),
                 ),
                 spaceBetween(
                   Center(
-                    child: alertText(
+                    child: metrophobicText(
+
                         loginquickly,
-                        white,
-                        15),
+                        size: 15.sp,
+                        textAlign: TextAlign.justify),
                   ),
                 ),
                 spaceBetween(
@@ -85,8 +85,6 @@ _password.dispose();
             
                     },
                     text: google,
-                    size: 20,
-                    color: white,
                     leftAssetValue: 'assets/googleIcon.png',
                   ),
                 ),
@@ -94,19 +92,21 @@ _password.dispose();
                   CustomButton(
                       onPressed: () {},
                       text: meta,
-                      size: 20,
-                      color: white,
                       leftAssetValue: 'assets/metaIcon.png'),
                 ),
                 spaceBetween(
                   CustomButton(
                     onPressed: () {},
                     text: signinwith,
-                    size: 20,
-                    color: white,
                     rightAssetValue: 'assets/XIcon.png',
                   ),
                 ),
+                Padding(
+                  padding:  EdgeInsets.symmetric(vertical: 2.h),
+                  child: metrophobicText('By signing up you confirm that you have read, accepted and agreed to Terms of Use and Privacy Policy.',
+                  size: 12.sp),
+                )
+               
               ],
             ),
           ),
@@ -117,7 +117,7 @@ _password.dispose();
 
 Widget spaceBetween(child) {
   return Padding(
-    padding: const EdgeInsets.symmetric(vertical: 10),
+    padding:  EdgeInsets.symmetric(vertical:1.h ),
     child: child,
   );
 }

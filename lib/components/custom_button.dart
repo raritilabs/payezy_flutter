@@ -8,15 +8,15 @@ class CustomButton extends StatelessWidget {
   final dynamic onPressed;
   final String text;
   final double size;
-  final Color color;
+   final Color color;
   final  String? leftAssetValue;
   final  String? rightAssetValue;
-  const CustomButton({
+   const CustomButton({
     Key? key,
      required this.onPressed,
     required this.text,
-    required this.size,
-    required this.color,
+     this.size=20,
+     this.color=white,
      this.leftAssetValue,
      this.rightAssetValue,
   }) : super(key: key);

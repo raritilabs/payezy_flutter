@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:payezy/pages/cybrid.dart';
-import 'package:payezy/pages/enter_details.dart';
+import 'package:payezy/pages/intro_page.dart';
+import 'package:payezy/pages/profilePages/profile.dart';
+import 'package:payezy/pages/sendPages/cybrid.dart';
+import 'package:payezy/pages/sendPages/enter_details.dart';
 import 'package:payezy/pages/get_started.dart';
 import 'package:payezy/pages/home_page.dart';
 import 'package:payezy/pages/sign_up.dart';
@@ -9,6 +11,7 @@ import 'package:payezy/providers/get_started_provider.dart';
 import 'package:payezy/providers/send_provider.dart';
 import 'package:payezy/services/routes.dart';
 import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 
 
 void main()  {
@@ -30,19 +33,25 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<GetStartedProvider>(create:(context) => GetStartedProvider()),
       ],
     
-     child:MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Payezy Mobile App',
-      home: const SplashScreen(),
-      routes: {
-        homePage:(context)=> const HomePage(),
-        enterDetailsPage:(context) =>const EnterDetails(),
-        cybrid:(context)=>const Cybrid(),
-        signupPage:(context)=>const SignUp(),
-        getStarted:(context)=>const GetStarted(),
+     child:Sizer(
+      builder:(context,orientation,deviceType){
+return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Payezy Mobile App',
+        home: const SplashScreen(),
+        routes: {
+          homePage:(context)=> const HomePage(),
+          enterDetailsPage:(context) =>const EnterDetails(),
+          cybrid:(context)=>const Cybrid(),
+          signupPage:(context)=>const SignUp(),
+          getStarted:(context)=>const GetStarted(),
+          profile:(context)=>const Profile(),
+        }
+         );
+         
       }
-
-    ));
+      
+     ));
   }
 }
 

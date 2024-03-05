@@ -24,3 +24,7 @@ const cancelButton=Color.fromRGBO(253, 82, 82, 1);
 
 //getstarted
 const grey = Color.fromRGBO(42, 56, 74, 1);
+
+//Profile
+
+const lightGrey = Color.fromRGBO(165, 162, 184, 1);

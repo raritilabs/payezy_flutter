@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:payezy/themes/colors.dart';
+import 'package:sizer/sizer.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget{
   final String title;
-  final bool value;
+  final bool isVisible;
 
-   const CustomAppBar({super.key, required this.title, required this.value});
+   const CustomAppBar({super.key, required this.title, required this.isVisible});
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-        leadingWidth: 250,
+        leadingWidth: 50.w,
         //payezylogo
         leading: Padding(
-          padding: const EdgeInsets.only(left:15),
+          padding: EdgeInsets.only(left:4.w,top: 1.h),
           child: Text(title,
               style: GoogleFonts.michroma(color: Colors.white, fontSize: 25)),
         ),
@@ -24,7 +25,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget{
         //Login button on the right
         actions: [
           Visibility(
-            visible: value,
+            visible: isVisible,
             child: IconButton(
               onPressed: () {},
               icon:Image.asset('assets/notifyIcon.png')
@@ -36,5 +37,5 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget{
   
   @override
   
-  Size get preferredSize => const Size.fromHeight(60);
+  Size get preferredSize =>  Size.fromHeight(6.h);
 }
