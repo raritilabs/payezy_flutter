@@ -8,9 +8,20 @@ import 'package:payezy/themes/fonts.dart';
 import 'package:payezy/themes/string_constants.dart';
 import 'package:provider/provider.dart';
 
-class EnterAmount extends StatelessWidget {
+class EnterAmount extends StatefulWidget {
   const EnterAmount({super.key});
 
+  @override
+  State<EnterAmount> createState() => _EnterAmountState();
+}
+
+class _EnterAmountState extends State<EnterAmount> {
+late final TextEditingController _youSend;
+  @override
+  void initState() {
+_youSend=TextEditingController();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -88,14 +99,15 @@ class EnterAmount extends StatelessWidget {
                       Padding(
                           padding: const EdgeInsets.only(
                               left: 15, right: 15, top: 2, bottom: 10),
-                          child: customTextField(youSend,'\$')),
+                          child: customTextField(youSend,label: '\$',controller: _youSend)),
 
                       //Recipient gets...
 
                       Padding(
                         padding: const EdgeInsets.all(15.0),
-                        child: customTextField(recipientGets,'\$'),
+                        child: customTextField(recipientGets,readOnly:true,),
                       ),
+
                       Padding(
                         padding: const EdgeInsets.only(
                             bottom: 5, top: 0, left: 15, right: 15),

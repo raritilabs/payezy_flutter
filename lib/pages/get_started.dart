@@ -52,8 +52,9 @@ _password.dispose();
                     alignment: Alignment.centerLeft,
                     child: spaceBetween(metrophobicText(loginorsignup,size: 15.sp))),
                 spaceBetween(
-                  customTextField(email,'',_email,
-                  (value)=>emailProvider.setEmail(value),false,TextInputType.emailAddress),            
+                  customTextField(email,label: '',controller: _email,onChanged: 
+                  (value)=>emailProvider.setEmail(value),obscure: 
+                  false,textInputType: TextInputType.emailAddress),            
                 ),
                 spaceBetween(CustomButton(
                   onPressed: () { 

@@ -9,8 +9,8 @@ class BottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: EdgeInsets.symmetric(horizontal: 2.w),
-        child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 2.w), //padding
+        child: Container(  //bottom bar
               decoration: BoxDecoration(
                   gradient: const LinearGradient(
                       colors: [mainCardGradient1, mainCardGradient2],
@@ -42,7 +42,9 @@ class BottomNavBar extends StatelessWidget {
               ),Padding(
                 padding:  EdgeInsets.all(1.h),
                 child: IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.popAndPushNamed(context, '/transfer');
+                  },
                   icon:Image.asset('assets/bottomNavIcon3.png'),
                 ),
               ),

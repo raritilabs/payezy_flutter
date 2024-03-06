@@ -53,32 +53,31 @@ class _SignUpState extends State<SignUp> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 //email field
-                customTextField(email, emailProvider.email, null, null, true,
-                    TextInputType.emailAddress),
+                customTextField(email, label: emailProvider.email,readOnly:  true,
+                   textInputType:  TextInputType.emailAddress),
           
                  SizedBox(
                   height: 1.h,
                 ),
                 customTextField(
                     password,
-                    '',
-                    _password,
-                    (value) => emailProvider.setPassword(value),
-                    false, //readonly value
-                    TextInputType.text,
-                    true),
+                    controller: _password,
+                    onChanged: (value) => emailProvider.setPassword(value),
+                    readOnly: false, //readonly value
+                    textInputType: TextInputType.text,
+                    obscure: true),
           
                  SizedBox(
                   height: 1.h,
                 ),
                  customTextField(
                     'Confirm Password',
-                    '',
-                    _password,
-                   null,
-                    false, //readonly value
-                    TextInputType.text,
-                    true),
+                   
+                   controller:  _password,
+                   
+                   readOnly:  false, //readonly value
+                    textInputType: TextInputType.text,
+                   obscure:  true),
           
                  SizedBox(
                   height: 2.h,

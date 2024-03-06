@@ -28,3 +28,6 @@ const grey = Color.fromRGBO(42, 56, 74, 1);
 //Profile
 
 const lightGrey = Color.fromRGBO(165, 162, 184, 1);
+
+//Transfers
+const orange=Color.fromRGBO(249,185,89,1);

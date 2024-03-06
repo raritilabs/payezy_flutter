@@ -82,6 +82,6 @@ class EnterDetails extends StatelessWidget {
 Widget details(title) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-    child: customTextField(title, ''),
+    child: customTextField(title, label: ''),
   );
 }

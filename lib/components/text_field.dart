@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:payezy/themes/colors.dart';
 import 'package:sizer/sizer.dart';
 
-Widget customTextField(String text,[String? label='',TextEditingController? controller,onChanged,bool? readOnly=false,TextInputType? textInputType, bool? obscure=false]){
+Widget customTextField(String text,{String? label='',TextEditingController? controller,onChanged,bool? readOnly=false,TextInputType? textInputType, bool? obscure=false}){
 
 return Container(
                         width: double.infinity,
