@@ -6,6 +6,7 @@ import 'package:payezy/pages/get_started.dart';
 import 'package:payezy/pages/home_page.dart';
 import 'package:payezy/pages/sign_up.dart';
 import 'package:payezy/pages/splash_screen.dart';
+import 'package:payezy/pages/splash_screen_1.dart';
 import 'package:payezy/pages/transferPages/transfer.dart';
 import 'package:payezy/providers/get_started_provider.dart';
 import 'package:payezy/providers/send_provider.dart';
@@ -38,7 +39,7 @@ class MyApp extends StatelessWidget {
 return MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Payezy Mobile App',
-        home: const SplashScreen(),
+        home: const Splash(),
         routes: {
           homePage:(context)=> const HomePage(),
           enterDetailsPage:(context) =>const EnterDetails(),

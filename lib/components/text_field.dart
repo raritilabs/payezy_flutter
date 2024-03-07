@@ -28,11 +28,11 @@ return Container(
                                         fontSize: 16.sp),
                                   )),
                             
-
+                                 SizedBox(height: 1.h,),
                               //TextField
 
                                SizedBox(
-                                height: 4.h,
+                                height: 4.5.h,
                                 child: TextField(
                                   obscureText: obscure!,
                                   onChanged:onChanged,
@@ -40,13 +40,13 @@ return Container(
                                   style: const TextStyle(color: white),
                                   autocorrect: false,
                                   decoration: InputDecoration(
-                                    floatingLabelStyle: const TextStyle(color: white),
                                       border: InputBorder.none,
-                                      label:Text(label!,),
+                                     hintText:label!,
+                                    hintStyle: TextStyle( color: white, fontSize: 20.sp),
                                       labelStyle:  TextStyle(
                                           color: white, fontSize: 20.sp)),
                                 ),
-                              )
+                                                             )
                             ],
                           ),
                         ),

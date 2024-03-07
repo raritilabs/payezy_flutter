@@ -1,4 +1,7 @@
+import 'dart:math';
 import 'dart:ui';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:payezy/components/custom_button.dart';
 import 'package:payezy/components/text_field.dart';
@@ -6,8 +9,34 @@ import 'package:payezy/themes/colors.dart';
 import 'package:payezy/themes/fonts.dart';
 import 'package:payezy/themes/string_constants.dart';
 
-class EnterDetails extends StatelessWidget {
+class EnterDetails extends StatefulWidget {
   const EnterDetails({super.key});
+
+  @override
+  State<EnterDetails> createState() => _EnterDetailsState();
+}
+
+class _EnterDetailsState extends State<EnterDetails> {
+
+TextEditingController _fName=TextEditingController();
+TextEditingController _phone=TextEditingController();
+TextEditingController _bAccountNumber=TextEditingController();
+TextEditingController _iFSC=TextEditingController();
+
+addData(String fname,num phone, num bankaccnum,num ifsc)
+{
+  if(fname=="" && phone==0 && bankaccnum == 0 && ifsc==0){
+    print('Enter Required Fields');
+  }
+  else{
+    FirebaseFirestore.instance.collection('Users').doc(fname).set({
+      "First Name":fname,
+      "Phone":phone,
+      "Bank Acc. Number" :bankaccnum,
+      "IFSC Code":ifsc,
+    }).then((value) => print('inserted'));
+  }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -25,11 +54,11 @@ class EnterDetails extends StatelessWidget {
           height: 10,
         ),
     
-        details(fullname),
-        details(phone),
-        details(bankaccnum),
+        details(fullname,controller: _fName),
+        details(phone,controller: _phone),
+        details(bankaccnum,controller:_bAccountNumber),
         details(confirmacc),
-        details(ifsc),
+        details(ifsc,controller: _iFSC),
     
         Padding(
           padding:
@@ -79,9 +108,9 @@ class EnterDetails extends StatelessWidget {
   }
 }
 
-Widget details(title) {
+Widget details(title, {controller}) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-    child: customTextField(title, label: ''),
+    child: customTextField(title,controller: controller),
   );
 }

@@ -30,7 +30,10 @@ class _SplashState extends State<Splash> with TickerProviderStateMixin {
     return  Scaffold(
       backgroundColor: mainBackgroundColor,
       body: Center(
-        child: Image.asset('assets/payezyLogo.png'),
+        child:Image.asset('assets/payezeySplashIcon.gif',
+        )
+        
+        //Image.asset('assets/payezyLogo.png'),
       )
     );
   }

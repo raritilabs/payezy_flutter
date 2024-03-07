@@ -18,73 +18,68 @@ class GetStarted extends StatefulWidget {
 
 class _GetStartedState extends State<GetStarted> {
   late final TextEditingController _email;
-  late final TextEditingController _password;
 
-   @override
+  @override
   void initState() {
-    _email=TextEditingController();
-    _password=TextEditingController();
+    _email = TextEditingController();
     super.initState();
   }
 
   @override
   void dispose() {
     super.dispose();
-_email.dispose();
-_password.dispose();
+    _email.dispose();
   }
-  
+
   @override
   Widget build(BuildContext context) {
-    final emailProvider=Provider.of<GetStartedProvider>(context);
+    final emailProvider = Provider.of<GetStartedProvider>(context);
     return Scaffold(
-      backgroundColor: mainBackgroundColor,
-      appBar: const CustomAppBar(title: getStarted, isVisible: false),
-      body: Padding(
-          padding:  EdgeInsets.symmetric(horizontal: 5.w),
+        backgroundColor: mainBackgroundColor,
+        appBar: const CustomAppBar(title: getStarted, isVisible: false),
+        body: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 5.w),
           child: SingleChildScrollView(
             child: Column(
               children: [
-                 SizedBox(
+                SizedBox(
                   height: 1.h,
                 ),
                 Align(
                     alignment: Alignment.centerLeft,
-                    child: spaceBetween(metrophobicText(loginorsignup,size: 15.sp))),
+                    child: spaceBetween(
+                        metrophobicText(loginorsignup, size: 15.sp))),
                 spaceBetween(
-                  customTextField(email,label: '',controller: _email,onChanged: 
-                  (value)=>emailProvider.setEmail(value),obscure: 
-                  false,textInputType: TextInputType.emailAddress),            
+                  customTextField(email,
+                     readOnly: false,
+                      controller: _email,
+                      onChanged: (value) => emailProvider.setEmail(value),
+                      obscure: false,
+                      textInputType: TextInputType.emailAddress),
                 ),
                 spaceBetween(CustomButton(
-                  onPressed: () { 
-                   
-                   Navigator.pushNamed(context, '/signup'); 
-                                       },
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/signup');
+                  },
                   text: continu,
                   size: 18.sp,
                   color: white,
                 )),
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 2.h),
-                  child:Center(
+                  child: Center(
                     child: metrophobicText(or, size: 20.sp),
                   ),
                 ),
                 spaceBetween(
                   Center(
-                    child: metrophobicText(
-
-                        loginquickly,
-                        size: 15.sp,
-                        textAlign: TextAlign.justify),
+                    child: metrophobicText(loginquickly,
+                        size: 15.sp, textAlign: TextAlign.justify),
                   ),
                 ),
                 spaceBetween(
                   CustomButton(
-                    onPressed: () {
-            
-                    },
+                    onPressed: () {},
                     text: google,
                     leftAssetValue: 'assets/googleIcon.png',
                   ),
@@ -103,22 +98,21 @@ _password.dispose();
                   ),
                 ),
                 Padding(
-                  padding:  EdgeInsets.symmetric(vertical: 2.h),
-                  child: metrophobicText('By signing up you confirm that you have read, accepted and agreed to Terms of Use and Privacy Policy.',
-                  size: 12.sp),
+                  padding: EdgeInsets.symmetric(vertical: 2.h),
+                  child: metrophobicText(
+                      'By signing up you confirm that you have read, accepted and agreed to Terms of Use and Privacy Policy.',
+                      size: 12.sp),
                 )
-               
               ],
             ),
           ),
         ));
-        }
   }
-
+}
 
 Widget spaceBetween(child) {
   return Padding(
-    padding:  EdgeInsets.symmetric(vertical:1.h ),
+    padding: EdgeInsets.symmetric(vertical: 1.h),
     child: child,
   );
 }

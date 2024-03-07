@@ -1,6 +1,5 @@
 // ignore: unused_import
 import 'dart:math';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +36,7 @@ class _SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
-    final emailProvider = Provider.of<GetStartedProvider>(context);
+    final emailProvider = Provider.of<GetStartedProvider>(context,listen: false);
     return Scaffold(
       backgroundColor: mainBackgroundColor,
       body: FutureBuilder(
@@ -53,19 +52,19 @@ class _SignUpState extends State<SignUp> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 //email field
-                customTextField(email, label: emailProvider.email,readOnly:  true,
-                   textInputType:  TextInputType.emailAddress),
-          
+                customTextField(email, label: emailProvider.email, readOnly:  true,
+                textInputType:  TextInputType.emailAddress),   
                  SizedBox(
                   height: 1.h,
                 ),
                 customTextField(
                     password,
                     controller: _password,
-                    onChanged: (value) => emailProvider.setPassword(value),
+                   onChanged: (value) => emailProvider.setPassword(value),
                     readOnly: false, //readonly value
                     textInputType: TextInputType.text,
                     obscure: true),
+                    
           
                  SizedBox(
                   height: 1.h,
@@ -73,7 +72,7 @@ class _SignUpState extends State<SignUp> {
                  customTextField(
                     'Confirm Password',
                    
-                   controller:  _password,
+                  // controller:  _password,
                    
                    readOnly:  false, //readonly value
                     textInputType: TextInputType.text,
@@ -97,7 +96,6 @@ class _SignUpState extends State<SignUp> {
                 TextButton(
                   onPressed: () {
                  Navigator.pushNamed(context, '/homepage');
-
                   },
                   child: const Text('Already Registered? Login here'),
                   
