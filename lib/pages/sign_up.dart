@@ -1,5 +1,3 @@
-// ignore: unused_import
-import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +34,7 @@ class _SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
-    final emailProvider = Provider.of<GetStartedProvider>(context,listen: false);
+    final emailProvider = Provider.of<GetStartedProvider>(context,);
     return Scaffold(
       backgroundColor: mainBackgroundColor,
       body: FutureBuilder(

@@ -1,13 +1,13 @@
-import 'dart:math';
 import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:payezy/components/custom_button.dart';
 import 'package:payezy/components/text_field.dart';
+import 'package:payezy/providers/enter_details.dart';
 import 'package:payezy/themes/colors.dart';
 import 'package:payezy/themes/fonts.dart';
 import 'package:payezy/themes/string_constants.dart';
+import 'package:provider/provider.dart';
 
 class EnterDetails extends StatefulWidget {
   const EnterDetails({super.key});
@@ -18,12 +18,12 @@ class EnterDetails extends StatefulWidget {
 
 class _EnterDetailsState extends State<EnterDetails> {
 
-TextEditingController _fName=TextEditingController();
-TextEditingController _phone=TextEditingController();
-TextEditingController _bAccountNumber=TextEditingController();
-TextEditingController _iFSC=TextEditingController();
+final TextEditingController _fName=TextEditingController();
+final TextEditingController _phone=TextEditingController();
+final TextEditingController _bAccountNumber=TextEditingController();
+final TextEditingController _iFSC=TextEditingController();
 
-addData(String fname,num phone, num bankaccnum,num ifsc)
+addData(String fname,int phone, int bankaccnum,num ifsc) async
 {
   if(fname=="" && phone==0 && bankaccnum == 0 && ifsc==0){
     print('Enter Required Fields');
@@ -40,6 +40,8 @@ addData(String fname,num phone, num bankaccnum,num ifsc)
 
   @override
   Widget build(BuildContext context) {
+    final enterDetailsProvider = Provider.of<EnterDetailsProvider>(context,);
+
     return Column(
       children: [
         ///Enter the details...
@@ -54,11 +56,11 @@ addData(String fname,num phone, num bankaccnum,num ifsc)
           height: 10,
         ),
     
-        details(fullname,controller: _fName),
-        details(phone,controller: _phone),
-        details(bankaccnum,controller:_bAccountNumber),
+        details(fullname,controller: _fName,onChanged: (value)=>enterDetailsProvider.setfName(value)),
+        details(phone,controller: _phone,onChanged: (value)=>enterDetailsProvider.setPhone(int.parse(value))),
+        details(bankaccnum,controller:_bAccountNumber,onChanged: (value)=>enterDetailsProvider.setBankAccNum(int.parse(value))),
         details(confirmacc),
-        details(ifsc,controller: _iFSC),
+        details(ifsc,controller: _iFSC,onChanged: (value)=>enterDetailsProvider.setiFSC(int.parse(value))),
     
         Padding(
           padding:
@@ -84,7 +86,13 @@ addData(String fname,num phone, num bankaccnum,num ifsc)
                             children: [
                               Expanded(
                                 child: CustomButton(onPressed: () {
-                                  Navigator.pushNamed(context, '/cybrid');
+    addData(
+      enterDetailsProvider.fname,
+      enterDetailsProvider.phone,
+      enterDetailsProvider.bAccountNumber,
+      enterDetailsProvider.iFSC,
+    );
+         Navigator.pushNamed(context, '/cybrid');
                                 }, text:confirm,size: 15,color:
                                     lightBlueThemeColor),
                               ),
@@ -108,9 +116,9 @@ addData(String fname,num phone, num bankaccnum,num ifsc)
   }
 }
 
-Widget details(title, {controller}) {
+Widget details(String title, {TextEditingController? controller,dynamic onChanged}) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-    child: customTextField(title,controller: controller),
+    child: customTextField(title,controller: controller,onChanged: onChanged),
   );
 }
