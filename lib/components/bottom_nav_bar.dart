@@ -43,7 +43,7 @@ class BottomNavBar extends StatelessWidget {
                 padding:  EdgeInsets.all(1.h),
                 child: IconButton(
                   onPressed: () {
-                    Navigator.popAndPushNamed(context, '/transfer');
+                    Navigator.popAndPushNamed(context, '/fetchData');
                   },
                   icon:Image.asset('assets/bottomNavIcon3.png'),
                 ),

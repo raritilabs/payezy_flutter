@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 
@@ -13,8 +12,8 @@ int get phone=>_phone;
 int _bAccountNumber=0;
 int get bAccountNumber=>_bAccountNumber;
 
-num _iFSC=0;
-num get iFSC=>_iFSC;
+Object _iFSC=0;
+Object get iFSC=>_iFSC;
 
 void setfName(String value){
   _fName = value;
@@ -28,7 +27,7 @@ void setBankAccNum(int value){
   _bAccountNumber = value;
   notifyListeners();
 }  
-void setiFSC(num value){
+void setiFSC(Object value){
   _iFSC = value;
   notifyListeners();
 }

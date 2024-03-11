@@ -23,7 +23,7 @@ final TextEditingController _phone=TextEditingController();
 final TextEditingController _bAccountNumber=TextEditingController();
 final TextEditingController _iFSC=TextEditingController();
 
-addData(String fname,int phone, int bankaccnum,num ifsc) async
+addData(String fname,int phone, int bankaccnum,Object ifsc) async
 {
   if(fname=="" && phone==0 && bankaccnum == 0 && ifsc==0){
     print('Enter Required Fields');
@@ -32,7 +32,7 @@ addData(String fname,int phone, int bankaccnum,num ifsc) async
     FirebaseFirestore.instance.collection('Users').doc(fname).set({
       "First Name":fname,
       "Phone":phone,
-      "Bank Acc. Number" :bankaccnum,
+      "Bank Acc Number" :bankaccnum,
       "IFSC Code":ifsc,
     }).then((value) => print('inserted'));
   }
@@ -60,7 +60,7 @@ addData(String fname,int phone, int bankaccnum,num ifsc) async
         details(phone,controller: _phone,onChanged: (value)=>enterDetailsProvider.setPhone(int.parse(value))),
         details(bankaccnum,controller:_bAccountNumber,onChanged: (value)=>enterDetailsProvider.setBankAccNum(int.parse(value))),
         details(confirmacc),
-        details(ifsc,controller: _iFSC,onChanged: (value)=>enterDetailsProvider.setiFSC(int.parse(value))),
+        details(ifsc,controller: _iFSC,onChanged: (value)=>enterDetailsProvider.setiFSC((value))),
     
         Padding(
           padding:

@@ -14,6 +14,7 @@ void setEmail(String value){
 
 void setPassword(String value){
   _password = value;
+  print(_password);
   notifyListeners();
 }  
 

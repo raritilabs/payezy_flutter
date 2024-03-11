@@ -5,14 +5,14 @@ import 'package:sizer/sizer.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget{
   final String title;
-  final bool isVisible;
+  final bool? isVisible;
 
-   const CustomAppBar({super.key, required this.title, required this.isVisible});
+   const CustomAppBar({super.key, required this.title, this.isVisible=false});
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-        leadingWidth: 50.w,
+        leadingWidth: 150.w,
         //payezylogo
         leading: Padding(
           padding: EdgeInsets.only(left:4.w,top: 1.h),
@@ -24,12 +24,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget{
         elevation: 0, //z coordinate
         //Login button on the right
         actions: [
-          Visibility(
-            visible: isVisible,
-            child: IconButton(
-              onPressed: () {},
-              icon:Image.asset('assets/notifyIcon.png')
-            ),
+          if (isVisible ?? false)
+          IconButton(
+            onPressed: () {
+              // Action for the notification button
+            },
+            icon: Image.asset('assets/notifyIcon.png'),
           ),
         ],
       );

@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:payezy/components/app_bar.dart';
 import 'package:payezy/components/bottom_nav_bar.dart';
@@ -18,7 +17,7 @@ class TransferPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: mainBackgroundColor,
       appBar: const CustomAppBar(title: 'Transfer', isVisible: false),
-      bottomNavigationBar: BottomNavBar(),
+      bottomNavigationBar: const BottomNavBar(),
       body: Padding(
         padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 3.h),
         child: const TransferHistory(),
@@ -39,7 +38,7 @@ class _TransferHistoryState extends State<TransferHistory> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-        child: Column(
+        child: Column( 
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         metrophobicText('Transfer History', size: 17.sp),

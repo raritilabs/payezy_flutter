@@ -34,7 +34,8 @@ return Container(
                                SizedBox(
                                 height: 4.5.h,
                                 child: TextField(
-                                  obscureText: obscure!,
+                                  controller: controller,
+                                 obscureText: obscure!,
                                   onChanged:onChanged,
                                   keyboardType:textInputType,
                                   style: const TextStyle(color: white),

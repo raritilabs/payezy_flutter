@@ -6,42 +6,41 @@ import 'package:payezy/components/app_bar.dart';
 import 'package:payezy/components/custom_button.dart';
 import 'package:payezy/components/text_field.dart';
 import 'package:payezy/firebase_options.dart';
-import 'package:payezy/providers/get_started_provider.dart';
 import 'package:payezy/themes/colors.dart';
 import 'package:payezy/themes/string_constants.dart';
-import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-class SignUp extends StatefulWidget {
-  const SignUp({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  State<SignUp> createState() => _SignUpState();
+  State<LoginPage> createState() => _LoginState();
 }
 
-class _SignUpState extends State<SignUp> {
+class _LoginState extends State<LoginPage> {
   late final TextEditingController _password;
+  late final TextEditingController _email;
 
   @override
   void initState() {
     _password = TextEditingController();
+    _email=TextEditingController();
     super.initState();
   }
 
   @override
   void dispose() {
+    _email.dispose();
     _password.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final emailProvider = Provider.of<GetStartedProvider>(
-      context,
-    );
+   
     return Scaffold(
       backgroundColor: mainBackgroundColor,
-      appBar: const CustomAppBar(title: 'Sign Up'),
+      appBar: const CustomAppBar(title: 'Login'),
       body: FutureBuilder(
           future: Firebase.initializeApp(
             options: DefaultFirebaseOptions.currentPlatform,
@@ -57,7 +56,7 @@ class _SignUpState extends State<SignUp> {
                       children: [
                         //email field
                         customTextField(email,
-                            label: emailProvider.email,
+                            controller: _email,
                             readOnly: true,
                             textInputType: TextInputType.emailAddress),
                         SizedBox(
@@ -70,49 +69,29 @@ class _SignUpState extends State<SignUp> {
                             textInputType: TextInputType.text,
                             obscure: true),
 
-                        SizedBox(
-                          height: 1.h,
-                        ),
-                        customTextField('Confirm Password',
-
-                            // controller:  _password,
-
-                            readOnly: false, //readonly value
-                            textInputType: TextInputType.text,
-                            obscure: true),
-
+                       
                         SizedBox(
                           height: 2.h,
                         ),
 
                         CustomButton(
                           onPressed: () async {
-                            final email = emailProvider.email;
+                            final email = _email.text;
                             final password = _password.text;
                             try{
-                              final userCredential = await FirebaseAuth.instance
-                                .createUserWithEmailAndPassword(
-                              email: email,
-                              password: password,
-                            );
-                             print("value is $userCredential");
+                              FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
                             }
-                            catch (e){
-                              print('error:$e');
-                            }
-                            
-                           
+                             
+                        catch(e){
+                          print(e);
+                        }
+                        Navigator.pushNamed(context, '/homepage');
                           },
-                          text: signup,
+                          text: login,
                           size: 18.sp,
                         ),
 
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pushNamed(context, '/login');
-                          },
-                          child: const Text('Already Registered? Login here'),
-                        ),
+                       
                       ],
                     ),
                   ),
