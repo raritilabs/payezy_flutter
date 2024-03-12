@@ -34,7 +34,7 @@ class _EnterAmountState extends State<EnterAmount> {
       children: [
         ///Process payment via...
         Padding(
-          padding: const EdgeInsets.only(left: 35, top: 10, bottom: 10),
+          padding:  EdgeInsets.only(left: 10.w, top: 1.h, bottom: 2.h),
           child: Align(
               alignment: Alignment.centerLeft,
               child: subtitleText(paymentOptionsText)),

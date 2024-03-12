@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:payezy/pages/get_started.dart';
 import 'package:payezy/themes/colors.dart';
+import 'package:sizer/sizer.dart';
 
 class IntroPage extends StatefulWidget {
   const IntroPage({super.key});
@@ -33,6 +34,7 @@ class _IntroPageState extends State<IntroPage> {
       backgroundColor: mainBackgroundColor,
       body: Column(
         children: [
+          SizedBox(height: 7.h,),
           Expanded(
             child: PageView.builder(
               controller: _controller,
@@ -44,27 +46,35 @@ class _IntroPageState extends State<IntroPage> {
                 itemCount: contents.length,
                 itemBuilder: (_, i) {
                   return Padding(
-                    padding: const EdgeInsets.all(40),
+                    padding:  EdgeInsets.symmetric(horizontal: 3.w ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Text(
-                          contents[i].title,
-                          style: GoogleFonts.roboto(
-                              color: white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 24),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(
-                          height: 30,
-                        ),
-                        Text(contents[i].description,
-                            style: GoogleFonts.roboto(
+                        SizedBox(
+                          width: double.infinity,
+                         
+                          child: Text(
+                            contents[i].title,
+                            style: GoogleFonts.michroma(
                                 color: white,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 15),
-                            textAlign: TextAlign.center),
+                                fontWeight: FontWeight.w400,
+                                fontSize: 20.sp
+                                ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                         SizedBox(
+                          height: 20.h,
+                        ),
+                        Padding(
+                          padding:  EdgeInsets.symmetric(horizontal: 3.h),
+                          child: Text(contents[i].description,
+                              style: GoogleFonts.metrophobic(
+                                  color: lightBlueThemeColor,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12.sp),
+                              textAlign: TextAlign.center),
+                        ),
                       ],
                     ),
                   );
@@ -86,14 +96,21 @@ class _IntroPageState extends State<IntroPage> {
               
             },
             child: Container(
-              width: 50,
+             
               decoration: BoxDecoration(
-                border: Border.all(
-                  color: white,
-                ),
+               
                 borderRadius: BorderRadius.circular(5),
               ),
-              child:  Text('Next',style: GoogleFonts.roboto(color: white),textAlign: TextAlign.center,),
+              child:  Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(contents[currentIndex].btnName,style: GoogleFonts.roboto(color: white),textAlign: TextAlign.center,),
+               Padding(
+                 padding:  EdgeInsets.only(left: 1.h),
+                 child: Image.asset('assets/nextIcon.png'),
+               ),
+                ],
+              ),
             ),
           ),
           const SizedBox(height: 50,)
@@ -109,7 +126,7 @@ class _IntroPageState extends State<IntroPage> {
             padding: const EdgeInsets.only(right: 10,left: 10),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
-              color: white
+              color: lightBlueThemeColor,
             ),
           );
   }
@@ -118,15 +135,23 @@ class _IntroPageState extends State<IntroPage> {
 class IntroPageContent {
   String title;
   String description;
+  String btnName;
 
-  IntroPageContent({required this.title, required this.description});
+  IntroPageContent({required this.title, required this.description,required this.btnName});
 }
 
 List<IntroPageContent> contents = [
+   IntroPageContent(
+      title: 'Borderless Payments Feeless Transactions',
+      description: 'With ZERO Fees, Payezy is the cheapest money transfer platform in USA',
+       btnName:'Next',),
   IntroPageContent(
-      title: 'Get money to where it matters',
-      description: 'Instant payments to your friends and family back home'),
+      title: 'Getting money to where it matters',
+      description: 'Send payments instantly from USA to your friends and family back in India',
+       btnName:'Next',),
+     
   IntroPageContent(
-      title: 'Page 2',
-      description: 'Instant payments to your friends and family back home'),
+      title: 'Safe & Secure Transactions',
+      description: 'Your financial data is encrypted and stored securely, ensuring that your money is in safe hands',
+       btnName:'Get Started',),
 ];

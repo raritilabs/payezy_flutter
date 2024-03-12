@@ -6,6 +6,7 @@ import 'package:payezy/pages/sendPages/enter_details.dart';
 import 'package:payezy/providers/send_provider.dart';
 import 'package:payezy/themes/string_constants.dart';
 import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 import '../../components/bottom_nav_bar.dart'; //custom bottom nav bar
 import 'package:payezy/themes/colors.dart'; //colors
 
@@ -29,7 +30,7 @@ return Scaffold(
       //appBar begins
       appBar:  const CustomAppBar(title: send,isVisible: true,),
       body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+       padding: EdgeInsets.only(left: 5.w,right:5.w,top: 5.h,),
         child: Column(
           children: [
             CustomContainer(

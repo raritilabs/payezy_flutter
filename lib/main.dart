@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
 return MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Payezy Mobile App',
-        home:  const Splash(),
+        home: const Splash(),
         routes: {
           homePage:(context)=> const HomePage(),
           enterDetailsPage:(context) =>const EnterDetails(),

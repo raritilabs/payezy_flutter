@@ -50,7 +50,7 @@ class _SignUpState extends State<SignUp> {
             switch (snapshot.connectionState) {
               case ConnectionState.done:
                 return Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 5.w),
+                  padding: EdgeInsets.symmetric(horizontal: 5.w,vertical: 13.h),
                   child: SingleChildScrollView(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,

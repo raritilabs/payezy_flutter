@@ -7,6 +7,7 @@ import 'package:payezy/components/custom_button.dart';
 import 'package:payezy/components/text_field.dart';
 import 'package:payezy/firebase_options.dart';
 import 'package:payezy/themes/colors.dart';
+import 'package:payezy/themes/fonts.dart';
 import 'package:payezy/themes/string_constants.dart';
 import 'package:sizer/sizer.dart';
 
@@ -49,7 +50,7 @@ class _LoginState extends State<LoginPage> {
             switch (snapshot.connectionState) {
               case ConnectionState.done:
                 return Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 5.w),
+                  padding: EdgeInsets.symmetric(horizontal: 5.w,vertical: 13.h),
                   child: SingleChildScrollView(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -90,7 +91,8 @@ class _LoginState extends State<LoginPage> {
                           text: login,
                           size: 18.sp,
                         ),
-
+TextButton(onPressed: (){Navigator.pushNamed(context, '/homepage');}
+, child: metrophobicText('Login'))
                        
                       ],
                     ),
