@@ -3,15 +3,16 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:payezy/pages/get_started.dart';
 import 'package:payezy/themes/colors.dart';
 import 'package:sizer/sizer.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-class IntroPage extends StatefulWidget {
-  const IntroPage({super.key});
+class OnboardingScreen extends StatefulWidget {
+  const OnboardingScreen({super.key});
 
   @override
-  State<IntroPage> createState() => _IntroPageState();
+  State<OnboardingScreen> createState() => _OnboardingScreenState();
 }
 
-class _IntroPageState extends State<IntroPage> {
+class _OnboardingScreenState extends State<OnboardingScreen> {
     int currentIndex=0;
   late PageController _controller;
 
@@ -29,7 +30,6 @@ class _IntroPageState extends State<IntroPage> {
 
   @override
   Widget build(BuildContext context) {
-  
     return Scaffold(
       backgroundColor: mainBackgroundColor,
       body: Column(
@@ -75,23 +75,41 @@ class _IntroPageState extends State<IntroPage> {
                                   fontSize: 12.sp),
                               textAlign: TextAlign.center),
                         ),
+                        
+
+                        
                       ],
+                      
                     ),
                   );
                 }),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(contents.length, (index) => buildDot(index,context))),
+            SmoothPageIndicator(controller: _controller, count: 3,effect: const ExpandingDotsEffect(
+              dotColor: grey,
+              expansionFactor: 3,
+               dotHeight: 10,
+               dotWidth: 10,
+               activeDotColor: lightBlueThemeColor,
+               
+              
+             ),), 
+          
           const SizedBox(height: 10,),
           GestureDetector(
             onTap: (){
               if(currentIndex == contents.length -1){
-                  Navigator.push(context,MaterialPageRoute(builder: (_)=> const GetStarted()));
+                  // Navigator.push(context,MaterialPageRoute(
+                    
+                  //   builder: (_)=> const GetStarted())
+                  //   );
+                  {
+            Navigator.of(context).push(_createRoute(const GetStarted()));
+          };
               }
+              
                 _controller.nextPage(
-                  duration: const Duration(milliseconds: 100), 
-                  curve: Curves.bounceIn,
+                  duration: const Duration(milliseconds: 500), 
+                  curve: Curves.easeIn,
                   );
               
             },
@@ -118,18 +136,26 @@ class _IntroPageState extends State<IntroPage> {
       ),
     );
   }
+  
+  Route<Object?> _createRoute(Widget route) {
+    return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) =>route,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      const begin = Offset(0, 1);
+      const end = Offset.zero;
+      final tween = Tween(begin: begin, end: end);
+  final offsetAnimation = animation.drive(tween);
 
-  Container buildDot(int index, BuildContext context) {
-    return Container(
-            height: 10,
-            width: currentIndex == index? 20:10,
-            padding: const EdgeInsets.only(right: 10,left: 10),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              color: lightBlueThemeColor,
-            ),
-          );
+      return SlideTransition(
+      position: offsetAnimation,
+        child: child,
+      );
+    },
+  );
   }
+ 
+
+
 }
 
 class IntroPageContent {

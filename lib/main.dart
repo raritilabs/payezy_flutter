@@ -6,9 +6,9 @@ import 'package:payezy/pages/sendPages/enter_details.dart';
 import 'package:payezy/pages/get_started.dart';
 import 'package:payezy/pages/home_page.dart';
 import 'package:payezy/pages/sign_up.dart';
-import 'package:payezy/pages/splash_screen_1.dart';
+import 'package:payezy/pages/splash_screen.dart';
 import 'package:payezy/pages/transferPages/fetch_data.dart';
-import 'package:payezy/pages/transferPages/transfer.dart';
+import 'package:payezy/pages/delete/transfer.dart';
 import 'package:payezy/providers/enter_details.dart';
 import 'package:payezy/providers/fetch_data_provider.dart';
 import 'package:payezy/providers/get_started_provider.dart';
@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
 return MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Payezy Mobile App',
-        home: const Splash(),
+        home: const SplashScreen(),
         routes: {
           homePage:(context)=> const HomePage(),
           enterDetailsPage:(context) =>const EnterDetails(),

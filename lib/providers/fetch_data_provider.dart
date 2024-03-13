@@ -10,12 +10,8 @@ class FetchDataProvider extends ChangeNotifier {
 
   // Method to toggle visibility at a specific index
   void toggleVisibility(int index) {
-    if (_visibility.isEmpty) {
-      // Handle the case where the visibility list is empty
-      return;
-    }
-
     _visibility[index] = !_visibility[index];
+    
     notifyListeners(); // Notify listeners after toggling
   }
 

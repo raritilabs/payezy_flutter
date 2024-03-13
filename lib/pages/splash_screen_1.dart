@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:payezy/pages/intro_page.dart';
+import 'package:payezy/pages/onboarding_screen.dart';
 import 'package:payezy/themes/colors.dart';
 
 class Splash extends StatefulWidget {
@@ -15,7 +15,8 @@ class _SplashState extends State<Splash> with TickerProviderStateMixin {
   void initState() {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
     Future.delayed(const Duration(seconds: 3),(){
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const IntroPage(),),);
+ Navigator.of(context).push(_createRoute(const OnboardingScreen()));
+     // Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const OnboardingScreen(),),);
     });
     super.initState();
    
@@ -38,3 +39,20 @@ class _SplashState extends State<Splash> with TickerProviderStateMixin {
     );
   }
 }
+
+ Route<Object?> _createRoute(Widget route) {
+    return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) =>route,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      //const begin = Offset(1, 1);
+     // const end = Offset.zero;
+   //   final tween = Tween(begin: begin, end: end);
+ // final offsetAnimation = animation.drive(tween);
+
+      return FadeTransition( 
+      opacity:animation,
+        child: child,
+      );
+    },
+  );
+  }

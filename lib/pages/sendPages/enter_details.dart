@@ -26,7 +26,7 @@ final TextEditingController _iFSC=TextEditingController();
 addData(String fname,int phone, int bankaccnum,Object ifsc) async
 {
   if(fname=="" && phone==0 && bankaccnum == 0 && ifsc==0){
-    print('Enter Required Fields');
+    const Text('Enter Required Fields');
   }
   else{
     FirebaseFirestore.instance.collection('Users').doc(fname).set({

@@ -90,15 +90,16 @@ class _SignUpState extends State<SignUp> {
                             final email = emailProvider.email;
                             final password = _password.text;
                             try{
-                              final userCredential = await FirebaseAuth.instance
+                              //final userCredential = 
+                              await FirebaseAuth.instance
                                 .createUserWithEmailAndPassword(
                               email: email,
                               password: password,
                             );
-                             print("value is $userCredential");
+                            // print("value is $userCredential");
                             }
                             catch (e){
-                              print('error:$e');
+                           //   print('error:$e');
                             }
                             
                            
