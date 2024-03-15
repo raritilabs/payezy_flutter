@@ -1,5 +1,5 @@
 
-const homePage ='/homepage';
+const sendPage ='/sendpage';
 const enterDetailsPage='/enterdetailspage';
 const cybrid = '/cybrid';
 const signupPage = '/signup';
@@ -8,3 +8,4 @@ const profile='/profile';
 const transfer='/transfer';
 const fetchData='/fetchData';
 const loginPage='/login';
+const mainScreen='/mainscreen';

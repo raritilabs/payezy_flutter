@@ -29,6 +29,8 @@ class _SplashState extends State<Splash> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
+            resizeToAvoidBottomInset: false,
+
       backgroundColor: mainBackgroundColor,
       body: Center(
         child:Image.asset('assets/payezeySplashIcon.gif',

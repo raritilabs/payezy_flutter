@@ -15,6 +15,8 @@ class TransferPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+            resizeToAvoidBottomInset: false,
+
       backgroundColor: mainBackgroundColor,
       appBar: const CustomAppBar(title: 'Transfer', isVisible: false),
       bottomNavigationBar: const BottomNavBar(),

@@ -3,11 +3,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:payezy/components/custom_button.dart';
 import 'package:payezy/components/text_field.dart';
-import 'package:payezy/providers/enter_details.dart';
+import 'package:payezy/providers/enter_details_provider.dart';
 import 'package:payezy/themes/colors.dart';
 import 'package:payezy/themes/fonts.dart';
 import 'package:payezy/themes/string_constants.dart';
 import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 
 class EnterDetails extends StatefulWidget {
   const EnterDetails({super.key});
@@ -46,14 +47,14 @@ addData(String fname,int phone, int bankaccnum,Object ifsc) async
       children: [
         ///Enter the details...
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding:  EdgeInsets.only(left: 5.w,right: 5.w,top: 4.h),
           child: Align(
             alignment: Alignment.centerLeft,
-            child: titleText(enterthedetails),
+            child: metrophobicText(enterthedetails,size: 12.sp),
           ),
         ),
-        const SizedBox(
-          height: 10,
+         SizedBox(
+          height: 1.h,
         ),
     
         details(fullname,controller: _fName,onChanged: (value)=>enterDetailsProvider.setfName(value)),
@@ -64,7 +65,7 @@ addData(String fname,int phone, int bankaccnum,Object ifsc) async
     
         Padding(
           padding:
-              const EdgeInsets.only(bottom: 10, top: 15, left: 15, right: 15),
+               EdgeInsets.only(bottom: 2.h, top: 5.h, left: 5.w, right: 5.w),
           child: CustomButton(onPressed:() {
             showDialog(
                 barrierColor: blurColor,
@@ -77,9 +78,9 @@ addData(String fname,int phone, int bankaccnum,Object ifsc) async
                             borderRadius: BorderRadius.circular(10)),
                         title: metrophobicText(
                           areyousure,
-                          size: 25,
+                          size: 15.sp,
                         ),
-                        content: metrophobicText(note,color:  lightBlueThemeColor, size: 12),
+                        content: metrophobicText(note,color:  lightBlueThemeColor, size: 10.sp),
                         actions: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -97,7 +98,7 @@ addData(String fname,int phone, int bankaccnum,Object ifsc) async
                                     lightBlueThemeColor),
                               ),
                               const SizedBox(
-                                width: 15,
+                                width: 25,
                               ),
                               Expanded(
                                 child: CustomButton(onPressed: () {
@@ -109,7 +110,7 @@ addData(String fname,int phone, int bankaccnum,Object ifsc) async
                         ],
                       ),
                     ));
-          }, text:proceed, size:22, color:white,rightAssetValue: "assets/nextIcon.png",),
+          }, text:proceed, size:17.sp, color:white,rightAssetValue: "assets/nextIcon.png",),
         ),
       ],
     );
@@ -118,7 +119,7 @@ addData(String fname,int phone, int bankaccnum,Object ifsc) async
 
 Widget details(String title, {TextEditingController? controller,dynamic onChanged}) {
   return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-    child: customTextField(title,controller: controller,onChanged: onChanged),
+    padding:  EdgeInsets.symmetric(horizontal: 5.w, vertical: 0.7.h),
+    child: customTextField(title,'',controller: controller,onChanged: onChanged),
   );
 }

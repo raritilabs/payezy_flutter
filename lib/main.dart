@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:payezy/pages/login_page.dart';
+import 'package:payezy/pages/main_screen.dart';
 import 'package:payezy/pages/profilePages/profile.dart';
 import 'package:payezy/pages/sendPages/cybrid.dart';
 import 'package:payezy/pages/sendPages/enter_details.dart';
 import 'package:payezy/pages/get_started.dart';
-import 'package:payezy/pages/home_page.dart';
+import 'package:payezy/pages/sendPages/send_page.dart';
 import 'package:payezy/pages/sign_up.dart';
 import 'package:payezy/pages/splash_screen.dart';
 import 'package:payezy/pages/transferPages/fetch_data.dart';
 import 'package:payezy/pages/delete/transfer.dart';
-import 'package:payezy/providers/enter_details.dart';
+import 'package:payezy/providers/enter_details_provider.dart';
 import 'package:payezy/providers/fetch_data_provider.dart';
 import 'package:payezy/providers/get_started_provider.dart';
+import 'package:payezy/providers/nav_provider.dart';
 import 'package:payezy/providers/send_provider.dart';
 import 'package:payezy/services/routes.dart';
 import 'package:provider/provider.dart';
@@ -37,6 +39,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<GetStartedProvider>(create:(context) => GetStartedProvider()),
         ChangeNotifierProvider<EnterDetailsProvider>(create:(context) => EnterDetailsProvider()),
         ChangeNotifierProvider<FetchDataProvider>(create:(context) => FetchDataProvider()),
+        ChangeNotifierProvider<NavigationProvider>(create:(context) => NavigationProvider()),
       ],
     
      child:Sizer(
@@ -46,7 +49,7 @@ return MaterialApp(
         title: 'Payezy Mobile App',
         home: const SplashScreen(),
         routes: {
-          homePage:(context)=> const HomePage(),
+          sendPage:(context)=> const SendPage(),
           enterDetailsPage:(context) =>const EnterDetails(),
           cybrid:(context)=>const Cybrid(),
           signupPage:(context)=>const SignUp(),
@@ -55,6 +58,7 @@ return MaterialApp(
           transfer:(context)=>const TransferPage(),
           fetchData:(context)=>const FetchData(),
           loginPage:(context)=>const LoginPage(),
+          mainScreen:(context)=>const MainScreen(),
 
         }
          );

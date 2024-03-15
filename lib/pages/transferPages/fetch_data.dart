@@ -36,11 +36,13 @@ class _FetchDataState extends State<FetchData> {
     //calling fetchDataProvider
     //final fetchDataProvider = Provider.of<FetchDataProvider>(context,listen: true);
     return Scaffold(
+            resizeToAvoidBottomInset: false,
+
         backgroundColor: mainBackgroundColor,
         appBar: const CustomAppBar(
           title: "Transfers",
         ),
-        bottomNavigationBar: const BottomNavBar(),
+       // bottomNavigationBar: const BottomNavBar(),
         body: Padding(
           padding: EdgeInsets.only(
             top: 6.h,

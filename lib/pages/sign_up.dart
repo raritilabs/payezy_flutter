@@ -8,6 +8,7 @@ import 'package:payezy/components/text_field.dart';
 import 'package:payezy/firebase_options.dart';
 import 'package:payezy/providers/get_started_provider.dart';
 import 'package:payezy/themes/colors.dart';
+import 'package:payezy/themes/fonts.dart';
 import 'package:payezy/themes/string_constants.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -40,6 +41,8 @@ class _SignUpState extends State<SignUp> {
       context,
     );
     return Scaffold(
+            resizeToAvoidBottomInset: false,
+            
       backgroundColor: mainBackgroundColor,
       appBar: const CustomAppBar(title: 'Sign Up'),
       body: FutureBuilder(
@@ -52,11 +55,12 @@ class _SignUpState extends State<SignUp> {
                 return Padding(
                   padding: EdgeInsets.symmetric(horizontal: 5.w,vertical: 13.h),
                   child: SingleChildScrollView(
+                    reverse: true,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         //email field
-                        customTextField(email,
+                        customTextField(email,'',
                             label: emailProvider.email,
                             readOnly: true,
                             textInputType: TextInputType.emailAddress),
@@ -64,6 +68,7 @@ class _SignUpState extends State<SignUp> {
                           height: 1.h,
                         ),
                         customTextField(password,
+                        '',
                             controller: _password,
                             //  onChanged: (value) => emailProvider.setPassword(value),
                             readOnly: false, //readonly value
@@ -73,7 +78,7 @@ class _SignUpState extends State<SignUp> {
                         SizedBox(
                           height: 1.h,
                         ),
-                        customTextField('Confirm Password',
+                        customTextField('Confirm Password','',
 
                             // controller:  _password,
 
@@ -82,7 +87,7 @@ class _SignUpState extends State<SignUp> {
                             obscure: true),
 
                         SizedBox(
-                          height: 2.h,
+                          height: 5.h,
                         ),
 
                         CustomButton(
@@ -107,12 +112,12 @@ class _SignUpState extends State<SignUp> {
                           text: signup,
                           size: 18.sp,
                         ),
-
+SizedBox(height: 2.h,),
                         TextButton(
                           onPressed: () {
                             Navigator.pushNamed(context, '/login');
                           },
-                          child: const Text('Already Registered? Login here'),
+                          child: metrophobicText('Already Registered? Login here',color: lightBlueThemeColor),
                         ),
                       ],
                     ),

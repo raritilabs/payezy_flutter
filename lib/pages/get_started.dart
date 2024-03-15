@@ -35,6 +35,7 @@ class _GetStartedState extends State<GetStarted> {
   Widget build(BuildContext context) {
     final emailProvider = Provider.of<GetStartedProvider>(context);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
         backgroundColor: mainBackgroundColor,
         appBar: const CustomAppBar(title: getStarted, isVisible: false),
         body: Padding(
@@ -50,7 +51,7 @@ class _GetStartedState extends State<GetStarted> {
                     child: spaceBetween(
                         metrophobicText(loginorsignup, size: 15.sp))),
                 spaceBetween(
-                  customTextField(email,
+                  customTextField(email,'',
                      readOnly: false,
                       controller: _email,
                     //  onChanged: (value) => emailProvider.setEmail(value),

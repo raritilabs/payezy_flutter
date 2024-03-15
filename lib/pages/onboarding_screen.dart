@@ -13,12 +13,12 @@ class OnboardingScreen extends StatefulWidget {
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
-    int currentIndex=0;
+  int currentIndex = 0;
   late PageController _controller;
 
-@override
+  @override
   void initState() {
-   _controller = PageController(initialPage: 0);
+    _controller = PageController(initialPage: 0);
     super.initState();
   }
 
@@ -31,131 +31,142 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: mainBackgroundColor,
       body: Column(
         children: [
-          SizedBox(height: 7.h,),
+          SizedBox(
+            height: 20.h,
+          ),
           Expanded(
             child: PageView.builder(
-              controller: _controller,
-              onPageChanged: (int index){
-                setState(() {
-                  currentIndex = index;
-                });
-              },
+                controller: _controller,
+                onPageChanged: (int index) {
+                  setState(() {
+                    currentIndex = index;
+                  });
+                },
                 itemCount: contents.length,
                 itemBuilder: (_, i) {
                   return Padding(
-                    padding:  EdgeInsets.symmetric(horizontal: 3.w ),
+                    padding: EdgeInsets.symmetric(horizontal: 2.w,),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      //  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         SizedBox(
                           width: double.infinity,
-                         
                           child: Text(
                             contents[i].title,
                             style: GoogleFonts.michroma(
-                                color: white,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 20.sp
-                                ),
+                              color: white,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 19.sp,
+                              fontStyle: FontStyle.normal,
+                              height: 1.sp,
+                            ),
                             textAlign: TextAlign.center,
                           ),
                         ),
-                         SizedBox(
-                          height: 20.h,
+                        SizedBox(
+                          height: 40.h,
                         ),
                         Padding(
-                          padding:  EdgeInsets.symmetric(horizontal: 3.h),
+                          padding: EdgeInsets.symmetric(horizontal: 15.w),
                           child: Text(contents[i].description,
                               style: GoogleFonts.metrophobic(
+                                wordSpacing: 0,
+                                letterSpacing: 0,
                                   color: lightBlueThemeColor,
                                   fontWeight: FontWeight.w400,
-                                  fontSize: 12.sp),
+                                  fontSize: 10.sp),
                               textAlign: TextAlign.center),
                         ),
                         
-
-                        
                       ],
-                      
                     ),
                   );
                 }),
           ),
-            SmoothPageIndicator(controller: _controller, count: 3,effect: const ExpandingDotsEffect(
+          //page indicator
+          SmoothPageIndicator(
+            controller: _controller,
+            count: 3,
+            effect: const ExpandingDotsEffect(
               dotColor: grey,
-              expansionFactor: 3,
-               dotHeight: 10,
-               dotWidth: 10,
-               activeDotColor: lightBlueThemeColor,
-               
-              
-             ),), 
+              expansionFactor: 2,
+              dotHeight: 6,
+              dotWidth: 6,
+              activeDotColor: lightBlueThemeColor,
+            ),
+          ),
           
-          const SizedBox(height: 10,),
+SizedBox(height: 3.h,),
           GestureDetector(
-            onTap: (){
-              if(currentIndex == contents.length -1){
-                  // Navigator.push(context,MaterialPageRoute(
-                    
-                  //   builder: (_)=> const GetStarted())
-                  //   );
-                  {
-            Navigator.of(context).push(_createRoute(const GetStarted()));
-          };
+            onTap: () {
+              if (currentIndex == contents.length - 1) {
+
+                {
+                  Navigator.of(context).push(_createRoute(const GetStarted()));
+                }
+                ;
               }
-              
-                _controller.nextPage(
-                  duration: const Duration(milliseconds: 500), 
-                  curve: Curves.easeIn,
-                  );
-              
+
+              _controller.nextPage(
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.easeIn,
+              );
             },
-            child: Container(
-             
-              decoration: BoxDecoration(
-               
-                borderRadius: BorderRadius.circular(5),
-              ),
-              child:  Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(contents[currentIndex].btnName,style: GoogleFonts.roboto(color: white),textAlign: TextAlign.center,),
-               Padding(
-                 padding:  EdgeInsets.only(left: 1.h),
-                 child: Image.asset('assets/nextIcon.png'),
-               ),
-                ],
+            
+            child: Padding(
+              padding:  EdgeInsets.only(top: 2.h),
+              child: Container(
+                width: 40.w,
+                height: 6.h,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  border: Border.all(color: mainBackgroundColor),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      contents[currentIndex].btnName,
+                      style: GoogleFonts.roboto(color: white),
+                      textAlign: TextAlign.center,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 1.h),
+                      child: Image.asset('assets/nextIcon.png'),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-          const SizedBox(height: 50,)
+           SizedBox(
+            height: 5.h,
+          )
         ],
       ),
     );
   }
-  
+
   Route<Object?> _createRoute(Widget route) {
     return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) =>route,
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      const begin = Offset(0, 1);
-      const end = Offset.zero;
-      final tween = Tween(begin: begin, end: end);
-  final offsetAnimation = animation.drive(tween);
+      pageBuilder: (context, animation, secondaryAnimation) => route,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(0, 1);
+        const end = Offset.zero;
+        final tween = Tween(begin: begin, end: end);
+        final offsetAnimation = animation.drive(tween);
 
-      return SlideTransition(
-      position: offsetAnimation,
-        child: child,
-      );
-    },
-  );
+        return SlideTransition(
+          position: offsetAnimation,
+          child: child,
+        );
+      },
+    );
   }
- 
-
-
 }
 
 class IntroPageContent {
@@ -163,21 +174,27 @@ class IntroPageContent {
   String description;
   String btnName;
 
-  IntroPageContent({required this.title, required this.description,required this.btnName});
+  IntroPageContent(
+      {required this.title, required this.description, required this.btnName});
 }
 
 List<IntroPageContent> contents = [
-   IntroPageContent(
-      title: 'Borderless Payments Feeless Transactions',
-      description: 'With ZERO Fees, Payezy is the cheapest money transfer platform in USA',
-       btnName:'Next',),
   IntroPageContent(
-      title: 'Getting money to where it matters',
-      description: 'Send payments instantly from USA to your friends and family back in India',
-       btnName:'Next',),
-     
+    title: 'Borderless Payments Feeless Transactions',
+    description:
+        'With ZERO Fees, Payezy is the cheapest money transfer platform in USA',
+    btnName: 'Next',
+  ),
   IntroPageContent(
-      title: 'Safe & Secure Transactions',
-      description: 'Your financial data is encrypted and stored securely, ensuring that your money is in safe hands',
-       btnName:'Get Started',),
+    title: 'Getting money to where it matters',
+    description:
+        'Send payments instantly from USA to your friends and family back in India',
+    btnName: 'Next',
+  ),
+  IntroPageContent(
+    title: 'Safe & Secure Transactions',
+    description:
+        'Your financial data is encrypted and stored securely, ensuring that your money is in safe hands',
+    btnName: 'Get Started',
+  ),
 ];

@@ -11,11 +11,15 @@ class Profile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const CustomAppBar(title: 'Profile', isVisible: true),
+    return 
+     Scaffold(
+          resizeToAvoidBottomInset: false,
+
+       appBar: const CustomAppBar(title: 'Profile', isVisible: true),
       backgroundColor: mainBackgroundColor,
-      bottomNavigationBar: const BottomNavBar(),
-      body: Padding(
+    //   //bottomNavigationBar: const BottomNavBar(),
+       body: 
+      Padding(
         padding: EdgeInsets.all(5.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

@@ -34,10 +34,10 @@ class _EnterAmountState extends State<EnterAmount> {
       children: [
         ///Process payment via...
         Padding(
-          padding:  EdgeInsets.only(left: 10.w, top: 1.h, bottom: 2.h),
+          padding:  EdgeInsets.only(left: 10.w, top: 0.2.h, bottom: 1.h),
           child: Align(
               alignment: Alignment.centerLeft,
-              child: subtitleText(paymentOptionsText)),
+              child: metrophobicText(paymentOptionsText,size: 10.sp,color:lightGrey)),
         ),
         //two buttons and lines
 
@@ -48,28 +48,31 @@ class _EnterAmountState extends State<EnterAmount> {
             Expanded(child: customLine()),
             //  Bank transfer button
             GestureDetector(
+              
               onTap: () {},
               child: Container(
-                  width: 150,
-                  height: 30,
+                  width: 40.w,
+                  height: 4.h,
                   decoration: const BoxDecoration(
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(5),
                         bottomLeft: Radius.circular(5)),
                     color: lightBlueThemeColor,
                   ),
-                  child: const Center(
-                      child: Text(
-                    paymentOption1,
-                    style: TextStyle(color: black),
-                  ))),
+                  child:  Center(
+                      child:metrophobicText(paymentOption1,
+                      color: black,
+                      size: 12.sp)
+                  )),
             ),
             //Card Payment button
             GestureDetector(
-              onTap: () {},
+
+              onTap: () {
+              },
               child: Container(
-                  width: 150,
-                  height: 30,
+                  width: 40.w,
+                  height: 4.h,
                   decoration: BoxDecoration(
                     borderRadius: const BorderRadius.only(
                         topRight: Radius.circular(5),
@@ -77,44 +80,50 @@ class _EnterAmountState extends State<EnterAmount> {
                     border: Border.all(color: lightBlueThemeColor),
                     color: Colors.transparent,
                   ),
-                  child: const Center(
-                      child: Text(creditcard, style: TextStyle(color: white)))),
+                  child:  Center(
+                      child: metrophobicText(creditcard,color: white,size: 12.sp),
+                      )),
             ),
             //right decorative line
             Expanded(child: customLine()),
           ],
         ),
-
-        const SizedBox(
-          height: 10,
+//space b/w
+         SizedBox(
+          height: 2.5.h,
         ),
-        //Enter the amount of...
+  //Enter the amount of...
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: titleText(entertheamount),
+          padding:  EdgeInsets.symmetric(horizontal: 5.w),
+          child: metrophobicText(entertheamount,size: 12.sp),
         ),
-        const SizedBox(
-          height: 5,
-        ), // space b/w
+          // space b/w
         //You send text field
         Padding(
-            padding:
-                const EdgeInsets.only(left: 15, right: 15, top: 2, bottom: 10),
+            padding:EdgeInsets.only(left: 5.w, right: 5.w, top: 2.h,bottom: 1.5.h),
             child: customTextField(
               youSend,
-              label: '\$',
+              'USD',
+              label: '\00.00',
               controller: _youSend,
-              onChanged: (value)=>sendPageProvider.setSendAmount(value),
-              textInputType: TextInputType.number
+              onChanged: (value){
+                sendPageProvider.setSendAmount(value);
+                },
+              textInputType: TextInputType.number,
+              sideTextcolor: sendPageProvider.expanded?white:greyFontThemeColor,
+             
             )),
 
         //Recipient gets...
 
         Padding(
-          padding: const EdgeInsets.all(15.0),
+          padding:EdgeInsets.only(left: 5.w, right: 5.w,),
           child: customTextField(
             recipientGets,
-            label: sendPageProvider.youReceive.toString(),
+            'INR',
+            label:sendPageProvider.expanded?sendPageProvider.youReceive.toString():'00.00',
+             sideTextcolor: sendPageProvider.expanded?white:greyFontThemeColor,
+             color: sendPageProvider.expanded?white:greyFontThemeColor,
             readOnly: true,
           ),
         ),
@@ -125,48 +134,46 @@ class _EnterAmountState extends State<EnterAmount> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                metrophobicText('Charges Breakdown', color: lightGrey),
+             SizedBox(height: 2.h,),
+                metrophobicText('Charges Breakdown', color: lightGrey,size: 10.sp),
+                SizedBox(height: 0.5.h,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    metrophobicText('Best Price',size: 11.sp),
+                    metrophobicText('\$1 @ 82.54 INR',size: 11.sp),
+                  ],
+                ),
+                SizedBox(height: 1.h,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    metrophobicText('Platform Charges',size: 11.sp),
+                    metrophobicText('--',size: 11.sp),
+                  ],
+                ),
+                SizedBox(
+                  height: 4.h,
+                ),
+                metrophobicText('Net Transfer', color: lightGrey,size: 10.sp),
                 SizedBox(
                   height: 1.h,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    metrophobicText('Best Price'),
-                    metrophobicText('\$1 @ 82.54 INR'),
+                    metrophobicText('Total INR Transferred',size: 11.sp),
+                    metrophobicText(sendPageProvider.youReceive.toString(),size: 11.sp)
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    metrophobicText('Platform Charges'),
-                    metrophobicText('--')
+                    metrophobicText('Effective mid-market rate',size: 11.sp),
+                    metrophobicText('--',size: 11.sp),
                   ],
                 ),
-                SizedBox(
-                  height: 1.h,
-                ),
-                metrophobicText('Net Transfer', color: lightGrey),
-                SizedBox(
-                  height: 1.h,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    metrophobicText('Total INR Transferred'),
-                    metrophobicText(sendPageProvider.youReceive.toString())
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    metrophobicText('Effective mid-market rate'),
-                    metrophobicText('--')
-                  ],
-                ),
-                SizedBox(
-                  height: 2.h,
-                ),
+               
               ],
             ),
           ),
@@ -174,13 +181,13 @@ class _EnterAmountState extends State<EnterAmount> {
 
         Padding(
           padding:
-              const EdgeInsets.only(bottom: 5, top: 0, left: 15, right: 15),
+               EdgeInsets.only(bottom: 2.h, top:5.h , left: 5.w, right: 5.w),
           child: CustomButton(
             onPressed: () {
-              sendPageProvider.setSendPage(SendPage.enterDetails);
+              sendPageProvider.setSendPage(SendPages.enterDetails);
             },
             text: proceed,
-            size: 22,
+            size: 17.sp,
             color: white,
             rightAssetValue: 'assets/nextIcon.png',
           ),

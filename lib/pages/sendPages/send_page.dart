@@ -7,17 +7,16 @@ import 'package:payezy/providers/send_provider.dart';
 import 'package:payezy/themes/string_constants.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import '../../components/bottom_nav_bar.dart'; //custom bottom nav bar
 import 'package:payezy/themes/colors.dart'; //colors
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class SendPage extends StatefulWidget {
+  const SendPage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<SendPage> createState() => _SendPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _SendPageState extends State<SendPage> {
   @override
   Widget build(BuildContext context) {
      return ChangeNotifierProvider(
@@ -25,29 +24,29 @@ class _HomePageState extends State<HomePage> {
       child:
           Consumer<SendPageProvider>(builder: (context, sendPageProvider, child) {
 return Scaffold(
-   resizeToAvoidBottomInset: false, //to prevent the overflow when textfield is clicked
+  
+  // resizeToAvoidBottomInset: true, //to prevent the overflow when textfield is clicked
       backgroundColor: mainBackgroundColor,
       //appBar begins
       appBar:  const CustomAppBar(title: send,isVisible: true,),
       body: Padding(
-       padding: EdgeInsets.only(left: 5.w,right:5.w,top: 5.h,),
-        child: Column(
-          children: [
-            CustomContainer(
-              //custom container
-              child: switch(sendPageProvider.sendPage){
-                SendPage.enterAmount=>const EnterAmount(),
-                SendPage.enterDetails=>const EnterDetails(),
-              },
-            ),
-          ],
+       padding: EdgeInsets.only(left: 5.w,right:5.w,top: 3.h,),
+        child: SingleChildScrollView(
+          reverse: true,
+          child: Column(
+            children: [
+              CustomContainer(
+                //custom container
+                child: switch(sendPageProvider.sendPage){
+                  SendPages.enterAmount=>const EnterAmount(),
+                  SendPages.enterDetails=>const EnterDetails(),
+                },
+              ),
+            ],
+          ),
         ),
       ),
-      bottomNavigationBar: const BottomNavBar(),
-    );
-
-   
-  
+    );  
           }));
           }
 }

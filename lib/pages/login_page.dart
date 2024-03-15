@@ -40,6 +40,7 @@ class _LoginState extends State<LoginPage> {
   Widget build(BuildContext context) {
    
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: mainBackgroundColor,
       appBar: const CustomAppBar(title: 'Login'),
       body: FutureBuilder(
@@ -56,14 +57,14 @@ class _LoginState extends State<LoginPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         //email field
-                        customTextField(email,
+                        customTextField(email,'',
                             controller: _email,
                             readOnly: true,
                             textInputType: TextInputType.emailAddress),
                         SizedBox(
                           height: 1.h,
                         ),
-                        customTextField(password,
+                        customTextField(password,'',
                             controller: _password,
                             //  onChanged: (value) => emailProvider.setPassword(value),
                             readOnly: false, //readonly value
@@ -91,7 +92,7 @@ class _LoginState extends State<LoginPage> {
                           text: login,
                           size: 18.sp,
                         ),
-TextButton(onPressed: (){Navigator.pushNamed(context, '/homepage');}
+TextButton(onPressed: (){Navigator.pushNamed(context, '/mainscreen');}
 , child: metrophobicText('Login'))
                        
                       ],

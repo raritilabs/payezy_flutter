@@ -12,14 +12,6 @@ Widget titleText(String text) {
   );
 }
 
-Widget subtitleText(String text) {
-  return Text(
-    text,
-    style: const TextStyle(
-      color: greyFontThemeColor,
-    ),
-  );
-}
 
 Widget metrophobicText(String text,{Color color=white,double size=16,TextAlign textAlign=TextAlign.left,double spacing = -0.3}){
     return Text(
@@ -27,6 +19,20 @@ Widget metrophobicText(String text,{Color color=white,double size=16,TextAlign t
     textAlign: textAlign,
     text,
     style: GoogleFonts.metrophobic(
+      color: color,
+      fontSize: size,
+      letterSpacing:spacing, 
+      
+    ),
+  );
+}
+
+Widget robotoText(String text,{Color color=white,double size=16,TextAlign textAlign=TextAlign.left,double spacing = -0.3}){
+    return Text(
+
+    textAlign: textAlign,
+    text,
+    style: GoogleFonts.roboto(
       color: color,
       fontSize: size,
       letterSpacing:spacing, 
