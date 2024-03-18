@@ -54,13 +54,14 @@ class _GetStartedState extends State<GetStarted> {
                   customTextField(email,'',
                      readOnly: false,
                       controller: _email,
-                    //  onChanged: (value) => emailProvider.setEmail(value),
+                      onChanged: (value) => emailProvider.setEmail(value),
                       obscure: false,
                       textInputType: TextInputType.emailAddress),
                 ),
+                SizedBox(height: 5.h,),
                 spaceBetween(CustomButton(
                   onPressed: () async{
-                    emailProvider.setEmail(_email.text);
+                  //  emailProvider.setEmail(_email.text);
                     Navigator.pushNamed(context, '/signup');
                   },
                   text: continu,

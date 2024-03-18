@@ -41,6 +41,7 @@ class _LoginState extends State<LoginPage> {
    
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      
       backgroundColor: mainBackgroundColor,
       appBar: const CustomAppBar(title: 'Login'),
       body: FutureBuilder(
@@ -52,51 +53,50 @@ class _LoginState extends State<LoginPage> {
               case ConnectionState.done:
                 return Padding(
                   padding: EdgeInsets.symmetric(horizontal: 5.w,vertical: 13.h),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        //email field
-                        customTextField(email,'',
-                            controller: _email,
-                            readOnly: true,
-                            textInputType: TextInputType.emailAddress),
-                        SizedBox(
-                          height: 1.h,
-                        ),
-                        customTextField(password,'',
-                            controller: _password,
-                            //  onChanged: (value) => emailProvider.setPassword(value),
-                            readOnly: false, //readonly value
-                            textInputType: TextInputType.text,
-                            obscure: true),
-
-                       
-                        SizedBox(
-                          height: 2.h,
-                        ),
-
-                        CustomButton(
-                          onPressed: () async {
-                            final email = _email.text;
-                            final password = _password.text;
-                            try{
-                              FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
-                            }
-                             
-                        catch(e){
-                          print(e);
-                        }
-                        Navigator.pushNamed(context, '/homepage');
-                          },
-                          text: login,
-                          size: 18.sp,
-                        ),
-TextButton(onPressed: (){Navigator.pushNamed(context, '/mainscreen');}
-, child: metrophobicText('Login'))
-                       
-                      ],
-                    ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      //email field
+                      customTextField(email,'',
+                          controller: _email,
+                          readOnly: true,
+                          textInputType: TextInputType.emailAddress),
+                      SizedBox(
+                        height: 1.h,
+                      ),
+                      customTextField(password,'',
+                          controller: _password,
+                          //  onChanged: (value) => emailProvider.setPassword(value),
+                          readOnly: false, //readonly value
+                          textInputType: TextInputType.text,
+                          obscure: true),
+                  
+                     
+                      SizedBox(
+                        height: 8.h,
+                      ),
+                  
+                      CustomButton(
+                        onPressed: () async {
+                          final email = _email.text;
+                          final password = _password.text;
+                          try{
+                            FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
+                          
+                          }
+                           
+                      catch(e){
+                        print(e);
+                      }
+                      Navigator.pushNamed(context, '/homepage');
+                        },
+                        text: login,
+                        size: 18.sp,
+                      ),
+                  TextButton(onPressed: (){Navigator.pushNamed(context, '/mainscreen');}
+                  , child: metrophobicText('Login'))
+                     
+                    ],
                   ),
                 );
               default:

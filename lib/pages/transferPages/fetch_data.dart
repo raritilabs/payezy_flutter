@@ -123,7 +123,7 @@ class _FetchDataState extends State<FetchData> {
                                                 ),
                                               ),
                                               metrophobicText(
-                                                  "${snapshot.data!.docs[index]["First Name"]}",
+                                                  "${(snapshot.data!.docs[index]["First Name"]).toString().substring(0,7)}",
                                                   size: 13.sp),
                                             ],
                                           ),

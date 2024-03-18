@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:payezy/components/custom_button.dart';
 import 'package:payezy/components/custom_line.dart';
@@ -18,6 +20,8 @@ class EnterAmount extends StatefulWidget {
 
 class _EnterAmountState extends State<EnterAmount> {
   late final TextEditingController _youSend;
+  late String snackBar='';
+  final formKey=GlobalKey<FormState>();
   
   @override
   void initState() {
@@ -78,7 +82,7 @@ class _EnterAmountState extends State<EnterAmount> {
                         topRight: Radius.circular(5),
                         bottomRight: Radius.circular(5)),
                     border: Border.all(color: lightBlueThemeColor),
-                    color: Colors.transparent,
+                    color: const Color.fromRGBO(0, 0, 0, 0),
                   ),
                   child:  Center(
                       child: metrophobicText(creditcard,color: white,size: 12.sp),
@@ -99,20 +103,31 @@ class _EnterAmountState extends State<EnterAmount> {
         ),
           // space b/w
         //You send text field
-        Padding(
-            padding:EdgeInsets.only(left: 5.w, right: 5.w, top: 2.h,bottom: 1.5.h),
-            child: customTextField(
-              youSend,
-              'USD',
-              label: '\00.00',
-              controller: _youSend,
-              onChanged: (value){
-                sendPageProvider.setSendAmount(value);
-                },
-              textInputType: TextInputType.number,
-              sideTextcolor: sendPageProvider.expanded?white:greyFontThemeColor,
-             
-            )),
+        Form(
+          key:formKey,
+          child: Padding(
+              padding:EdgeInsets.only(left: 5.w, right: 5.w, top: 2.h,bottom: 2.5.h),
+              child: customTextField(
+                youSend,
+                'USD',
+                label: '\00.00',
+                controller: _youSend,
+                onChanged: (value){
+                  try{ if(value!=null || value!.isEmpty){
+                 sendPageProvider.setSendAmount(value);
+                  }}
+                 catch (e){
+                  print('error is $e');
+                 }
+                 
+                 
+                  },
+                textInputType: TextInputType.number,
+              
+                sideTextcolor: sendPageProvider.expanded?white:greyFontThemeColor,
+               
+              )),
+        ),
 
         //Recipient gets...
 
@@ -127,6 +142,9 @@ class _EnterAmountState extends State<EnterAmount> {
             readOnly: true,
           ),
         ),
+        SizedBox(height: 2.h,),
+        metrophobicText(sendPageProvider.noValueValidationMessage?"Please enter a valid amount of USD to continue":'',color: Colors.red,size: 11.sp),
+
         Visibility(
           visible:sendPageProvider.expanded,
           child: Padding(
@@ -173,7 +191,8 @@ class _EnterAmountState extends State<EnterAmount> {
                     metrophobicText('--',size: 11.sp),
                   ],
                 ),
-               
+               SizedBox(height: 2.h,),
+             metrophobicText(sendPageProvider.maxValueValidationMessage?"Maximum allowed transfer is 2000 USD":'',color: Colors.red,size: 11.sp),
               ],
             ),
           ),
@@ -181,10 +200,20 @@ class _EnterAmountState extends State<EnterAmount> {
 
         Padding(
           padding:
-               EdgeInsets.only(bottom: 2.h, top:5.h , left: 5.w, right: 5.w),
+               EdgeInsets.only(bottom: 2.h, top:4.h , left: 5.w, right: 5.w),
           child: CustomButton(
             onPressed: () {
+            if(sendPageProvider.youSend == 0.0){
+               sendPageProvider.setnoValueValidationMessage(); 
+            }
+            else if(sendPageProvider.youSend >2000){
+              sendPageProvider.setmaxValueValidationMessage();
+            }
+            else{
               sendPageProvider.setSendPage(SendPages.enterDetails);
+            }
+            
+             
             },
             text: proceed,
             size: 17.sp,

@@ -25,14 +25,15 @@ class _SendPageState extends State<SendPage> {
           Consumer<SendPageProvider>(builder: (context, sendPageProvider, child) {
 return Scaffold(
   
-  // resizeToAvoidBottomInset: true, //to prevent the overflow when textfield is clicked
+  //resizeToAvoidBottomInset: false, //to prevent the overflow when textfield is clicked
       backgroundColor: mainBackgroundColor,
       //appBar begins
       appBar:  const CustomAppBar(title: send,isVisible: true,),
       body: Padding(
        padding: EdgeInsets.only(left: 5.w,right:5.w,top: 3.h,),
         child: SingleChildScrollView(
-          reverse: true,
+          reverse: true,  
+
           child: Column(
             children: [
               CustomContainer(

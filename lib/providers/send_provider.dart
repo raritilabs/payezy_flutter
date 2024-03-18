@@ -15,6 +15,10 @@ num _youReceive=00.00;
 num get youReceive=>_youReceive;
 bool _expanded=false;
 bool get expanded=>_expanded;
+bool _noValueValidationMessage=false; //turns true when no value is typed
+bool get noValueValidationMessage=>_noValueValidationMessage;
+bool _maxValueValidationMessage=false; //turns true when value exceeds 2000
+bool get maxValueValidationMessage=>_maxValueValidationMessage;
 
 
   void setSendPage(SendPages sendPage)
@@ -24,9 +28,25 @@ bool get expanded=>_expanded;
   }
 
   void setSendAmount(String value){
+    _noValueValidationMessage=false;
+    _maxValueValidationMessage=false;
   _youSend = num.parse(value);
   _youReceive=_youSend*82.54;
   _expanded=true;
-  notifyListeners();
-} 
-}
+   notifyListeners();
+  }
+  
+  void setnoValueValidationMessage(){
+    _noValueValidationMessage=true;
+    notifyListeners();
+ }
+
+  void setmaxValueValidationMessage(){
+    _maxValueValidationMessage=true;
+    notifyListeners();
+ }
+  }
+
+    
+ 
+

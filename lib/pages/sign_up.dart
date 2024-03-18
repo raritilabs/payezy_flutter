@@ -21,38 +21,41 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-  late final TextEditingController _password;
+ // late final TextEditingController _password;
+   final TextEditingController _password = TextEditingController();
 
-  @override
-  void initState() {
-    _password = TextEditingController();
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   _password = TextEditingController();
+  //   super.initState();
+  // }
 
-  @override
-  void dispose() {
-    _password.dispose();
-    super.dispose();
-  }
-
+  // @override
+  // void dispose() {
+  //   _password.dispose();
+  //   super.dispose();
+  // }
   @override
   Widget build(BuildContext context) {
     final emailProvider = Provider.of<GetStartedProvider>(
       context,
     );
+
     return Scaffold(
             resizeToAvoidBottomInset: false,
             
       backgroundColor: mainBackgroundColor,
       appBar: const CustomAppBar(title: 'Sign Up'),
-      body: FutureBuilder(
+      body:
+       FutureBuilder(
           future: Firebase.initializeApp(
             options: DefaultFirebaseOptions.currentPlatform,
           ),
           builder: (context, snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.done:
-                return Padding(
+                return 
+                Padding(
                   padding: EdgeInsets.symmetric(horizontal: 5.w,vertical: 13.h),
                   child: SingleChildScrollView(
                     reverse: true,
@@ -61,22 +64,30 @@ class _SignUpState extends State<SignUp> {
                       children: [
                         //email field
                         customTextField(email,'',
+                      
                             label: emailProvider.email,
                             readOnly: true,
-                            textInputType: TextInputType.emailAddress),
+                            textInputType: TextInputType.emailAddress,
+                         
+                            ),
+
+                            
                         SizedBox(
-                          height: 1.h,
+                          height: 3.h,
                         ),
                         customTextField(password,
                         '',
                             controller: _password,
-                            //  onChanged: (value) => emailProvider.setPassword(value),
+                              onChanged: (value) { 
+                                emailProvider.setPassword(value);
+                              
+                              },
                             readOnly: false, //readonly value
                             textInputType: TextInputType.text,
                             obscure: true),
 
                         SizedBox(
-                          height: 1.h,
+                          height: 3.h,
                         ),
                         customTextField('Confirm Password','',
 
@@ -87,25 +98,26 @@ class _SignUpState extends State<SignUp> {
                             obscure: true),
 
                         SizedBox(
-                          height: 5.h,
+                          height: 8.h,
                         ),
 
                         CustomButton(
                           onPressed: () async {
-                            final email = emailProvider.email;
-                            final password = _password.text;
-                            try{
-                              //final userCredential = 
-                              await FirebaseAuth.instance
-                                .createUserWithEmailAndPassword(
-                              email: email,
-                              password: password,
-                            );
-                            // print("value is $userCredential");
-                            }
-                            catch (e){
+                            //final email = emailProvider.email;
+                            //final password = _password.text;
+                         
+                            // try{
+                            //   //final userCredential = 
+                            //   await FirebaseAuth.instance
+                            //     .createUserWithEmailAndPassword(
+                            //   email: email,
+                            //   password: password,
+                            // );
+                            // // print("value is $userCredential");
+                            // }
+                         //   catch (e){
                            //   print('error:$e');
-                            }
+                         //   }
                             
                            
                           },
@@ -122,11 +134,14 @@ SizedBox(height: 2.h,),
                       ],
                     ),
                   ),
-                );
+                
+     ) ;
               default:
-                return const LinearProgressIndicator();
+               return const LinearProgressIndicator();
             }
-          }),
-    );
+          }
+          ),
+    )
+    ;
   }
 }
