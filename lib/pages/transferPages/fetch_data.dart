@@ -2,7 +2,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:payezy/components/app_bar.dart';
-import 'package:payezy/components/bottom_nav_bar.dart';
 import 'package:payezy/components/custom_button.dart';
 import 'package:payezy/components/custom_container.dart';
 import 'package:payezy/themes/colors.dart';
@@ -16,17 +15,38 @@ class FetchData extends StatefulWidget {
   State<FetchData> createState() => _FetchDataState();
 }
 
-class _FetchDataState extends State<FetchData> {
+class _FetchDataState extends State<FetchData> with SingleTickerProviderStateMixin {
+
+  late AnimationController _controller;
+  late Animation<Offset> _animation;
+ @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 500), // Adjust duration as needed
+    );
+
+   _animation = Tween<Offset>(
+      begin: Offset(0.0, -1.0), // Off-screen top
+      end: Offset.zero,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.ease));
+  }
+
+
   int selectedItemIndex = -1;
+  
 
   void toggleVisibility(int index) {
     setState(() {
       if (selectedItemIndex == index) {
         // If the same item is clicked again, hide the container
         selectedItemIndex = -1;
+         _controller.reverse();
       } else {
         // If a different item is clicked, show its container
         selectedItemIndex = index;
+        _controller.forward();
       }
     });
   }
@@ -123,7 +143,10 @@ class _FetchDataState extends State<FetchData> {
                                                 ),
                                               ),
                                               metrophobicText(
-                                                  "${(snapshot.data!.docs[index]["First Name"]).toString().substring(0,7)}",
+                                                  (((snapshot.data!.docs[index]["First Name"]).toString().length)>6)?
+                                                  (snapshot.data!.docs[index]["First Name"]).toString().substring(0,6):
+                                                  (snapshot.data!.docs[index]["First Name"]).toString(),
+                                                  
                                                   size: 13.sp),
                                             ],
                                           ),
@@ -139,159 +162,164 @@ class _FetchDataState extends State<FetchData> {
                                       visible: selectedItemIndex == index
                                           ? true
                                           : false,
-                                      child: Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 4.w),
-                                        child: Column(
-                                          children: [
-                                            SizedBox(
-                                              height: 3.h,
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
+                                      child: SlideTransition(
+                                        position: _animation,
+                                        child: CustomContainer(
+                                          child: Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 4.w),
+                                            child: Column(
                                               children: [
+                                                SizedBox(
+                                                  height: 3.h,
+                                                ),
                                                 Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
                                                   children: [
-                                                    Padding(
-                                                      padding:
-                                                          EdgeInsets.symmetric(
-                                                              horizontal: .5.h),
-                                                      child: Image.asset(
-                                                          'assets/USIcon.png'),
+                                                    Row(
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsets.symmetric(
+                                                                  horizontal: .5.h),
+                                                          child: Image.asset(
+                                                              'assets/USIcon.png'),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsets.symmetric(
+                                                                  horizontal:
+                                                                      0.5.h),
+                                                          child: metrophobicText(
+                                                              '\$ 1000.00',
+                                                              size: 13.sp),
+                                                        ),
+                                                      ],
                                                     ),
-                                                    Padding(
-                                                      padding:
-                                                          EdgeInsets.symmetric(
-                                                              horizontal:
-                                                                  0.5.h),
-                                                      child: metrophobicText(
-                                                          '\$ 1000.00',
-                                                          size: 13.sp),
-                                                    ),
+                                                    Container(
+                                                        decoration: BoxDecoration(
+                                                          color: orange,
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  3),
+                                                        ),
+                                                        child: Padding(
+                                                          padding:
+                                                              EdgeInsets.symmetric(
+                                                                  horizontal: 3.w,
+                                                                  vertical: 0.3.h),
+                                                          child: metrophobicText(
+                                                              'Processing'),
+                                                        )),
                                                   ],
                                                 ),
-                                                Container(
-                                                    decoration: BoxDecoration(
-                                                      color: orange,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              3),
-                                                    ),
-                                                    child: Padding(
-                                                      padding:
-                                                          EdgeInsets.symmetric(
-                                                              horizontal: 3.w,
-                                                              vertical: 0.3.h),
+                                                                                
+                                                //end of row one----------------------------------
+                                                SizedBox(
+                                                  height: 3.h,
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    Expanded(
+                                                        child: SizedBox(
                                                       child: metrophobicText(
-                                                          'Processing'),
+                                                          'Transfer ID',
+                                                          color: lightGrey,
+                                                          size: 10.sp),
                                                     )),
+                                                    Expanded(
+                                                        child: SizedBox(
+                                                      child: metrophobicText(
+                                                          'Account No.',
+                                                          color: lightGrey,
+                                                          size: 10.sp),
+                                                    )),
+                                                  ],
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    Expanded(
+                                                        child: SizedBox(
+                                                      child: metrophobicText(
+                                                          '37823727272',
+                                                          size: 12.sp),
+                                                    )),
+                                                    Expanded(
+                                                        child: SizedBox(
+                                                      child: metrophobicText(
+                                                          "${snapshot.data!.docs[index]['Bank Acc Number']}",
+                                                          size: 12.sp),
+                                                    )),
+                                                  ],
+                                                ),
+                                                                                
+                                                SizedBox(
+                                                  height: 3.h,
+                                                ),
+                                                                                
+                                                //------------------------row 2 ends--------------------
+                                                                                
+                                                //-------------------------row 3 begins-------------------------------//
+                                                Row(
+                                                  children: [
+                                                    Expanded(
+                                                        child: SizedBox(
+                                                      child: metrophobicText(
+                                                          'IFSC Code',
+                                                          color: lightGrey,
+                                                          size: 10.sp),
+                                                    )),
+                                                                                
+                                                    Expanded(
+                                                        child: SizedBox(
+                                                      child: metrophobicText(
+                                                          'Phone',
+                                                          color: lightGrey,
+                                                          size: 10.sp),
+                                                    )),
+                                                                                
+                                                    
+                                                  ],
+                                                ),
+                                                                                
+                                                Row(
+                                                  children: [
+                                                    Expanded(
+                                                        child: SizedBox(
+                                                      child: metrophobicText(
+                                                          "${snapshot.data!.docs[index]['IFSC Code']}",
+                                                          size: 12.sp),
+                                                    )),
+                                                                                
+                                                    Expanded(
+                                                        child: SizedBox(
+                                                      child: metrophobicText(
+                                                          "${snapshot.data!.docs[index]['Phone']}",
+                                                          size: 12.sp),
+                                                    )),
+                                                                                
+                                                    // Expanded(child: SizedBox()),
+                                                  ],
+                                                ),
+                                                                                
+                                                SizedBox(height: 3.h),
+                                                metrophobicText(
+                                                    'Please be patient,Your transfer order will be succesfully delievered within 2 hours.',
+                                                    size: 10.sp,
+                                                    color: orange),
+                                                SizedBox(
+                                                  height: 3.h,
+                                                ),
+                                                CustomButton(
+                                                  onPressed: () {},
+                                                  text: "Cancel & Refund",
+                                                  size: 16.sp,
+                                                ),
                                               ],
                                             ),
-
-                                            //end of row one----------------------------------
-                                            SizedBox(
-                                              height: 3.h,
-                                            ),
-                                            Row(
-                                              children: [
-                                                Expanded(
-                                                    child: SizedBox(
-                                                  child: metrophobicText(
-                                                      'Transfer ID',
-                                                      color: lightGrey,
-                                                      size: 10.sp),
-                                                )),
-                                                Expanded(
-                                                    child: SizedBox(
-                                                  child: metrophobicText(
-                                                      'Account No.',
-                                                      color: lightGrey,
-                                                      size: 10.sp),
-                                                )),
-                                              ],
-                                            ),
-                                            Row(
-                                              children: [
-                                                Expanded(
-                                                    child: SizedBox(
-                                                  child: metrophobicText(
-                                                      '37823727272',
-                                                      size: 12.sp),
-                                                )),
-                                                Expanded(
-                                                    child: SizedBox(
-                                                  child: metrophobicText(
-                                                      "${snapshot.data!.docs[index]['Bank Acc Number']}",
-                                                      size: 12.sp),
-                                                )),
-                                              ],
-                                            ),
-
-                                            SizedBox(
-                                              height: 3.h,
-                                            ),
-
-                                            //------------------------row 2 ends--------------------
-
-                                            //-------------------------row 3 begins-------------------------------//
-                                            Row(
-                                              children: [
-                                                Expanded(
-                                                    child: SizedBox(
-                                                  child: metrophobicText(
-                                                      'IFSC Code',
-                                                      color: lightGrey,
-                                                      size: 10.sp),
-                                                )),
-
-                                                Expanded(
-                                                    child: SizedBox(
-                                                  child: metrophobicText(
-                                                      'Phone',
-                                                      color: lightGrey,
-                                                      size: 10.sp),
-                                                )),
-
-                                                
-                                              ],
-                                            ),
-
-                                            Row(
-                                              children: [
-                                                Expanded(
-                                                    child: SizedBox(
-                                                  child: metrophobicText(
-                                                      "${snapshot.data!.docs[index]['IFSC Code']}",
-                                                      size: 12.sp),
-                                                )),
-
-                                                Expanded(
-                                                    child: SizedBox(
-                                                  child: metrophobicText(
-                                                      "${snapshot.data!.docs[index]['Phone']}",
-                                                      size: 12.sp),
-                                                )),
-
-                                                // Expanded(child: SizedBox()),
-                                              ],
-                                            ),
-
-                                            SizedBox(height: 3.h),
-                                            metrophobicText(
-                                                'Please be patient,Your transfer order will be succesfully delievered within 2 hours.',
-                                                size: 10.sp,
-                                                color: orange),
-                                            SizedBox(
-                                              height: 3.h,
-                                            ),
-                                            CustomButton(
-                                              onPressed: () {},
-                                              text: "Cancel & Refund",
-                                              size: 16.sp,
-                                            ),
-                                          ],
+                                          ),
                                         ),
                                       ),
                                     ),

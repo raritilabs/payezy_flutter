@@ -1,6 +1,6 @@
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:payezy/components/custom_button.dart';
 import 'package:payezy/components/custom_line.dart';
 import 'package:payezy/components/text_field.dart';
@@ -30,6 +30,12 @@ class _EnterAmountState extends State<EnterAmount> {
   }
 
   @override
+  void dispose() {
+    _youSend.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
 
     final sendPageProvider =
@@ -41,6 +47,7 @@ class _EnterAmountState extends State<EnterAmount> {
           padding:  EdgeInsets.only(left: 10.w, top: 0.2.h, bottom: 1.h),
           child: Align(
               alignment: Alignment.centerLeft,
+            
               child: metrophobicText(paymentOptionsText,size: 10.sp,color:lightGrey)),
         ),
         //two buttons and lines
@@ -92,7 +99,7 @@ class _EnterAmountState extends State<EnterAmount> {
             Expanded(child: customLine()),
           ],
         ),
-//space b/w
+//space b/w button and enter the amount..
          SizedBox(
           height: 2.5.h,
         ),
@@ -103,31 +110,29 @@ class _EnterAmountState extends State<EnterAmount> {
         ),
           // space b/w
         //You send text field
-        Form(
-          key:formKey,
-          child: Padding(
-              padding:EdgeInsets.only(left: 5.w, right: 5.w, top: 2.h,bottom: 2.5.h),
-              child: customTextField(
-                youSend,
-                'USD',
-                label: '\00.00',
-                controller: _youSend,
-                onChanged: (value){
-                  try{ if(value!=null || value!.isEmpty){
-                 sendPageProvider.setSendAmount(value);
-                  }}
-                 catch (e){
-                  print('error is $e');
-                 }
-                 
-                 
-                  },
-                textInputType: TextInputType.number,
-              
-                sideTextcolor: sendPageProvider.expanded?white:greyFontThemeColor,
+        Padding(
+            padding:EdgeInsets.only(left: 5.w, right: 5.w, top: 2.h,bottom: 2.5.h),
+            child: customTextField(
+              youSend,
+              'USD',
+              label: '00.00',
+              inputFormatters:[FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}'))],
+              controller: _youSend,
+              onChanged: (value){
+                try{ if(value!=null || value!.isEmpty){
+               sendPageProvider.setSendAmount(value);
+                }}
+               catch (e){
+                print('error is $e');
+               }
                
-              )),
-        ),
+               
+                },
+              textInputType: const TextInputType.numberWithOptions(decimal: true),
+            
+              sideTextcolor: sendPageProvider.expanded?white:greyFontThemeColor,
+             
+            )),
 
         //Recipient gets...
 

@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:payezy/pages/profilePages/profile.dart';
-import 'package:payezy/pages/sendPages/enter_amount.dart';
-import 'package:payezy/pages/transferPages/fetch_data.dart';
 import 'package:payezy/providers/nav_provider.dart';
 import 'package:payezy/themes/colors.dart';
 import 'package:provider/provider.dart';

@@ -23,6 +23,7 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
  // late final TextEditingController _password;
    final TextEditingController _password = TextEditingController();
+   final TextEditingController _confirmPassword = TextEditingController();
 
   // @override
   // void initState() {
@@ -78,7 +79,7 @@ class _SignUpState extends State<SignUp> {
                         customTextField(password,
                         '',
                             controller: _password,
-                              onChanged: (value) { 
+                              onFieldSubmitted: (value) { 
                                 emailProvider.setPassword(value);
                               
                               },
@@ -91,35 +92,49 @@ class _SignUpState extends State<SignUp> {
                         ),
                         customTextField('Confirm Password','',
 
-                            // controller:  _password,
-
+                             controller:  _confirmPassword,
+onFieldSubmitted: (value) { 
+                                emailProvider.setConfirmPassword(value);
+                              
+                              },
+                            
                             readOnly: false, //readonly value
                             textInputType: TextInputType.text,
                             obscure: true),
 
                         SizedBox(
-                          height: 8.h,
+                          height: 3.h,
                         ),
-
+                        metrophobicText(emailProvider.wrongPassword?"Passwords do not match":'',color: Colors.red),
+                         SizedBox(
+                          height: 2.h,
+                        ),
                         CustomButton(
                           onPressed: () async {
-                            //final email = emailProvider.email;
-                            //final password = _password.text;
+
+                            if(emailProvider.password!=emailProvider.confirmPassword){
+                              emailProvider.setWrongPasswordValidation();
+                            }
+                            else{
+final email = emailProvider.email;
+                            final password =emailProvider.password;
                          
-                            // try{
-                            //   //final userCredential = 
-                            //   await FirebaseAuth.instance
-                            //     .createUserWithEmailAndPassword(
-                            //   email: email,
-                            //   password: password,
-                            // );
-                            // // print("value is $userCredential");
-                            // }
-                         //   catch (e){
-                           //   print('error:$e');
-                         //   }
+                             try{
+                            final userCredential = 
+                              await FirebaseAuth.instance
+                                 .createUserWithEmailAndPassword(
+                               email: email,
+                               password: password,
+                             );
+                             print("value is $userCredential");
+                             }
+                           catch (e){
+                            print('error:$e');
+                            }
                             
                            
+                            }
+                            
                           },
                           text: signup,
                           size: 18.sp,

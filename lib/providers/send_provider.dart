@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:payezy/functions/truncate_to_decimal.dart';
 
 enum SendPages{
   enterAmount,
@@ -31,7 +32,7 @@ bool get maxValueValidationMessage=>_maxValueValidationMessage;
     _noValueValidationMessage=false;
     _maxValueValidationMessage=false;
   _youSend = num.parse(value);
-  _youReceive=_youSend*82.54;
+  _youReceive=(_youSend*82.54).truncateToDecimalPlaces(2);
   _expanded=true;
    notifyListeners();
   }

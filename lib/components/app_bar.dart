@@ -1,5 +1,6 @@
 //Custom AppBar(Bar at the top of the app)
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:payezy/themes/colors.dart';
 import 'package:sizer/sizer.dart';
@@ -34,7 +35,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget{
                 onPressed: () {
                   // Action for the notification button
                 },
-                icon: Image.asset('assets/notifyIcon.png'),
+                icon: SvgPicture.asset( 'assets/notifyIcon.svg'),
+              
               ),
             ],
           ),

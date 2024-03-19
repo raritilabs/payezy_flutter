@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 import 'package:payezy/pages/get_started.dart';
 import 'package:payezy/themes/colors.dart';
 import 'package:sizer/sizer.dart';
@@ -31,11 +32,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       backgroundColor: mainBackgroundColor,
       body: Column(
         children: [
-          SizedBox(
+          SizedBox(   //initial gap 
             height: 20.h,
           ),
           Expanded(
@@ -68,8 +68,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           ),
                         ),
                         SizedBox(
-                          height: 40.h,
+                          height: 3.h,
                         ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10.w),
+                          child:LottieBuilder.asset(contents[i].animation), 
+                        ),
+                        
+                        SizedBox(
+                          height: 5.h,
+                        ),
+
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 15.w),
                           child: Text(contents[i].description,
@@ -173,9 +182,10 @@ class IntroPageContent {
   String title;
   String description;
   String btnName;
+  String animation;
 
   IntroPageContent(
-      {required this.title, required this.description, required this.btnName});
+      {required this.title, required this.description, required this.btnName,required this.animation});
 }
 
 List<IntroPageContent> contents = [
@@ -184,17 +194,20 @@ List<IntroPageContent> contents = [
     description:
         'With ZERO Fees, Payezy is the cheapest money transfer platform in USA',
     btnName: 'Next',
+    animation:'assets/animation_1.json'
   ),
   IntroPageContent(
     title: 'Getting money to where it matters',
     description:
         'Send payments instantly from USA to your friends and family back in India',
     btnName: 'Next',
+    animation: 'assets/animation_2.json'
   ),
   IntroPageContent(
     title: 'Safe & Secure Transactions',
     description:
         'Your financial data is encrypted and stored securely, ensuring that your money is in safe hands',
     btnName: 'Get Started',
+    animation: 'assets/animation_3.json'
   ),
 ];

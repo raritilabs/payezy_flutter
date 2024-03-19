@@ -6,6 +6,10 @@ class GetStartedProvider extends ChangeNotifier{
 String get email=>_email;
 String _password='';
 String get password=>_password;
+String _confirmPassword='';
+String get confirmPassword=>_confirmPassword;
+bool _wrongPassword=false;
+bool get wrongPassword=>_wrongPassword;
 
 void setEmail(String value){
   _email = value;
@@ -15,6 +19,16 @@ void setEmail(String value){
 void setPassword(String value){
   _password = value;
   notifyListeners();
-}  
+}
+
+void setConfirmPassword(String value){
+  _confirmPassword=value;
+  notifyListeners();
+}
+
+void setWrongPasswordValidation(){
+  _wrongPassword=true;
+  notifyListeners();
+}
 
 }

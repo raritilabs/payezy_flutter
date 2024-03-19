@@ -19,6 +19,8 @@ class SendPage extends StatefulWidget {
 class _SendPageState extends State<SendPage> {
   @override
   Widget build(BuildContext context) {
+
+    
      return ChangeNotifierProvider(
       create: (context) => SendPageProvider(),
       child:
@@ -31,20 +33,16 @@ return Scaffold(
       appBar:  const CustomAppBar(title: send,isVisible: true,),
       body: Padding(
        padding: EdgeInsets.only(left: 5.w,right:5.w,top: 3.h,),
-        child: SingleChildScrollView(
-          reverse: true,  
-
-          child: Column(
-            children: [
-              CustomContainer(
-                //custom container
-                child: switch(sendPageProvider.sendPage){
-                  SendPages.enterAmount=>const EnterAmount(),
-                  SendPages.enterDetails=>const EnterDetails(),
-                },
-              ),
-            ],
-          ),
+        child: ListView(
+          children: [
+            CustomContainer(
+              //custom container
+              child: switch(sendPageProvider.sendPage){
+                SendPages.enterAmount=>const EnterAmount(),
+                SendPages.enterDetails=>const EnterDetails(),
+              },
+            ),
+          ],
         ),
       ),
     );  

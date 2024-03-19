@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:payezy/components/app_bar.dart';
-import 'package:payezy/components/bottom_nav_bar.dart';
 import 'package:payezy/components/custom_container.dart';
 import 'package:payezy/themes/colors.dart';
 import 'package:payezy/themes/fonts.dart';

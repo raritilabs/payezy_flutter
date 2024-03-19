@@ -21,31 +21,28 @@ class _GetStartedState extends State<GetStarted> {
 
   @override
   void initState() {
-    _email = TextEditingController();
+    _email = TextEditingController(); //controls the email text field
     super.initState();
   }
 
   @override
   void dispose() {
     super.dispose();
-    _email.dispose();
+    _email.dispose();  //disposes the email controller
   }
 
   @override
   Widget build(BuildContext context) {
     final emailProvider = Provider.of<GetStartedProvider>(context);
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-        backgroundColor: mainBackgroundColor,
-        appBar: const CustomAppBar(title: getStarted, isVisible: false),
+      resizeToAvoidBottomInset: false, // prevents the bottom from coming up with the keyboard
+        backgroundColor: mainBackgroundColor,  
+        appBar: const CustomAppBar(title: getStarted, isVisible: false),  
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 5.w),
+          padding: EdgeInsets.symmetric(horizontal: 5.w),  //side padding 5.w
           child: SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox(
-                  height: 1.h,
-                ),
                 Align(
                     alignment: Alignment.centerLeft,
                     child: spaceBetween(
@@ -58,13 +55,13 @@ class _GetStartedState extends State<GetStarted> {
                       obscure: false,
                       textInputType: TextInputType.emailAddress),
                 ),
-                SizedBox(height: 5.h,),
+                SizedBox(height: 2.h,),
                 spaceBetween(CustomButton(
                   onPressed: () async{
                   //  emailProvider.setEmail(_email.text);
                     Navigator.pushNamed(context, '/signup');
                   },
-                  text: continu,
+                  text: 'Continue',
                   size: 18.sp,
                   color: white,
                 )),
@@ -84,6 +81,7 @@ class _GetStartedState extends State<GetStarted> {
                   CustomButton(
                     onPressed: () {},
                     text: google,
+                    size: 16.sp,
                     leftAssetValue: 'assets/googleIcon.png',
                   ),
                 ),
@@ -91,6 +89,7 @@ class _GetStartedState extends State<GetStarted> {
                   CustomButton(
                       onPressed: () {},
                       text: meta,
+                      size: 16.sp,
                       leftAssetValue: 'assets/metaIcon.png'),
                 ),
                 spaceBetween(
@@ -98,13 +97,15 @@ class _GetStartedState extends State<GetStarted> {
                     onPressed: () {},
                     text: signinwith,
                     rightAssetValue: 'assets/XIcon.png',
+                    size: 16.sp,
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 2.h),
                   child: metrophobicText(
-                      'By signing up you confirm that you have read, accepted and agreed to Terms of Use and Privacy Policy.',
-                      size: 12.sp),
+                     bySigning,
+                     textAlign: TextAlign.justify,
+                      size: 10.sp),
                 )
               ],
             ),

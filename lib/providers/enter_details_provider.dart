@@ -25,6 +25,7 @@ class EnterDetailsProvider extends ChangeNotifier{
   bool get confirmAccountValidationMessage=>_confirmAccountValidationMessage;
      bool _iFSCValidationMessage=false;
   bool get iFSCValidationMessage=>_iFSCValidationMessage;
+  
  
  String _fName='';
 String get fname=>_fName;
@@ -95,4 +96,13 @@ void setfnameValidationMessage(){
     _validationMessage=validationMessage;
     notifyListeners();
   }
-}
+
+  void reset(){
+    _phoneValidationMessage=false;
+  _bAccountValidationMessage=false;
+  _confirmAccountValidationMessage=false;
+ _iFSCValidationMessage=false;
+  notifyListeners();
+  }
+  }
+
