@@ -10,6 +10,7 @@ import 'package:payezy/pages/sign_up.dart';
 import 'package:payezy/pages/splash_screen.dart';
 import 'package:payezy/pages/transferPages/fetch_data.dart';
 import 'package:payezy/pages/delete/transfer.dart';
+import 'package:payezy/providers/api_provider.dart';
 import 'package:payezy/providers/enter_details_provider.dart';
 import 'package:payezy/providers/fetch_data_provider.dart';
 import 'package:payezy/providers/get_started_provider.dart';
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<EnterDetailsProvider>(create:(context) => EnterDetailsProvider()),
         ChangeNotifierProvider<FetchDataProvider>(create:(context) => FetchDataProvider()),
         ChangeNotifierProvider<NavigationProvider>(create:(context) => NavigationProvider()),
+        ChangeNotifierProvider<ApiProvider>(create:(context) => ApiProvider()),
       ],
     
      child:Sizer(

@@ -17,6 +17,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget{
       child: Padding(
         padding:  EdgeInsets.only(top:1.h),
         child: AppBar(
+          scrolledUnderElevation: 0.0,
             leadingWidth: 150.w,
             //payezylogo
             leading: Padding(
@@ -26,7 +27,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget{
                   style: GoogleFonts.michroma(color: Colors.white, fontSize: 22.sp)),
             ),
         
-            backgroundColor: mainBackgroundColor,
+            backgroundColor:Colors.transparent,
             elevation: 0, //z coordinate
             //Login button on the right
             actions: [
@@ -46,5 +47,5 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget{
   
   @override
   
-  Size get preferredSize =>  Size.fromHeight(12.h);
+  Size get preferredSize =>  Size.fromHeight(8.h);
 }

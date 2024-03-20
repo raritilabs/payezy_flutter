@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:payezy/components/custom_button.dart';
 import 'package:payezy/components/text_field.dart';
+import 'package:payezy/providers/api_provider.dart';
 import 'package:payezy/providers/enter_details_provider.dart';
 import 'package:payezy/themes/colors.dart';
 import 'package:payezy/themes/fonts.dart';
@@ -26,6 +27,7 @@ class _EnterDetailsState extends State<EnterDetails> {
   final TextEditingController _iFSC = TextEditingController();
   final TextEditingController _confirmAccount = TextEditingController();
 
+
 @override
   void dispose() {
         _fName.dispose();
@@ -45,6 +47,7 @@ class _EnterDetailsState extends State<EnterDetails> {
     final enterDetailsProvider = Provider.of<EnterDetailsProvider>(
       context,listen: true
     );
+    final ifscApiProvider=Provider.of<ApiProvider>(context,listen: true);
 
     return SingleChildScrollView(
       reverse: true,
@@ -66,82 +69,67 @@ class _EnterDetailsState extends State<EnterDetails> {
           details(fullname,
               controller: _fName,
               textInputType: TextInputType.name,
-              inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]'))],
+              inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[a-zA-Z\\s]'))],
               onChanged: (value) => enterDetailsProvider.setfName(value)),
           details(phone, 
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           textInputType:TextInputType.phone,
           controller: _phone, onChanged: (value) {
-            try {
-              if (value != null || value!.isEmpty) {
-                enterDetailsProvider.setPhone(int.parse(value));
-              }
-            } catch (e) {
-              print('error is $e');
-            }
+            
+                enterDetailsProvider.setPhone(int.tryParse(value)??0);
+             
           }),
           details(bankaccnum,
           textInputType: TextInputType.number,
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
            controller: _bAccountNumber, onChanged: (value) {
-            try {
-              if (value != null || value!.isEmpty) {
-                enterDetailsProvider.setBankAccNum(int.parse(value));
-              }
-            } catch (e) {
-              print('error is $e');
-            }
+                           enterDetailsProvider.setBankAccNum(int.tryParse(value)??0);
+
           }),
           details(confirmacc, 
           textInputType: TextInputType.number,
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           controller: _confirmAccount, onChanged: (value) {
-            try {
-              if (value != null || value!.isEmpty) {
-                enterDetailsProvider.setconfirmAcc(int.parse(value));
-              }
-            } catch (e) {
-              print('error is $e');
-            }
+                            enterDetailsProvider.setconfirmAcc(int.tryParse(value)??0);
+
           }),
           details(ifsc,
               controller: _iFSC,
-              onChanged: (value) => enterDetailsProvider.setiFSC((value))),
+              onChanged: (value) async{
+                ifscApiProvider.setiFSC((value));
+                await ifscApiProvider.getDataFromAPI();
+                
+              }
+              
+              ),
           SizedBox(
             child: switch (enterDetailsProvider.validationMessage) {
               ValidationMessage.fnameVM => metrophobicText(
-                 // enterDetailsProvider.fnameValidationMessage
-                      //? 
+                 
                       "Please enter a full name",
-                      //: '',
+                     
                   color: Colors.red,
                   size: 11.sp),
               ValidationMessage.bAccountNumberVM => metrophobicText(
-                  //enterDetailsProvider.bAccountValidationMessage
-                    //  ?
-                       "Please enter an account number"
-                     ,// : '',
+                       "Please enter a valid account number",
                   color: Colors.red,
                   size: 11.sp),
               ValidationMessage.confirmAccountVM => metrophobicText(
-                  //enterDetailsProvider.confirmAccountValidationMessage
-                      //?
+                 
                        "Please confirm the account number"
-                      ,//: '',
+                      ,
                   color: Colors.red,
                   size: 11.sp),
               ValidationMessage.iFSCVM => metrophobicText(
-                 // enterDetailsProvider.iFSCValidationMessage
-                      //?
                        "Please enter an IFSC Code"
-                    ,//  : '',
+                    
+                     //ifscApiProvider.isLoading?'loading':ifscApiProvider.values.ifsc
+                    ,
                   color: Colors.red,
                   size: 11.sp),
               ValidationMessage.phoneVM => metrophobicText(
-                  //enterDetailsProvider.phoneValidationMessage
-                     // ?
                        "Please enter a 10-digit phone number"
-                    ,//  : '',
+                    ,
                   color: Colors.red,
                   size: 11.sp),
               ValidationMessage.initial => metrophobicText(''),
@@ -151,25 +139,29 @@ class _EnterDetailsState extends State<EnterDetails> {
             padding:
                 EdgeInsets.only(bottom: 2.h, top: 1.h, left: 5.w, right: 5.w),
             child: CustomButton(
-              onPressed: () {
+              onPressed: ()  {
+               //  enterDetailsProvider.setValidationMessage(ValidationMessage.iFSCVM);
                 if (enterDetailsProvider.fname.isEmpty) {
-                 // enterDetailsProvider.setfnameValidationMessage();
                   enterDetailsProvider.setValidationMessage(ValidationMessage.fnameVM);
-                } else if (enterDetailsProvider.phone.toString().length != 10) {
-                 // enterDetailsProvider.setphoneValidationMessage();
+                }
+                 else if (enterDetailsProvider.phone.toString().length != 10) {
             enterDetailsProvider.setValidationMessage(ValidationMessage.phoneVM);
       
-                } else if (enterDetailsProvider.confirmAccount !=
+                } else if(enterDetailsProvider.bAccountNumber.toString().length !=16) {
+                  enterDetailsProvider.setValidationMessage(ValidationMessage.bAccountNumberVM);
+                }
+                
+                else if (enterDetailsProvider.confirmAccount !=
                     enterDetailsProvider.bAccountNumber) {
       
                                  enterDetailsProvider.setValidationMessage(ValidationMessage.confirmAccountVM);
       
-                 // enterDetailsProvider.setconfirmAccountValidationMessage();
                 } 
                 
                 else 
                 {
-                  enterDetailsProvider.reset();
+                 
+                  enterDetailsProvider.setValidationMessage(ValidationMessage.initial);
                   showDialog(
                       barrierColor: blurColor,
                       context: context,
@@ -250,3 +242,4 @@ Widget details(String title,
         ),
   );
 }
+

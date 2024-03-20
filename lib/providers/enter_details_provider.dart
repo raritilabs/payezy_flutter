@@ -97,12 +97,6 @@ void setfnameValidationMessage(){
     notifyListeners();
   }
 
-  void reset(){
-    _phoneValidationMessage=false;
-  _bAccountValidationMessage=false;
-  _confirmAccountValidationMessage=false;
- _iFSCValidationMessage=false;
-  notifyListeners();
-  }
+  
   }
 

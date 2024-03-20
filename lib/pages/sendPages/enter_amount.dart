@@ -37,9 +37,8 @@ class _EnterAmountState extends State<EnterAmount> {
 
   @override
   Widget build(BuildContext context) {
-
-    final sendPageProvider =
-        Provider.of<SendPageProvider>(context, listen: true);
+final sendPageProvider=Provider.of<SendPageProvider>(context);
+   
     return Column(
       children: [
         ///Process payment via...
@@ -51,7 +50,7 @@ class _EnterAmountState extends State<EnterAmount> {
               child: metrophobicText(paymentOptionsText,size: 10.sp,color:lightGrey)),
         ),
         //two buttons and lines
-
+    
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -60,50 +59,59 @@ class _EnterAmountState extends State<EnterAmount> {
             //  Bank transfer button
             GestureDetector(
               
-              onTap: () {},
-              child: Container(
-                  width: 40.w,
-                  height: 4.h,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(5),
-                        bottomLeft: Radius.circular(5)),
-                    color: lightBlueThemeColor,
-                  ),
-                  child:  Center(
-                      child:metrophobicText(paymentOption1,
-                      color: black,
-                      size: 12.sp)
-                  )),
-            ),
-            //Card Payment button
-            GestureDetector(
-
               onTap: () {
+            sendPageProvider.setBankIsSelected();
+            
               },
               child: Container(
                   width: 40.w,
                   height: 4.h,
                   decoration: BoxDecoration(
                     borderRadius: const BorderRadius.only(
-                        topRight: Radius.circular(5),
-                        bottomRight: Radius.circular(5)),
-                    border: Border.all(color: lightBlueThemeColor),
-                    color: const Color.fromRGBO(0, 0, 0, 0),
+                        topLeft: Radius.circular(5),
+                        bottomLeft: Radius.circular(5)),
+                                            border: Border.all(color: lightBlueThemeColor),
+            
+                    color:sendPageProvider.bankIsSelected?lightBlueThemeColor:Colors.transparent,
                   ),
                   child:  Center(
-                      child: metrophobicText(creditcard,color: white,size: 12.sp),
-                      )),
+                      child:metrophobicText(paymentOption1,
+                      color:sendPageProvider.bankIsSelected?black:white,
+                      size: 12.sp)
+                  )),
             ),
+            //Card Payment button
+            GestureDetector(
+               
+                 onTap: () {
+                                  
+                  sendPageProvider.setCardIsSelected();
+    
+                 },
+                 child: Container(
+                     width: 40.w,
+                     height: 4.h,
+                     decoration: BoxDecoration(
+               
+                       borderRadius: const BorderRadius.only(
+                           topRight: Radius.circular(5),
+                           bottomRight: Radius.circular(5)),
+                       border: Border.all(color: lightBlueThemeColor),
+                       color:sendPageProvider.cardIsSelected?lightBlueThemeColor: Colors.transparent,
+                     ),
+                     child:  Center(
+                         child: metrophobicText(paymentOption2,color: sendPageProvider.cardIsSelected?black:white,size: 12.sp),
+                         )),
+               ),
             //right decorative line
             Expanded(child: customLine()),
           ],
         ),
-//space b/w button and enter the amount..
+    //space b/w button and enter the amount..
          SizedBox(
           height: 2.5.h,
         ),
-  //Enter the amount of...
+      //Enter the amount of...
         Padding(
           padding:  EdgeInsets.symmetric(horizontal: 5.w),
           child: metrophobicText(entertheamount,size: 12.sp),
@@ -111,7 +119,7 @@ class _EnterAmountState extends State<EnterAmount> {
           // space b/w
         //You send text field
         Padding(
-            padding:EdgeInsets.only(left: 5.w, right: 5.w, top: 2.h,bottom: 2.5.h),
+            padding:EdgeInsets.only(left: 5.w, right: 5.w, top: 2.h,),
             child: customTextField(
               youSend,
               'USD',
@@ -119,23 +127,29 @@ class _EnterAmountState extends State<EnterAmount> {
               inputFormatters:[FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}'))],
               controller: _youSend,
               onChanged: (value){
-                try{ if(value!=null || value!.isEmpty){
-               sendPageProvider.setSendAmount(value);
-                }}
-               catch (e){
-                print('error is $e');
-               }
-               
-               
+                
+                               sendPageProvider.setSendAmount(value);
                 },
+             
               textInputType: const TextInputType.numberWithOptions(decimal: true),
             
               sideTextcolor: sendPageProvider.expanded?white:greyFontThemeColor,
              
             )),
 
+            Padding(
+              padding:  EdgeInsets.symmetric(horizontal: 8.w,vertical: 2.h),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  metrophobicText('Exchange Rate (Best Price)',color: lightBlueThemeColor,size: 12.sp),
+                  metrophobicText('--',color: lightBlueThemeColor,size: 12.sp),
+                ],
+              ),
+            ),
+    
         //Recipient gets...
-
+    
         Padding(
           padding:EdgeInsets.only(left: 5.w, right: 5.w,),
           child: customTextField(
@@ -149,60 +163,12 @@ class _EnterAmountState extends State<EnterAmount> {
         ),
         SizedBox(height: 2.h,),
         metrophobicText(sendPageProvider.noValueValidationMessage?"Please enter a valid amount of USD to continue":'',color: Colors.red,size: 11.sp),
-
+    
         Visibility(
           visible:sendPageProvider.expanded,
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 5.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-             SizedBox(height: 2.h,),
-                metrophobicText('Charges Breakdown', color: lightGrey,size: 10.sp),
-                SizedBox(height: 0.5.h,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    metrophobicText('Best Price',size: 11.sp),
-                    metrophobicText('\$1 @ 82.54 INR',size: 11.sp),
-                  ],
-                ),
-                SizedBox(height: 1.h,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    metrophobicText('Platform Charges',size: 11.sp),
-                    metrophobicText('--',size: 11.sp),
-                  ],
-                ),
-                SizedBox(
-                  height: 4.h,
-                ),
-                metrophobicText('Net Transfer', color: lightGrey,size: 10.sp),
-                SizedBox(
-                  height: 1.h,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    metrophobicText('Total INR Transferred',size: 11.sp),
-                    metrophobicText(sendPageProvider.youReceive.toString(),size: 11.sp)
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    metrophobicText('Effective mid-market rate',size: 11.sp),
-                    metrophobicText('--',size: 11.sp),
-                  ],
-                ),
-               SizedBox(height: 2.h,),
-             metrophobicText(sendPageProvider.maxValueValidationMessage?"Maximum allowed transfer is 2000 USD":'',color: Colors.red,size: 11.sp),
-              ],
-            ),
-          ),
+          child: sendPageProvider.bankIsSelected?bankTransfer():creditCard()
         ),
-
+    
         Padding(
           padding:
                EdgeInsets.only(bottom: 2.h, top:4.h , left: 5.w, right: 5.w),
@@ -228,5 +194,176 @@ class _EnterAmountState extends State<EnterAmount> {
         ),
       ],
     );
+  }
+  
+  Widget bankTransfer() {
+    final sendPageProvider = Provider.of<SendPageProvider>(context);
+
+  return  Padding(
+            padding: EdgeInsets.symmetric(horizontal: 5.w),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+             SizedBox(height: 2.h,),
+                metrophobicText('Charges Breakdown', color: lightGrey,size: 10.sp),
+                SizedBox(height: 0.5.h,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    metrophobicText('Bank Transfer Charges(0.8%)',size: 11.sp),
+                    metrophobicText(sendPageProvider.bankTransferCharge.toStringAsFixed(2),size: 11.sp),
+                  ],
+                ),
+               metrophobicText('(Capped at \$5)',size: 10.sp),
+
+                SizedBox(height: 1.h,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    metrophobicText('Payezy Platform Fees',size: 11.sp),
+                    metrophobicText('\$0.00',size: 11.sp),
+                    //please substract once platform fees is added 
+                  ],
+                ),
+                SizedBox(
+                  height: 1.h,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    metrophobicText('Total Charges',size: 11.sp,color: lightBlueThemeColor),
+                    metrophobicText('\$${sendPageProvider.totalCharges.toStringAsFixed(2)}',size: 11.sp,color:lightBlueThemeColor),
+                  ],
+                ),
+                SizedBox(
+                  height: 4.h,
+                ),
+                metrophobicText('Price Breakdown', color: lightGrey,size: 10.sp),
+                SizedBox(
+                  height: 1.h,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    metrophobicText('Amount Paid(Due)',size: 11.sp),
+                    metrophobicText(sendPageProvider.youSend.toStringAsFixed(2),size: 11.sp)
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    metrophobicText('Amount Exchanged',size: 11.sp),
+                    metrophobicText(sendPageProvider.amountExchanged.toStringAsFixed(2),size: 11.sp),
+                  ],
+                ),
+                SizedBox(
+                  height: 4.h,
+                ),
+                metrophobicText('Net Transfer', color: lightGrey,size: 10.sp),
+                SizedBox(
+                  height: 1.h,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    metrophobicText('Total INR Transferred',color: lightBlueThemeColor, size: 11.sp),
+                    metrophobicText(sendPageProvider.youReceive.toString(),size: 11.sp)
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    metrophobicText('Effective mid-market rate',color: lightBlueThemeColor, size: 11.sp),
+                    metrophobicText('--',size: 11.sp),
+                  ],
+                ),
+                                    metrophobicText('(inc.taxes and charges)',size: 11.sp),
+
+               SizedBox(height: 2.h,),
+             metrophobicText(sendPageProvider.maxValueValidationMessage?"Maximum allowed transfer is 2000 USD":'',color: Colors.red,size: 11.sp),
+              ],
+            ),
+          );
+  }
+  
+ Widget creditCard() {
+    final sendPageProvider = Provider.of<SendPageProvider>(context);
+  return  Padding(
+            padding: EdgeInsets.symmetric(horizontal: 5.w),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+             SizedBox(height: 2.h,),
+                metrophobicText('Charges Breakdown', color: lightGrey,size: 10.sp),
+                SizedBox(height: 0.5.h,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    metrophobicText('Card Processing Charges(4%)',size: 11.sp),
+                    metrophobicText(sendPageProvider.cardTransferCharge.toStringAsFixed(2),size: 11.sp),
+                  ],
+                ),
+              
+
+                SizedBox(height: 1.h,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    metrophobicText('Payezy Platform Fees',size: 11.sp),
+                    metrophobicText('\$0.00',size: 11.sp),
+                    //please substract once platform fees is added 
+                  ],
+                ),
+              
+               
+                SizedBox(
+                  height: 4.h,
+                ),
+                metrophobicText('Price Breakdown', color: lightGrey,size: 10.sp),
+                SizedBox(
+                  height: 1.h,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    metrophobicText('Amount Paid(Due)',size: 11.sp),
+                    metrophobicText(sendPageProvider.youSend.toStringAsFixed(2),size: 11.sp)
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    metrophobicText('Amount Exchanged',size: 11.sp),
+                    metrophobicText(sendPageProvider.cardAmountExchanged.toStringAsFixed(2),size: 11.sp),
+                  ],
+                ),
+                SizedBox(
+                  height: 4.h,
+                ),
+                metrophobicText('Net Transfer', color: lightGrey,size: 10.sp),
+                SizedBox(
+                  height: 1.h,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    metrophobicText('Total INR Transferred',color: lightBlueThemeColor, size: 11.sp),
+                    metrophobicText(sendPageProvider.youReceive.toString(),size: 11.sp)
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    metrophobicText('Effective mid-market rate',color: lightBlueThemeColor, size: 11.sp),
+                    metrophobicText('--',size: 11.sp),
+                  ],
+                ),
+                                    metrophobicText('(inc.taxes and charges)',size: 11.sp),
+
+               SizedBox(height: 2.h,),
+             metrophobicText(sendPageProvider.maxValueValidationMessage?"Maximum allowed transfer is 2000 USD":'',color: Colors.red,size: 11.sp),
+              ],
+            ),
+          );
   }
 }
