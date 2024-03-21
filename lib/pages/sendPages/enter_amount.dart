@@ -1,9 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:payezy/components/custom_button.dart';
 import 'package:payezy/components/custom_line.dart';
 import 'package:payezy/components/text_field.dart';
+import 'package:payezy/providers/fetch_exchange_rate.dart';
 import 'package:payezy/providers/send_provider.dart';
 import 'package:payezy/themes/colors.dart';
 import 'package:payezy/themes/fonts.dart';
@@ -20,12 +20,13 @@ class EnterAmount extends StatefulWidget {
 
 class _EnterAmountState extends State<EnterAmount> {
   late final TextEditingController _youSend;
-  late String snackBar='';
-  final formKey=GlobalKey<FormState>();
+    late Future<double> data;
+
   
   @override
   void initState() {
     _youSend = TextEditingController();
+    data=fetchExchangeRate();
     super.initState();
   }
 
@@ -38,7 +39,8 @@ class _EnterAmountState extends State<EnterAmount> {
   @override
   Widget build(BuildContext context) {
 final sendPageProvider=Provider.of<SendPageProvider>(context);
-   
+//final exchangeRateApiProvider=Provider.of<ExchangeRateApiProvider>(context);
+
     return Column(
       children: [
         ///Process payment via...
@@ -113,7 +115,7 @@ final sendPageProvider=Provider.of<SendPageProvider>(context);
         ),
       //Enter the amount of...
         Padding(
-          padding:  EdgeInsets.symmetric(horizontal: 5.w),
+          padding:  EdgeInsets.symmetric(horizontal: 2.w),
           child: metrophobicText(entertheamount,size: 12.sp),
         ),
           // space b/w
@@ -143,7 +145,25 @@ final sendPageProvider=Provider.of<SendPageProvider>(context);
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   metrophobicText('Exchange Rate (Best Price)',color: lightBlueThemeColor,size: 12.sp),
-                  metrophobicText('--',color: lightBlueThemeColor,size: 12.sp),
+                  FutureBuilder(
+                      future: data,
+                      builder: (context,snapshot) {
+                        if(snapshot.connectionState==ConnectionState.waiting)
+                        {
+                          return const CircularProgressIndicator();
+                        }
+                        else if(snapshot.hasError)
+                        {
+                          return metrophobicText('Error');
+                        }
+                        else
+                        {
+                          sendPageProvider.setExchangeRate(snapshot.data as double);
+                          return metrophobicText('\$${snapshot.data.toString()}',size: 12.sp, color: lightBlueThemeColor);
+                        }
+                        
+                      }
+                    ),
                 ],
               ),
             ),
@@ -174,6 +194,8 @@ final sendPageProvider=Provider.of<SendPageProvider>(context);
                EdgeInsets.only(bottom: 2.h, top:4.h , left: 5.w, right: 5.w),
           child: CustomButton(
             onPressed: () {
+               
+
             if(sendPageProvider.youSend == 0.0){
                sendPageProvider.setnoValueValidationMessage(); 
             }

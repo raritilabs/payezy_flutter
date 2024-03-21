@@ -53,11 +53,18 @@ num _cardTransferCharge=00.00;
 num get cardTransferCharge=>_cardTransferCharge;
 num _cardAmountExchanged=00.00;
 num get cardAmountExchanged=>_cardAmountExchanged;
+double _exchangeRate=0.0;
+double get exchangeRate=>_exchangeRate;
 
   void setSendPage(SendPages sendPage)
   {
     _sendPage=sendPage;
     notifyListeners();
+  }
+
+  void setExchangeRate(double rate) async
+  {
+    _exchangeRate=rate;
   }
 
   void setSendAmount(String value){
@@ -66,6 +73,7 @@ num get cardAmountExchanged=>_cardAmountExchanged;
        _noValueValidationMessage=false;
     _maxValueValidationMessage=false;
   _youSend = num.tryParse(value)??0;
+  
   //bank transfer calculations
 
   _bankTransferCharge=(_youSend*0.008);
@@ -79,10 +87,10 @@ num get cardAmountExchanged=>_cardAmountExchanged;
   _cardAmountExchanged=_youSend-_cardTransferCharge;
 
 if(_bankIsSelected==true){
-_youReceive=(_amountExchanged*83.02).truncateToDecimalPlaces(2);
+_youReceive=(_amountExchanged*_exchangeRate).truncateToDecimalPlaces(2);
 }
 else{
-  _youReceive=(_cardAmountExchanged*83.02).truncateToDecimalPlaces(2);
+  _youReceive=(_cardAmountExchanged*_exchangeRate).truncateToDecimalPlaces(2);
 
 }
  

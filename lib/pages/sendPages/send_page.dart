@@ -16,7 +16,9 @@ class SendPage extends StatefulWidget {
   State<SendPage> createState() => _SendPageState();
 }
 
+
 class _SendPageState extends State<SendPage> {
+
   @override
   Widget build(BuildContext context) {
 
@@ -25,6 +27,7 @@ class _SendPageState extends State<SendPage> {
       create: (context) => SendPageProvider(),
       child:
           Consumer<SendPageProvider>(builder: (context, sendPageProvider, child) {
+            
 return Scaffold(
   
   //resizeToAvoidBottomInset: false, //to prevent the overflow when textfield is clicked

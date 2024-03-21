@@ -112,13 +112,16 @@ onFieldSubmitted: (value) {
                         CustomButton(
                           onPressed: () async {
 
-                            if(emailProvider.password!=emailProvider.confirmPassword){
-                              emailProvider.setWrongPasswordValidation();
-                            }
-                            else{
-final email = emailProvider.email;
+                            // if(emailProvider.password!=emailProvider.confirmPassword){
+                            //   print('password is ${emailProvider.password}');
+                            //   print('confirmpassword is ${emailProvider.confirmPassword}');
+
+                            //   emailProvider.setWrongPasswordValidation();
+                            // }
+                           // else{
+                            final email = emailProvider.email;
                             final password =emailProvider.password;
-                         
+                        
                              try{
                             final userCredential = 
                               await FirebaseAuth.instance
@@ -127,13 +130,14 @@ final email = emailProvider.email;
                                password: password,
                              );
                              print("value is $userCredential");
-                             }
-                           catch (e){
-                            print('error:$e');
+                             } catch (e){
+                            print(email);
+                             print(password);
+                            print('error is :$e');
                             }
                             
                            
-                            }
+                          //  }
                             
                           },
                           text: signup,

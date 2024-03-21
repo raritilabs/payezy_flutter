@@ -60,13 +60,14 @@ class _LoginState extends State<LoginPage> {
                       customTextField(email,'',
                           controller: _email,
                           readOnly: true,
+                         //  onChanged: (value) => emailProvider.(value),
                           textInputType: TextInputType.emailAddress),
                       SizedBox(
                         height: 1.h,
                       ),
                       customTextField(password,'',
                           controller: _password,
-                          //  onChanged: (value) => emailProvider.setPassword(value),
+                         //   onChanged: (value) => emailProvider.setPassword(value),
                           readOnly: false, //readonly value
                           textInputType: TextInputType.text,
                           obscure: true),
@@ -81,19 +82,28 @@ class _LoginState extends State<LoginPage> {
                           final email = _email.text;
                           final password = _password.text;
                           try{
-                            FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
+                          final userCredential=await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
+                            print(userCredential);
+
+                           
+                          } on FirebaseAuthException catch (e){
+                            
+                           print('AuthException occured:${e.code}');
+
+
+                            
                           
                           }
                            
-                      catch(e){
-                        print(e);
-                      }
-                      Navigator.pushNamed(context, '/homepage');
+                     
+                      Navigator.pushNamed(context, '/mainscreen');
                         },
                         text: login,
                         size: 18.sp,
                       ),
-                  TextButton(onPressed: (){Navigator.pushNamed(context, '/mainscreen');}
+                  TextButton(onPressed: (){
+                  //   FirebaseAuth.instance.signOut();
+                    Navigator.pushNamed(context, '/mainscreen');}
                   , child: metrophobicText('Login'))
                      
                     ],
