@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:payezy/components/app_bar.dart';
 import 'package:payezy/components/custom_container.dart';
 import 'package:payezy/firebase_options.dart';
+import 'package:payezy/services/routes.dart';
 import 'package:payezy/themes/colors.dart';
 import 'package:payezy/themes/fonts.dart';
 import 'package:sizer/sizer.dart';
@@ -121,7 +122,8 @@ return
               SizedBox(height: 2.h),
               metrophobicText('Terms of Use', size: 16.sp),
               SizedBox(height: 3.h),
-              TextButton(onPressed: () { FirebaseAuth.instance.signOut(); },
+              TextButton(onPressed: () { FirebaseAuth.instance.signOut();
+              Navigator.of(context).pushNamedAndRemoveUntil(getStartedPage, (route) => false); },
               child: metrophobicText('Log out', size: 16.sp)),
             ],
           )

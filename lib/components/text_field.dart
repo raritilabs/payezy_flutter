@@ -16,7 +16,8 @@ Widget customTextField(String text, String sideText1,
     Color sideTextcolor = greyFontThemeColor,
     Color color = greyFontThemeColor,
     List<TextInputFormatter>? inputFormatters,
-    dynamic onFieldSubmitted}) {
+    dynamic onFieldSubmitted,
+    bool enableSuggestions = true}) {
   return Container(
     width: double.infinity,
     decoration: BoxDecoration(
@@ -44,6 +45,7 @@ SizedBox(height: 1.h,),//gap b/w placeholder and font
                 child: TextFormField(
                   validator: validator,
                   textAlignVertical: TextAlignVertical.bottom,
+                  enableSuggestions:enableSuggestions ,
                   //autofocus: true,
                   //  autovalidateMode: AutovalidateMode.onUserInteraction,
                   inputFormatters:inputFormatters,
@@ -51,6 +53,7 @@ SizedBox(height: 1.h,),//gap b/w placeholder and font
                   obscureText: obscure!,
                   onChanged: onChanged,
                   onFieldSubmitted: onFieldSubmitted,
+                  
                   keyboardType: textInputType,
                   cursorHeight: 3.h,
                   cursorColor: white,

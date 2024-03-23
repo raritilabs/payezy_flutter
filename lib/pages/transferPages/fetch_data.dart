@@ -24,11 +24,11 @@ class _FetchDataState extends State<FetchData> with SingleTickerProviderStateMix
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 500), // Adjust duration as needed
+      duration: const Duration(milliseconds: 500), // Adjust duration as needed
     );
 
    _animation = Tween<Offset>(
-      begin: Offset(0.0, -1.0), // Off-screen top
+      begin: const Offset(0.0, -1.0), // Off-screen top
       end: Offset.zero,
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.ease));
   }

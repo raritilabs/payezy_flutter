@@ -1,4 +1,6 @@
 // ignore: unused_import
+import 'dart:math';
+import 'dart:developer' as devtools show log  ;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +8,7 @@ import 'package:payezy/components/app_bar.dart';
 import 'package:payezy/components/custom_button.dart';
 import 'package:payezy/components/text_field.dart';
 import 'package:payezy/firebase_options.dart';
+import 'package:payezy/services/routes.dart';
 import 'package:payezy/themes/colors.dart';
 import 'package:payezy/themes/fonts.dart';
 import 'package:payezy/themes/string_constants.dart';
@@ -25,7 +28,7 @@ class _LoginState extends State<LoginPage> {
   @override
   void initState() {
     _password = TextEditingController();
-    _email=TextEditingController();
+    _email = TextEditingController();
     super.initState();
   }
 
@@ -38,10 +41,8 @@ class _LoginState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-   
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      
       backgroundColor: mainBackgroundColor,
       appBar: const CustomAppBar(title: 'Login'),
       body: FutureBuilder(
@@ -52,60 +53,61 @@ class _LoginState extends State<LoginPage> {
             switch (snapshot.connectionState) {
               case ConnectionState.done:
                 return Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 5.w,vertical: 13.h),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 5.w, vertical: 13.h),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       //email field
-                      customTextField(email,'',
+                      customTextField(email, '',
                           controller: _email,
                           readOnly: true,
-                         //  onChanged: (value) => emailProvider.(value),
+                          //  onChanged: (value) => emailProvider.(value),
                           textInputType: TextInputType.emailAddress),
                       SizedBox(
                         height: 1.h,
                       ),
-                      customTextField(password,'',
+                      customTextField(password, '',
                           controller: _password,
-                         //   onChanged: (value) => emailProvider.setPassword(value),
+                          //   onChanged: (value) => emailProvider.setPassword(value),
                           readOnly: false, //readonly value
                           textInputType: TextInputType.text,
                           obscure: true),
-                  
-                     
+
                       SizedBox(
                         height: 8.h,
                       ),
-                  
+
                       CustomButton(
                         onPressed: () async {
                           final email = _email.text;
                           final password = _password.text;
-                          try{
-                          final userCredential=await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
-                            print(userCredential);
-
-                           
-                          } on FirebaseAuthException catch (e){
-                            
-                           print('AuthException occured:${e.code}');
-
-
-                            
-                          
+                          try {
+                          final UserCredential =await FirebaseAuth.instance.
+                          signInWithEmailAndPassword(email: email, password: password);
+Navigator.of(context).pushNamedAndRemoveUntil(mainScreen, (route) => false) ;                         }
+                         
+                           on FirebaseAuthException catch (e) {
+                            if(e.code == 'invalid-credential') {
+                              devtools.log
+                              ('AuthException occured:${e.code}');
+                            }
                           }
-                           
-                     
-                      Navigator.pushNamed(context, '/mainscreen');
                         },
+
+                        
                         text: login,
                         size: 18.sp,
                       ),
-                  TextButton(onPressed: (){
-                  //   FirebaseAuth.instance.signOut();
-                    Navigator.pushNamed(context, '/mainscreen');}
-                  , child: metrophobicText('Login'))
+                     SizedBox(height: 2.h,),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pushNamedAndRemoveUntil(signupPage,(route)=>false);
+                          },
+                          child: metrophobicText('New User? Sign Up',color: lightBlueThemeColor),
+                        ),
                      
+                      
                     ],
                   ),
                 );

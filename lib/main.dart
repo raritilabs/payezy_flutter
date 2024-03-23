@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:payezy/pages/home_page.dart';
 import 'package:payezy/pages/login_page.dart';
 import 'package:payezy/pages/main_screen.dart';
 import 'package:payezy/pages/profilePages/profile.dart';
@@ -10,9 +11,9 @@ import 'package:payezy/pages/sign_up.dart';
 import 'package:payezy/pages/splash_screen.dart';
 import 'package:payezy/pages/transferPages/fetch_data.dart';
 import 'package:payezy/pages/delete/transfer.dart';
+import 'package:payezy/pages/verify_email.dart';
 import 'package:payezy/providers/api_provider.dart';
 import 'package:payezy/providers/enter_details_provider.dart';
-import 'package:payezy/providers/fetch_exchange_rate.dart';
 import 'package:payezy/providers/fetch_data_provider.dart';
 import 'package:payezy/providers/get_started_provider.dart';
 import 'package:payezy/providers/nav_provider.dart';
@@ -56,12 +57,14 @@ return MaterialApp(
           enterDetailsPage:(context) =>const EnterDetails(),
           cybrid:(context)=>const Cybrid(),
           signupPage:(context)=>const SignUp(),
-          getStarted:(context)=>const GetStarted(),
+          getStartedPage:(context)=>const GetStarted(),
           profile:(context)=>const Profile(),
           transfer:(context)=>const TransferPage(),
           fetchData:(context)=>const FetchData(),
           loginPage:(context)=>const LoginPage(),
           mainScreen:(context)=>const MainScreen(),
+          verifyEmail:(context)=>const VerifyEmail(),
+          homePage:(context)=>const HomePage(),
 
         }
          );

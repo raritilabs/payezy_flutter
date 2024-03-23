@@ -17,11 +17,13 @@ void setEmail(String value){
 }  
 
 void setPassword(String value){
+    _wrongPassword=false;
   _password = value;
   notifyListeners();
 }
 
 void setConfirmPassword(String value){
+      _wrongPassword=false;
   _confirmPassword=value;
   notifyListeners();
 }

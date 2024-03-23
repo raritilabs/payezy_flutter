@@ -1,4 +1,6 @@
- import 'package:cloud_firestore/cloud_firestore.dart';
+ import 'dart:developer' show log;
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 addData(String fname, int phone, int bankaccnum, Object ifsc) async {
@@ -10,6 +12,6 @@ addData(String fname, int phone, int bankaccnum, Object ifsc) async {
         "Phone": phone,
         "Bank Acc Number": bankaccnum,
         "IFSC Code": ifsc,
-      }).then((value) => print('inserted'));
+      }).then((value) => log('inserted'));
     }
   }

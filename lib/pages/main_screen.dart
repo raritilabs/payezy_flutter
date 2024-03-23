@@ -3,9 +3,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:payezy/components/bottom_nav_bar.dart';
 import 'package:payezy/firebase_options.dart';
+import 'package:payezy/pages/login_page.dart';
 import 'package:payezy/pages/sendPages/send_page.dart';
 import 'package:payezy/pages/profilePages/profile.dart';
 import 'package:payezy/pages/transferPages/fetch_data.dart';
+import 'package:payezy/pages/verify_email.dart';
 import 'package:payezy/providers/nav_provider.dart';
 import 'package:payezy/themes/colors.dart';
 import 'package:provider/provider.dart';
@@ -32,27 +34,10 @@ class _MainScreenState extends State<MainScreen> {
       resizeToAvoidBottomInset: false,
       backgroundColor: mainBackgroundColor,
       bottomNavigationBar: const BottomNavBar(),
-      body: FutureBuilder(
-        future: Firebase.initializeApp(
-          options: DefaultFirebaseOptions.currentPlatform,
-        ),
-        builder: (context,snapshot){
-          switch (snapshot.connectionState){
-          case ConnectionState.done:
-        final user= FirebaseAuth.instance.currentUser;
-        if(user?.emailVerified??false){
-          print('you are verified');
-        }
-        else{
-          print('verify your email');
-        }
-         
-        default:
-        CircularProgressIndicator();
-
-  }return pages[navigationProvider.currentIndex];
-  }
-  ),
+      body:  pages[navigationProvider.currentIndex]
     );
-  }
-}
+        }
+        
+        }
+        
+       

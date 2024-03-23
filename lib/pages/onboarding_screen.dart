@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:payezy/pages/get_started.dart';
+import 'package:payezy/pages/home_page.dart';
 import 'package:payezy/themes/colors.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -116,9 +117,8 @@ SizedBox(height: 3.h,),
               if (currentIndex == contents.length - 1) {
 
                 {
-                  Navigator.of(context).push(_createRoute(const GetStarted()));
+                  Navigator.of(context).push(_createRoute(const HomePage()));
                 }
-                ;
               }
 
               _controller.nextPage(
