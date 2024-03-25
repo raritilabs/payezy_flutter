@@ -1,12 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:payezy/components/app_bar.dart';
 import 'package:payezy/components/custom_container.dart';
 import 'package:payezy/firebase_options.dart';
+import 'package:payezy/providers/get_started_provider.dart';
 import 'package:payezy/services/routes.dart';
 import 'package:payezy/themes/colors.dart';
 import 'package:payezy/themes/fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class Profile extends StatelessWidget {
@@ -14,6 +18,8 @@ class Profile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+        final getStartedProvider=Provider.of<GetStartedProvider>(context,listen: true);
+
     return 
      Scaffold(
           resizeToAvoidBottomInset: false,
@@ -47,10 +53,10 @@ return
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         metrophobicText(
-                          'John Doe',
+                          getStartedProvider.user,
                           size: 18.sp,
                         ),
-                        metrophobicText('john@gmail.com', color: lightGrey),
+                        metrophobicText(getStartedProvider.useremail, color: lightGrey),
                       ],
                     ),
                   )
@@ -122,7 +128,9 @@ return
               SizedBox(height: 2.h),
               metrophobicText('Terms of Use', size: 16.sp),
               SizedBox(height: 3.h),
-              TextButton(onPressed: () { FirebaseAuth.instance.signOut();
+              TextButton(onPressed: () { 
+                FirebaseAuth.instance.signOut(); 
+              //FacebookAuth.instance.logOut();             
               Navigator.of(context).pushNamedAndRemoveUntil(getStartedPage, (route) => false); },
               child: metrophobicText('Log out', size: 16.sp)),
             ],

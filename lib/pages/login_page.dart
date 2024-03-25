@@ -8,10 +8,12 @@ import 'package:payezy/components/app_bar.dart';
 import 'package:payezy/components/custom_button.dart';
 import 'package:payezy/components/text_field.dart';
 import 'package:payezy/firebase_options.dart';
+import 'package:payezy/providers/get_started_provider.dart';
 import 'package:payezy/services/routes.dart';
 import 'package:payezy/themes/colors.dart';
 import 'package:payezy/themes/fonts.dart';
 import 'package:payezy/themes/string_constants.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class LoginPage extends StatefulWidget {
@@ -85,6 +87,9 @@ class _LoginState extends State<LoginPage> {
                           try {
                           final UserCredential =await FirebaseAuth.instance.
                           signInWithEmailAndPassword(email: email, password: password);
+                   final getStartedProvider=Provider.of<GetStartedProvider>(context,listen: false);
+                          getStartedProvider.setUser(UserCredential.user?.displayName.toString(),UserCredential.user?.email);
+                          print('details are $UserCredential');
 Navigator.of(context).pushNamedAndRemoveUntil(mainScreen, (route) => false) ;                         }
                          
                            on FirebaseAuthException catch (e) {

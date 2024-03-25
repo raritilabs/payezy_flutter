@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:payezy/components/app_bar.dart';
 import 'package:payezy/components/custom_button.dart';
+import 'package:payezy/providers/get_started_provider.dart';
 import 'package:payezy/services/routes.dart';
+import 'package:payezy/services/sign_in_with_facebook.dart';
 import 'package:payezy/services/sign_in_with_google.dart';
 import 'package:payezy/themes/colors.dart';
 import 'package:payezy/themes/fonts.dart';
 import 'package:payezy/themes/string_constants.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'dart:developer' show log;
 
@@ -33,6 +37,8 @@ class _GetStartedState extends State<GetStarted> {
 
   @override
   Widget build(BuildContext context) {
+
+    final getStartedProvider=Provider.of<GetStartedProvider>(context,listen: false);
     return Scaffold(
       resizeToAvoidBottomInset: false, // prevents the bottom from coming up with the keyboard
         backgroundColor: mainBackgroundColor,  
@@ -77,9 +83,11 @@ class _GetStartedState extends State<GetStarted> {
                   ),
                   spaceBetween(
                     CustomButton(
-                      onPressed: ()  {
+                      onPressed: ()  async{
                         try{ 
-                          signInWithGoogle();
+                       final user=await  signInWithGoogle();
+                        
+                         getStartedProvider.setUser(user.user?.displayName.toString(), user.user?.email);
                           Navigator.of(context).pushNamedAndRemoveUntil(mainScreen, (route) => false);
                           }
                         catch(e){
@@ -94,7 +102,19 @@ class _GetStartedState extends State<GetStarted> {
                   ),
                   spaceBetween(
                     CustomButton(
-                        onPressed: () {},
+                        onPressed: () async{
+                          try{ 
+                       await FacebookAuth.instance.login(
+                        permissions: ["public_profile","email"]
+                       );
+                       //  getStartedProvider.setUser(user.user?.displayName.toString(), user.user?.email);
+                          Navigator.of(context).pushNamedAndRemoveUntil(mainScreen, (route) => false);
+                          }
+                        catch(e){
+                          log('error is $e');
+                        }
+                          
+                        },
                         text: meta,
                         size: 16.sp,
                         leftAssetValue: 'assets/metaIcon.png'),

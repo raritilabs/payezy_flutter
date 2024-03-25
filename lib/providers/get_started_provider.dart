@@ -10,6 +10,10 @@ String _confirmPassword='';
 String get confirmPassword=>_confirmPassword;
 bool _wrongPassword=false;
 bool get wrongPassword=>_wrongPassword;
+String _user='';
+String get user=>_user;
+String _useremail='';
+String get useremail=>_useremail;
 
 void setEmail(String value){
   _email = value;
@@ -31,6 +35,11 @@ void setConfirmPassword(String value){
 void setWrongPasswordValidation(){
   _wrongPassword=true;
   notifyListeners();
+}
+void setUser(name,email){
+_user=name;
+_useremail=email;
+notifyListeners();
 }
 
 }

@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
 return const GetStarted();                 }
                   return const MainScreen();
                 default:
-                  return const CircularProgressIndicator();
+                  return Text('...Loading');
               }
             });
   }
