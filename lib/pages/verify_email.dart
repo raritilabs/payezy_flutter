@@ -5,7 +5,6 @@ import 'package:payezy/components/custom_button.dart';
 import 'package:payezy/services/routes.dart';
 import 'package:payezy/themes/colors.dart';
 import 'package:payezy/themes/fonts.dart';
-import 'package:payezy/themes/string_constants.dart';
 import 'package:sizer/sizer.dart';
 
 class VerifyEmail extends StatefulWidget {
@@ -21,7 +20,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
 
       return Scaffold(
         backgroundColor: mainBackgroundColor,
-        appBar: CustomAppBar(title: "Verify Email"),
+        appBar: const CustomAppBar(title: "Verify Email"),
         body:Column(
         children:[ Padding(
                     padding: EdgeInsets.symmetric(horizontal: 8.w,vertical: 5.h),
@@ -38,7 +37,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
                             Expanded(
                               child: CustomButton(onPressed: ()async{
                                 await FirebaseAuth.instance.signOut();
-                                Navigator.of(context).pushNamedAndRemoveUntil(loginPage, (route) => false);
+                                Navigator.of(context).pushNamedAndRemoveUntil(getStartedPage, (route) => false);
                               }, text:"Back",size: 9.sp,),
                             ),
                             SizedBox(width: 2.w,),

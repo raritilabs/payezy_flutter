@@ -3,15 +3,20 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:payezy/components/app_bar.dart';
 import 'package:payezy/components/custom_button.dart';
 import 'package:payezy/providers/get_started_provider.dart';
+import 'package:payezy/providers/login_provider.dart';
 import 'package:payezy/services/routes.dart';
 import 'package:payezy/services/sign_in_with_facebook.dart';
 import 'package:payezy/services/sign_in_with_google.dart';
+import 'package:payezy/services/sign_in_with_twitter.dart';
 import 'package:payezy/themes/colors.dart';
 import 'package:payezy/themes/fonts.dart';
 import 'package:payezy/themes/string_constants.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'dart:developer' show log;
+import 'config.dart';
+
+import 'package:twitter_login/twitter_login.dart';
 
 class GetStarted extends StatefulWidget {
   const GetStarted({super.key});
@@ -32,19 +37,21 @@ class _GetStartedState extends State<GetStarted> {
   @override
   void dispose() {
     super.dispose();
-    _email.dispose();  //disposes the email controller
+    _email.dispose(); //disposes the email controller
   }
 
   @override
   Widget build(BuildContext context) {
-
-    final getStartedProvider=Provider.of<GetStartedProvider>(context,listen: false);
+    final getStartedProvider =
+        Provider.of<GetStartedProvider>(context, listen: false);
+    final loginProvider = Provider.of<LoginProvider>(context, listen: false);
     return Scaffold(
-      resizeToAvoidBottomInset: false, // prevents the bottom from coming up with the keyboard
-        backgroundColor: mainBackgroundColor,  
-        appBar: const CustomAppBar(title: getStarted, isVisible: false),  
-        body:Padding(
-            padding: EdgeInsets.symmetric(horizontal: 5.w),  //side padding 5.w
+        resizeToAvoidBottomInset:
+            false, // prevents the bottom from coming up with the keyboard
+        backgroundColor: mainBackgroundColor,
+        appBar: const CustomAppBar(title: getStarted, isVisible: false),
+        body: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 5.w), //side padding 5.w
             child: SingleChildScrollView(
               child: Column(
                 children: [
@@ -52,7 +59,7 @@ class _GetStartedState extends State<GetStarted> {
                       alignment: Alignment.centerLeft,
                       child: spaceBetween(
                           metrophobicText(loginorsignup, size: 15.sp))),
-                 // spaceBetween(
+                  // spaceBetween(
                   //   customTextField(email,'',
                   //      readOnly: false,
                   //       controller: _email,
@@ -60,9 +67,12 @@ class _GetStartedState extends State<GetStarted> {
                   //       obscure: false,
                   //       textInputType: TextInputType.emailAddress),
                   // ),
-                  SizedBox(height: 2.h,),
+                  SizedBox(
+                    height: 2.h,
+                  ),
                   spaceBetween(CustomButton(
-                    onPressed: () async{
+                    onPressed: () async {
+                      loginProvider.setLoginType(LoginType.emailPassword);
                       Navigator.pushNamed(context, '/login');
                     },
                     text: 'Continue with Email/Password',
@@ -83,17 +93,19 @@ class _GetStartedState extends State<GetStarted> {
                   ),
                   spaceBetween(
                     CustomButton(
-                      onPressed: ()  async{
-                        try{ 
-                       final user=await  signInWithGoogle();
-                        
-                         getStartedProvider.setUser(user.user?.displayName.toString(), user.user?.email);
-                          Navigator.of(context).pushNamedAndRemoveUntil(mainScreen, (route) => false);
-                          }
-                        catch(e){
+                      onPressed: () async {
+                        try {
+                          loginProvider.setLoginType(LoginType.google);
+                          final user = await signInWithGoogle();
+
+                          getStartedProvider.setUser(
+                              user.user?.displayName.toString(),
+                              user.user?.email);
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              mainScreen, (route) => false);
+                        } catch (e) {
                           log('error is $e');
                         }
-                       
                       },
                       text: google,
                       size: 16.sp,
@@ -102,18 +114,19 @@ class _GetStartedState extends State<GetStarted> {
                   ),
                   spaceBetween(
                     CustomButton(
-                        onPressed: () async{
-                          try{ 
-                       await FacebookAuth.instance.login(
-                        permissions: ["public_profile","email"]
-                       );
-                       //  getStartedProvider.setUser(user.user?.displayName.toString(), user.user?.email);
-                          Navigator.of(context).pushNamedAndRemoveUntil(mainScreen, (route) => false);
+                        onPressed: () async {
+                          try {
+                            loginProvider.setLoginType(LoginType.facebook);
+                            final user = await signInWithFacebook();
+                            getStartedProvider.setUser(
+                                user!.user?.displayName.toString(),
+                                user.user?.email.toString());
+
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                                mainScreen, (route) => false);
+                          } catch (e) {
+                            log('error is $e');
                           }
-                        catch(e){
-                          log('error is $e');
-                        }
-                          
                         },
                         text: meta,
                         size: 16.sp,
@@ -121,7 +134,20 @@ class _GetStartedState extends State<GetStarted> {
                   ),
                   spaceBetween(
                     CustomButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        loginProvider.setLoginType(LoginType.x);
+                        try {
+                          final user = await signInWithTwitter();
+                          print('details are ${user.user?.email}');
+                          getStartedProvider.setUser(
+                              user.user?.displayName.toString(),
+                              user.user?.email.toString());
+                        } catch (e) {
+                          print(e);
+                        }
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                            mainScreen, (route) => false);
+                      },
                       text: signinwith,
                       rightAssetValue: 'assets/XIcon.png',
                       size: 16.sp,
@@ -129,19 +155,14 @@ class _GetStartedState extends State<GetStarted> {
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 2.h),
-                    child: metrophobicText(
-                       bySigning,
-                       textAlign: TextAlign.justify,
-                        size: 10.sp),
+                    child: metrophobicText(bySigning,
+                        textAlign: TextAlign.justify, size: 10.sp),
                   )
                 ],
               ),
             )));
-  
-   }
-   }
-   
-
+  }
+}
 
 Widget spaceBetween(child) {
   return Padding(

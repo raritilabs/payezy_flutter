@@ -16,6 +16,7 @@ import 'package:payezy/providers/api_provider.dart';
 import 'package:payezy/providers/enter_details_provider.dart';
 import 'package:payezy/providers/fetch_data_provider.dart';
 import 'package:payezy/providers/get_started_provider.dart';
+import 'package:payezy/providers/login_provider.dart';
 import 'package:payezy/providers/nav_provider.dart';
 import 'package:payezy/providers/send_provider.dart';
 import 'package:payezy/services/routes.dart';
@@ -44,6 +45,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<FetchDataProvider>(create:(context) => FetchDataProvider()),
         ChangeNotifierProvider<NavigationProvider>(create:(context) => NavigationProvider()),
         ChangeNotifierProvider<ApiProvider>(create:(context) => ApiProvider()),
+        ChangeNotifierProvider<LoginProvider>(create:(context) => LoginProvider()),
+
       ],
     
      child:Sizer(

@@ -26,6 +26,7 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
   // late final TextEditingController _password;
   final TextEditingController _email = TextEditingController();
+  final TextEditingController _name = TextEditingController();
   final TextEditingController _password = TextEditingController();
   final TextEditingController _confirmPassword = TextEditingController();
 
@@ -62,11 +63,23 @@ class _SignUpState extends State<SignUp> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                          customTextField('Full Name', '',
+                            controller: _name,
+                            label: emailProvider.email,
+                            readOnly: false,
+                            textInputType: TextInputType.emailAddress,
+                            onFieldSubmitted: (value) {
+                          emailProvider.setName(value);
+                        }),
+
+                        SizedBox(
+                          height: 3.h,
+                        ),
                         //email field
                         customTextField(email, '',
                             controller: _email,
                             label: emailProvider.email,
-                            readOnly: true,
+                            readOnly: false,
                             textInputType: TextInputType.emailAddress,
                             onFieldSubmitted: (value) {
                           emailProvider.setEmail(value);
@@ -118,6 +131,7 @@ class _SignUpState extends State<SignUp> {
                             } else {
                               final email = _email.text;
                               final password = _password.text;
+                              final displayName=_name.text;
 
                               try {
                                 await FirebaseAuth.instance
@@ -126,6 +140,7 @@ class _SignUpState extends State<SignUp> {
                                   password: password,
                                 );
                                 final user = FirebaseAuth.instance.currentUser;
+                                user?.updateDisplayName(displayName);
                                 await user?.sendEmailVerification();
                                 Navigator.of(context).pushNamed(verifyEmail);
                               } on FirebaseAuthException catch (e) {

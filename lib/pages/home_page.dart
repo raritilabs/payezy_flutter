@@ -32,10 +32,10 @@ class _HomePageState extends State<HomePage> {
                       return const VerifyEmail();
                     }
                   } else {
-return const GetStarted();                 }
+                  return const GetStarted();                 }
                   return const MainScreen();
                 default:
-                  return Text('...Loading');
+                  return const Text('...Loading');
               }
             });
   }

@@ -7,7 +7,9 @@ import 'package:payezy/components/app_bar.dart';
 import 'package:payezy/components/custom_container.dart';
 import 'package:payezy/firebase_options.dart';
 import 'package:payezy/providers/get_started_provider.dart';
+import 'package:payezy/providers/login_provider.dart';
 import 'package:payezy/services/routes.dart';
+import 'package:payezy/services/sign_in_with_twitter.dart';
 import 'package:payezy/themes/colors.dart';
 import 'package:payezy/themes/fonts.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +21,7 @@ class Profile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
         final getStartedProvider=Provider.of<GetStartedProvider>(context,listen: true);
+        final loginProvider=Provider.of<LoginProvider>(context,listen: true);
 
     return 
      Scaffold(
@@ -127,10 +130,20 @@ return
               metrophobicText('Privacy Policy', size: 16.sp),
               SizedBox(height: 2.h),
               metrophobicText('Terms of Use', size: 16.sp),
-              SizedBox(height: 3.h),
-              TextButton(onPressed: () { 
-                FirebaseAuth.instance.signOut(); 
-              //FacebookAuth.instance.logOut();             
+              SizedBox(height: 2.h),
+              TextButton(onPressed: () async{ 
+                switch(loginProvider.loginType){
+
+                  case LoginType.emailPassword:
+                      await FirebaseAuth.instance.signOut(); 
+                  case LoginType.facebook:
+            await  FacebookAuth.instance.logOut();             
+                  case LoginType.google:
+                await GoogleSignIn().signOut();
+                  case LoginType.x:
+               FirebaseAuth.instance.signOut();
+                }
+                 getStartedProvider.resetUser();     
               Navigator.of(context).pushNamedAndRemoveUntil(getStartedPage, (route) => false); },
               child: metrophobicText('Log out', size: 16.sp)),
             ],
