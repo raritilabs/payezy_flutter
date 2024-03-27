@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:payezy/firebase_options.dart';
 import 'package:payezy/pages/get_started.dart';
 import 'package:payezy/pages/main_screen.dart';
-import 'package:payezy/pages/verify_email.dart';
-import 'dart:developer' show log;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -26,17 +24,15 @@ class _HomePageState extends State<HomePage> {
                 case ConnectionState.done:
                   final user = FirebaseAuth.instance.currentUser;
                   if (user != null) {
-                    if (user.emailVerified) {
-                      log('Email is verified');
-                    } else {
-                      return const VerifyEmail();
-                    }
+                    return const MainScreen();
                   } else {
-                  return const GetStarted();                 }
-                  return const MainScreen();
+                  return const GetStarted();    
+                  }
                 default:
-                  return const Text('...Loading');
+                return const GetStarted();
               }
+  
+
             });
   }
 }

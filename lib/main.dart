@@ -12,7 +12,7 @@ import 'package:payezy/pages/splash_screen.dart';
 import 'package:payezy/pages/transferPages/fetch_data.dart';
 import 'package:payezy/pages/delete/transfer.dart';
 import 'package:payezy/pages/verify_email.dart';
-import 'package:payezy/providers/api_provider.dart';
+import 'package:payezy/providers/ifsc_validator.dart';
 import 'package:payezy/providers/enter_details_provider.dart';
 import 'package:payezy/providers/fetch_data_provider.dart';
 import 'package:payezy/providers/get_started_provider.dart';

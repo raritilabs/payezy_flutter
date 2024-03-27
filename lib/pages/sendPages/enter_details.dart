@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:payezy/components/custom_button.dart';
 import 'package:payezy/components/text_field.dart';
-import 'package:payezy/providers/api_provider.dart';
+import 'package:payezy/providers/ifsc_validator.dart';
 import 'package:payezy/providers/enter_details_provider.dart';
 import 'package:payezy/themes/colors.dart';
 import 'package:payezy/themes/fonts.dart';
@@ -28,6 +28,7 @@ class _EnterDetailsState extends State<EnterDetails> {
   final TextEditingController _confirmAccount = TextEditingController();
 
 
+
 @override
   void dispose() {
         _fName.dispose();
@@ -48,7 +49,6 @@ class _EnterDetailsState extends State<EnterDetails> {
       context,listen: true
     );
     final ifscApiProvider=Provider.of<ApiProvider>(context,listen: true);
-
     return SingleChildScrollView(
       reverse: true,
       child: Column(
@@ -93,15 +93,32 @@ class _EnterDetailsState extends State<EnterDetails> {
                             enterDetailsProvider.setconfirmAcc(int.tryParse(value)??0);
 
           }),
-          details(ifsc,
+          details(ifsc
+          ,
               controller: _iFSC,
+              visible: enterDetailsProvider.visiblity,
               onChanged: (value) async{
-                ifscApiProvider.setiFSC((value));
-                await ifscApiProvider.getDataFromAPI();
+                enterDetailsProvider.setVisibility(false);
+                try{
+                  ifscApiProvider.setiFSC((value));
+               var result= await ifscApiProvider.getDataFromAPI();
+                if(result=='404'){
+                  enterDetailsProvider.setValidationMessage(ValidationMessage.iFSCVMError);
+                }
+                else{
+               enterDetailsProvider.setValidationMessage(ValidationMessage.initial);
+                enterDetailsProvider.setIFSCDetails(result.branch,result.city,result.bank);
+                  enterDetailsProvider.setVisibility(true);
+                }
+                }
+                catch(e){
+
+                }
                 
-              }
-              
-              ),
+
+                
+              },
+              details: "Branch:${enterDetailsProvider.branch}\nCity:${enterDetailsProvider.city}\nBank:${enterDetailsProvider.bank}\n"),
           SizedBox(
             child: switch (enterDetailsProvider.validationMessage) {
               ValidationMessage.fnameVM => metrophobicText(
@@ -120,10 +137,8 @@ class _EnterDetailsState extends State<EnterDetails> {
                       ,
                   color: Colors.red,
                   size: 11.sp),
-              ValidationMessage.iFSCVM => metrophobicText(
-                       "Please enter an IFSC Code"
-                    
-                     //ifscApiProvider.isLoading?'loading':ifscApiProvider.values.ifsc
+              ValidationMessage.iFSCVMError => metrophobicText(
+                      "IFSC should be 4 letters, followed by 7 letters or digits"
                     ,
                   color: Colors.red,
                   size: 11.sp),
@@ -133,6 +148,8 @@ class _EnterDetailsState extends State<EnterDetails> {
                   color: Colors.red,
                   size: 11.sp),
               ValidationMessage.initial => metrophobicText(''),
+              
+      
             },
           ),
           Padding(
@@ -140,7 +157,7 @@ class _EnterDetailsState extends State<EnterDetails> {
                 EdgeInsets.only(bottom: 2.h, top: 1.h, left: 5.w, right: 5.w),
             child: CustomButton(
               onPressed: ()  {
-               //  enterDetailsProvider.setValidationMessage(ValidationMessage.iFSCVM);
+                 enterDetailsProvider.setValidationMessage(ValidationMessage.initial);
                 if (enterDetailsProvider.fname.isEmpty) {
                   enterDetailsProvider.setValidationMessage(ValidationMessage.fnameVM);
                 }
@@ -231,7 +248,7 @@ class _EnterDetailsState extends State<EnterDetails> {
 }
 
 Widget details(String title,
-    {TextEditingController? controller,TextInputType? textInputType, dynamic onChanged, List<TextInputFormatter>? inputFormatters
+    {TextEditingController? controller,bool?visible=false,String? details='', TextInputType? textInputType, dynamic onChanged, List<TextInputFormatter>? inputFormatters
 }) {
   return Padding(
     padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 1.5.h),
@@ -239,6 +256,9 @@ Widget details(String title,
         controller: controller, onChanged: onChanged,
         inputFormatters:inputFormatters,
         textInputType: textInputType,
+        detailsVisible: visible!,
+        details: details
+
         ),
   );
 }

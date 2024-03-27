@@ -22,6 +22,7 @@ num get youReceive=>_youReceive;
 bool _expanded=false;
 bool get expanded=>_expanded;
 
+
 //validation message initialisation
 
 bool _noValueValidationMessage=false; //turns true when no value is typed
@@ -37,6 +38,7 @@ bool get bankIsSelected=>_bankIsSelected;
 bool _cardIsSelected=false;
 bool get cardIsSelected=>_cardIsSelected;
 
+
 //Bank Transfer expanded details initialisation
 
 num _bankTransferCharge=00.00;
@@ -45,7 +47,8 @@ num _totalCharges=00.00;
 num get totalCharges=>_totalCharges;
 num _amountExchanged=00.00;
 num get amountExchanged=>_amountExchanged;
-
+ num _effectiveMidMarketRate=00.00;
+ num get effectiveMidMarketRate=> _effectiveMidMarketRate;
 //card payment expanded details initialisation
 
 
@@ -75,12 +78,15 @@ double get exchangeRate=>_exchangeRate;
   _youSend = num.tryParse(value)??0;
   
   //bank transfer calculations
-
-  _bankTransferCharge=(_youSend*0.008);
+ _bankTransferCharge=(_youSend*0.008);
+if(_bankTransferCharge>5)
+{
+  _bankTransferCharge=5;
+}
+ 
   num _payezyPlatformfees=00.00;
   _totalCharges=_bankTransferCharge+_payezyPlatformfees;
-  _amountExchanged=_youSend-_totalCharges;
- 
+  _amountExchanged=_youSend - _totalCharges;
 
   //card transfer calculations1
   _cardTransferCharge=(_youSend*0.04);
@@ -94,6 +100,7 @@ else{
 
 }
  
+ _effectiveMidMarketRate=(_youReceive/_youSend).truncateToDecimalPlaces(2);
 
   _expanded=true;
    notifyListeners();

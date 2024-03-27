@@ -194,7 +194,8 @@ final sendPageProvider=Provider.of<SendPageProvider>(context);
                EdgeInsets.only(bottom: 2.h, top:4.h , left: 5.w, right: 5.w),
           child: CustomButton(
             onPressed: () {
-               
+               print('you send is ${sendPageProvider.youSend}');
+               print('you recve is ${sendPageProvider.youReceive}');
 
             if(sendPageProvider.youSend == 0.0){
                sendPageProvider.setnoValueValidationMessage(); 
@@ -296,7 +297,7 @@ final sendPageProvider=Provider.of<SendPageProvider>(context);
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     metrophobicText('Effective mid-market rate',color: lightBlueThemeColor, size: 11.sp),
-                    metrophobicText('--',size: 11.sp),
+                    metrophobicText(sendPageProvider.effectiveMidMarketRate.toString(),size: 11.sp),
                   ],
                 ),
                                     metrophobicText('(inc.taxes and charges)',size: 11.sp),

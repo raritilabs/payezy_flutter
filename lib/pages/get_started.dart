@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:payezy/components/app_bar.dart';
 import 'package:payezy/components/custom_button.dart';
 import 'package:payezy/providers/get_started_provider.dart';
@@ -14,9 +13,6 @@ import 'package:payezy/themes/string_constants.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'dart:developer' show log;
-import 'config.dart';
-
-import 'package:twitter_login/twitter_login.dart';
 
 class GetStarted extends StatefulWidget {
   const GetStarted({super.key});
@@ -59,14 +55,7 @@ class _GetStartedState extends State<GetStarted> {
                       alignment: Alignment.centerLeft,
                       child: spaceBetween(
                           metrophobicText(loginorsignup, size: 15.sp))),
-                  // spaceBetween(
-                  //   customTextField(email,'',
-                  //      readOnly: false,
-                  //       controller: _email,
-                  //       onChanged: (value) => emailProvider.setEmail(value),
-                  //       obscure: false,
-                  //       textInputType: TextInputType.emailAddress),
-                  // ),
+                 
                   SizedBox(
                     height: 2.h,
                   ),
@@ -142,11 +131,12 @@ class _GetStartedState extends State<GetStarted> {
                           getStartedProvider.setUser(
                               user.user?.displayName.toString(),
                               user.user?.email.toString());
-                        } catch (e) {
-                          print(e);
-                        }
-                        Navigator.of(context).pushNamedAndRemoveUntil(
+                              Navigator.of(context).pushNamedAndRemoveUntil(
                             mainScreen, (route) => false);
+                        } catch (e) {
+                          log('error is $e');
+                        }
+                        
                       },
                       text: signinwith,
                       rightAssetValue: 'assets/XIcon.png',

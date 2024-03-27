@@ -7,13 +7,15 @@ enum ValidationMessage{
   phoneVM,
   bAccountNumberVM,
   confirmAccountVM,
-  iFSCVM,
+  iFSCVMError,
 }
 
 class EnterDetailsProvider extends ChangeNotifier{
 
   ValidationMessage _validationMessage = ValidationMessage.initial;
   ValidationMessage get validationMessage => _validationMessage;
+bool _visibility=false;
+bool get visiblity=>_visibility;
 
   bool _fnameValidationMessage=false;
   bool get fnameValidationMessage=>_fnameValidationMessage;
@@ -42,6 +44,15 @@ int get confirmAccount=>_confirmAccount;
 Object _iFSC=0;
 Object get iFSC=>_iFSC;
 
+String _branch='';
+String get branch=>_branch;
+
+String _city='';
+String get city=>_city;
+
+String _bank='';
+String get bank=>_bank;
+
 void setfName(String value){
   _fnameValidationMessage=false;
   _fName = value;
@@ -66,6 +77,13 @@ void setiFSC(Object value){
  _iFSCValidationMessage=false;
 
   _iFSC = value;
+  notifyListeners();
+}
+
+void setIFSCDetails(String branch,String city,String bank){
+ _branch=branch;
+_city=city;
+  _bank =bank;
   notifyListeners();
 }
 
@@ -97,6 +115,9 @@ void setfnameValidationMessage(){
     notifyListeners();
   }
 
+void setVisibility(bool value){
+_visibility=value;
+}
   
   }
 

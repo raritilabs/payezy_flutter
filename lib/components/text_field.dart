@@ -6,6 +6,8 @@ import 'package:sizer/sizer.dart';
 
 Widget customTextField(String text, String sideText1,
     {String? errorTextVal,
+    String? details='',
+    bool? detailsVisible=false,
     String? label = '',
     TextEditingController? controller,
     String? Function(String?)? validator,
@@ -46,6 +48,7 @@ SizedBox(height: 1.h,),//gap b/w placeholder and font
                   validator: validator,
                   textAlignVertical: TextAlignVertical.bottom,
                   enableSuggestions:enableSuggestions ,
+                  
                   //autofocus: true,
                   //  autovalidateMode: AutovalidateMode.onUserInteraction,
                   inputFormatters:inputFormatters,
@@ -53,7 +56,6 @@ SizedBox(height: 1.h,),//gap b/w placeholder and font
                   obscureText: obscure!,
                   onChanged: onChanged,
                   onFieldSubmitted: onFieldSubmitted,
-                  
                   keyboardType: textInputType,
                   cursorHeight: 3.h,
                   cursorColor: white,
@@ -77,6 +79,9 @@ SizedBox(height: 1.h,),//gap b/w placeholder and font
                       robotoText(sideText1, size: 18.sp, color: sideTextcolor))
             ],
           ),
+          Visibility(
+            visible: detailsVisible!,
+            child: metrophobicText(details!.isNotEmpty?details:'')),
         ],
       ),
     ),
