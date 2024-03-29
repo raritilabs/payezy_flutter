@@ -8,7 +8,7 @@ class Cybrid extends StatelessWidget {
 
     return  Scaffold(
       appBar: AppBar(
-title: Text('Cybrid'),
+title: const Text('Cybrid'),
       ),
     );
   }

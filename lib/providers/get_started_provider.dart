@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class GetStartedProvider extends ChangeNotifier{
@@ -16,6 +17,12 @@ String _user='';
 String get user=>_user;
 String _useremail='';
 String get useremail=>_useremail;
+bool _isVisible=true;
+bool get isVisible=>_isVisible;
+late UserCredential _userCredentials;
+UserCredential get userCredentials=>_userCredentials;
+final String _type='';
+String get type=>_type;
 
 void setEmail(String value){
   _email = value;
@@ -51,6 +58,15 @@ notifyListeners();
 void resetUser(){
 _user='';
 _useremail='';
+ _isVisible=true;
 notifyListeners();
+}
+void setIsVisible(type){
+  _isVisible=false;
+  notifyListeners();
+}
+void setUserCredentials(user){
+  _userCredentials=user;
+  notifyListeners();
 }
 }

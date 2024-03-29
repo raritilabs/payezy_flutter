@@ -18,7 +18,8 @@ class FetchData extends StatefulWidget {
 class _FetchDataState extends State<FetchData> with SingleTickerProviderStateMixin {
 
   late AnimationController _controller;
-  late Animation<Offset> _animation;
+ // late Animation<Offset> _animation;
+  late Animation<double> _animation;
  @override
   void initState() {
     super.initState();
@@ -27,10 +28,12 @@ class _FetchDataState extends State<FetchData> with SingleTickerProviderStateMix
       duration: const Duration(milliseconds: 500), // Adjust duration as needed
     );
 
-   _animation = Tween<Offset>(
+   _animation = CurvedAnimation(parent: _controller, curve: Curves.easeIn);
+   /*Tween<Offset>(
       begin: const Offset(0.0, -1.0), // Off-screen top
       end: Offset.zero,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.ease));
+    ).
+    animate(CurvedAnimation(parent: _controller, curve: Curves.ease));*/
   }
 
 
@@ -162,8 +165,8 @@ class _FetchDataState extends State<FetchData> with SingleTickerProviderStateMix
                                       visible: selectedItemIndex == index
                                           ? true
                                           : false,
-                                      child: SlideTransition(
-                                        position: _animation,
+                                      child: FadeTransition(
+                                        opacity:_animation,
                                         child: Padding(
                                           padding: EdgeInsets.symmetric(
                                               horizontal: 3.w),

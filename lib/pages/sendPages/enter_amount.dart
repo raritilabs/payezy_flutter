@@ -72,7 +72,7 @@ final sendPageProvider=Provider.of<SendPageProvider>(context);
                     borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(5),
                         bottomLeft: Radius.circular(5)),
-                                            border: Border.all(color: lightBlueThemeColor),
+                   border: Border.all(color: lightBlueThemeColor),
             
                     color:sendPageProvider.bankIsSelected?lightBlueThemeColor:Colors.transparent,
                   ),
@@ -128,6 +128,7 @@ final sendPageProvider=Provider.of<SendPageProvider>(context);
               label: '00.00',
               inputFormatters:[FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}'))],
               controller: _youSend,
+              sidetextVisibility: true,
               onChanged: (value){
                 
                                sendPageProvider.setSendAmount(value);
@@ -172,9 +173,12 @@ final sendPageProvider=Provider.of<SendPageProvider>(context);
     
         Padding(
           padding:EdgeInsets.only(left: 5.w, right: 5.w,),
-          child: customTextField(
+          child:
+          
+          customTextField(
             recipientGets,
             'INR',
+            sidetextVisibility: true,
             label:sendPageProvider.expanded?sendPageProvider.youReceive.toString():'00.00',
              sideTextcolor: sendPageProvider.expanded?white:greyFontThemeColor,
              color: sendPageProvider.expanded?white:greyFontThemeColor,
@@ -194,9 +198,6 @@ final sendPageProvider=Provider.of<SendPageProvider>(context);
                EdgeInsets.only(bottom: 2.h, top:4.h , left: 5.w, right: 5.w),
           child: CustomButton(
             onPressed: () {
-               print('you send is ${sendPageProvider.youSend}');
-               print('you recve is ${sendPageProvider.youReceive}');
-
             if(sendPageProvider.youSend == 0.0){
                sendPageProvider.setnoValueValidationMessage(); 
             }

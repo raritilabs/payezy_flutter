@@ -13,15 +13,15 @@ Widget titleText(String text) {
 }
 
 
-Widget metrophobicText(String text,{Color color=white,double size=16,TextAlign textAlign=TextAlign.left,double spacing = -0.3}){
+Widget metrophobicText(String text,{Color color=white,double size=16,TextAlign textAlign=TextAlign.left,double spacing = -0.3,double height=1.5}){
     return Text(
-
     textAlign: textAlign,
     text,
     style: GoogleFonts.metrophobic(
       color: color,
       fontSize: size,
       letterSpacing:spacing, 
+      height: height,
       
     ),
   );

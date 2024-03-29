@@ -9,7 +9,6 @@ import 'package:payezy/firebase_options.dart';
 import 'package:payezy/providers/get_started_provider.dart';
 import 'package:payezy/providers/login_provider.dart';
 import 'package:payezy/services/routes.dart';
-import 'package:payezy/services/sign_in_with_twitter.dart';
 import 'package:payezy/themes/colors.dart';
 import 'package:payezy/themes/fonts.dart';
 import 'package:provider/provider.dart';

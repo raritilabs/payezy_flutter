@@ -12,6 +12,7 @@ import 'package:payezy/pages/splash_screen.dart';
 import 'package:payezy/pages/transferPages/fetch_data.dart';
 import 'package:payezy/pages/delete/transfer.dart';
 import 'package:payezy/pages/verify_email.dart';
+import 'package:payezy/providers/error_provider.dart';
 import 'package:payezy/providers/ifsc_validator.dart';
 import 'package:payezy/providers/enter_details_provider.dart';
 import 'package:payezy/providers/fetch_data_provider.dart';
@@ -46,6 +47,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<NavigationProvider>(create:(context) => NavigationProvider()),
         ChangeNotifierProvider<ApiProvider>(create:(context) => ApiProvider()),
         ChangeNotifierProvider<LoginProvider>(create:(context) => LoginProvider()),
+        ChangeNotifierProvider<ErrorProvider>(create:(context) => ErrorProvider()),
 
       ],
     

@@ -1,6 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:payezy/components/app_bar.dart';
 import 'package:payezy/components/custom_button.dart';
+import 'package:payezy/functions/enter_userData.dart';
+import 'package:payezy/providers/error_provider.dart';
 import 'package:payezy/providers/get_started_provider.dart';
 import 'package:payezy/providers/login_provider.dart';
 import 'package:payezy/services/routes.dart';
@@ -27,6 +31,7 @@ class _GetStartedState extends State<GetStarted> {
   @override
   void initState() {
     _email = TextEditingController(); //controls the email text field
+    Provider.of<GetStartedProvider>(context, listen: false);
     super.initState();
   }
 
@@ -38,60 +43,119 @@ class _GetStartedState extends State<GetStarted> {
 
   @override
   Widget build(BuildContext context) {
+//calling getStartedProvider(state manaagement)
     final getStartedProvider =
-        Provider.of<GetStartedProvider>(context, listen: false);
+        Provider.of<GetStartedProvider>(context, listen: true);
+//calling login provider
     final loginProvider = Provider.of<LoginProvider>(context, listen: false);
+//calling error provider to set errors
+        final errorProvider = Provider.of<ErrorProvider>(context, listen: false);
+
     return Scaffold(
-        resizeToAvoidBottomInset:
-            false, // prevents the bottom from coming up with the keyboard
+//prevents the bottom popping up with the keyboard
+        resizeToAvoidBottomInset: false,
         backgroundColor: mainBackgroundColor,
         appBar: const CustomAppBar(title: getStarted, isVisible: false),
         body: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 5.w), //side padding 5.w
+//side padding 5.w
+            padding: EdgeInsets.symmetric(horizontal: 5.w),
             child: SingleChildScrollView(
+//main column              
               child: Column(
                 children: [
                   Align(
                       alignment: Alignment.centerLeft,
+//login/signup title
                       child: spaceBetween(
                           metrophobicText(loginorsignup, size: 15.sp))),
-                 
+//gap b/w
                   SizedBox(
                     height: 2.h,
                   ),
+//email/password button
                   spaceBetween(CustomButton(
                     onPressed: () async {
                       loginProvider.setLoginType(LoginType.emailPassword);
                       Navigator.pushNamed(context, '/login');
                     },
                     text: 'Continue with Email/Password',
-                    size: 16.sp,
+                    size: 14.sp,
                     color: white,
                   )),
+//or text
+
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 2.h),
                     child: Center(
                       child: metrophobicText(or, size: 20.sp),
                     ),
                   ),
+//login quickly text...
+//                  
                   spaceBetween(
                     Center(
                       child: metrophobicText(loginquickly,
                           size: 15.sp, textAlign: TextAlign.justify),
                     ),
                   ),
+
+ //google login button and function
+
                   spaceBetween(
                     CustomButton(
                       onPressed: () async {
                         try {
+//setting the logintype to google
                           loginProvider.setLoginType(LoginType.google);
+//signing in with google
                           final user = await signInWithGoogle();
-
+//fetching the provider Id
+                          String? providerId;
+                          if (user.user != null && user.user!.providerData.isNotEmpty) {
+                            for (var userInfo in user.user!.providerData) {
+                              providerId = userInfo.providerId;
+                            }
+                          }
+//fetching the display name and email from usercredentials
+//
                           getStartedProvider.setUser(
                               user.user?.displayName.toString(),
                               user.user?.email);
+//adding the user data to firebase
+                          addUserData(
+                              'not initialised',
+                              user.user!.email.toString(),
+                              user.user!.displayName.toString(),
+                              '',
+                              0,
+                              '',
+                              providerId!);
+//navigating to main page after sign in                              
                           Navigator.of(context).pushNamedAndRemoveUntil(
                               mainScreen, (route) => false);
+//on firebaseexception
+                        } on FirebaseAuthException catch (e) {
+// The account already exists with a different credential                          
+                          if (e.code ==
+                              'account-exists-with-different-credential') {
+//fetching the error causing email, error-causing credential
+                            String? email = e.email;
+                            AuthCredential? pendingCredential = e.credential;
+//setting the error to display                            
+                           errorProvider.setError('User account exists with a different credential. Please try logging in by using any other provider.');
+//checking the type of error-causing provider                     
+//if twitter      
+                            if (pendingCredential?.signInMethod ==
+                                'twitter.com') {
+//
+                              UserCredential userCredential =
+                                  getStartedProvider.userCredentials;
+                              if (userCredential.user!.email == email) {
+                                await getStartedProvider.userCredentials.user
+                                    ?.linkWithCredential(pendingCredential!);
+                              }
+                            }
+                          }
                         } catch (e) {
                           log('error is $e');
                         }
@@ -101,53 +165,167 @@ class _GetStartedState extends State<GetStarted> {
                       leftAssetValue: 'assets/googleIcon.png',
                     ),
                   ),
-                  spaceBetween(
-                    CustomButton(
-                        onPressed: () async {
-                          try {
-                            loginProvider.setLoginType(LoginType.facebook);
-                            final user = await signInWithFacebook();
-                            getStartedProvider.setUser(
-                                user!.user?.displayName.toString(),
-                                user.user?.email.toString());
+                  //facebook login
+                  Visibility(
+                    visible: getStartedProvider.isVisible,
+                    child: spaceBetween(
+                      CustomButton(
+                          onPressed: () async {
+                            try {
+                              loginProvider.setLoginType(LoginType.facebook);
+                              final user = await signInWithFacebook();
+                              String? providerId;
 
-                            Navigator.of(context).pushNamedAndRemoveUntil(
-                                mainScreen, (route) => false);
-                          } catch (e) {
-                            log('error is $e');
-                          }
-                        },
-                        text: meta,
-                        size: 16.sp,
-                        leftAssetValue: 'assets/metaIcon.png'),
+// Check if user is not null before accessing user.user
+                              if (user != null &&
+                                  user.user != null &&
+                                  user.user!.providerData.isNotEmpty) {
+                                for (var userInfo in user.user!.providerData) {
+                                  providerId = userInfo.providerId;
+                                }
+                              }
+                              getStartedProvider.setUser(
+                                  user!.user?.displayName.toString(),
+                                  user.user?.email.toString());
+                              addUserData(
+                                  'not initialised',
+                                  user.user!.email.toString(),
+                                  user.user!.displayName.toString(),
+                                  '',
+                                  0,
+                                  '',
+                                  providerId!);
+
+                              getStartedProvider.setUserCredentials(user);
+
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                  mainScreen, (route) => false);
+                            } on FirebaseAuthException catch (e) {
+                              if (e.code ==
+                                  'account-exists-with-different-credential') {
+                                // The account already exists with a different credential
+                                String? email = e.email;
+                                AuthCredential? pendingCredential =
+                                    e.credential;
+
+                                log('User account exists with a different credential. Please try logging in by using any other provider.');
+                                if (pendingCredential?.signInMethod ==
+                                    'twitter.com') {
+                                  //  getStartedProvider.setIsVisible();
+                                  UserCredential userCredential =
+                                      getStartedProvider.userCredentials;
+                                  if (userCredential.user!.email == email) {
+                                    await getStartedProvider
+                                        .userCredentials.user
+                                        ?.linkWithCredential(
+                                            pendingCredential!);
+                                  }
+                                }
+                              }
+                            } catch (e) {
+                              log('error is $e');
+                            }
+                          },
+                          text: meta,
+                          size: 16.sp,
+                          leftAssetValue: 'assets/metaIcon.png'),
+                    ),
                   ),
+
+//X login button
                   spaceBetween(
                     CustomButton(
                       onPressed: () async {
                         loginProvider.setLoginType(LoginType.x);
+
                         try {
-                          final user = await signInWithTwitter();
-                          print('details are ${user.user?.email}');
+                          UserCredential userCredential =
+                              await signInWithTwitter();
+                          String? providerId;
+
+// Check if user is not null before accessing user.user
+                          if (userCredential.user != null &&
+                              userCredential.user!.providerData.isNotEmpty) {
+                            for (var userInfo
+                                in userCredential.user!.providerData) {
+                              providerId = userInfo.providerId;
+                            }
+                          }
+
+                          addUserData(
+                              'not initialised',
+                              userCredential.user!.email.toString(),
+                              userCredential.user!.displayName.toString(),
+                              '',
+                              0,
+                              '',
+                              providerId!);
                           getStartedProvider.setUser(
-                              user.user?.displayName.toString(),
-                              user.user?.email.toString());
-                              Navigator.of(context).pushNamedAndRemoveUntil(
-                            mainScreen, (route) => false);
+                              userCredential.user?.displayName.toString(),
+                              userCredential.user?.email.toString());
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              mainScreen, (route) => false);
+                          getStartedProvider.setUserCredentials(userCredential);
+                        } on FirebaseAuthException catch (e) {
+//exception handling                
+                          if (e.code ==
+                              'account-exists-with-different-credential') {
+                            // The account already exists with a different credential
+//fetch the error-causing email and credential
+                            String? email = e.email;
+                            AuthCredential? pendingCredential = e.credential;
+//logging the error
+                            log('User account exists with a different credential. Please try logging in by using any other provider.');
+//querying from firebase for the provider used to sign in with this email         
+                            QuerySnapshot query = await FirebaseFirestore
+                                .instance
+                                .collection('userData')
+                                .where("email", isEqualTo: email)
+                                .get();
+                            if (query.docs.isNotEmpty) {
+                              // Get the data from the first document and cast it to Map<String, dynamic>?
+                              Map<String, dynamic>? userData = query.docs.first
+                                  .data() as Map<String, dynamic>?;
+
+                              // Check if userData is not null and email is associated with facebook.com
+                              if (userData != null &&
+                                  userData['providerId'] == 'facebook.com') {
+                                final userCredential =
+                                    await signInWithFacebook();
+                                await userCredential!.user
+                                    ?.linkWithCredential(pendingCredential!);
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                    mainScreen, (route) => false);
+                              }
+                              if (userData != null &&
+                                  userData['providerId'] == 'google.com') {
+                                final userCredential = await signInWithGoogle();
+                                await userCredential.user
+                                    ?.linkWithCredential(pendingCredential!);
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                    mainScreen, (route) => false);
+                              }
+                            }
+                          }
                         } catch (e) {
                           log('error is $e');
                         }
-                        
                       },
                       text: signinwith,
                       rightAssetValue: 'assets/XIcon.png',
                       size: 16.sp,
                     ),
                   ),
+                  spaceBetween(
+                    metrophobicText(errorProvider.error,color: Colors.red),
+                  ),
+
+ //terms and privacy policy
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 2.h),
                     child: metrophobicText(bySigning,
                         textAlign: TextAlign.justify, size: 10.sp),
-                  )
+                  ),
                 ],
               ),
             )));

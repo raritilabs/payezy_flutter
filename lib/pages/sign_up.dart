@@ -129,20 +129,14 @@ class _SignUpState extends State<SignUp> {
 
                               emailProvider.setWrongPasswordValidation();
                             } else {
-                              final email = _email.text;
-                              final password = _password.text;
                               final displayName=_name.text;
 
                               try {
-                                await FirebaseAuth.instance
-                                    .createUserWithEmailAndPassword(
-                                  email: email,
-                                  password: password,
-                                );
                                 final user = FirebaseAuth.instance.currentUser;
                                 user?.updateDisplayName(displayName);
                                 await user?.sendEmailVerification();
                                 Navigator.of(context).pushNamed(verifyEmail);
+                    
                               } on FirebaseAuthException catch (e) {
                                  if (e.code == 'weak-password') {
                                    log('Weak Password');
@@ -172,7 +166,7 @@ class _SignUpState extends State<SignUp> {
                         TextButton(
                           onPressed: () {
                             Navigator.of(context).pushNamedAndRemoveUntil(
-                                '/login', (route) => false);
+                                '/getstarted', (route) => false);
                           },
                           child: metrophobicText(
                               'Already have an account? Login here',

@@ -9,17 +9,12 @@ import 'package:payezy/components/custom_button.dart';
 import 'package:payezy/components/text_field.dart';
 import 'package:payezy/firebase_options.dart';
 import 'package:payezy/providers/get_started_provider.dart';
-import 'package:payezy/providers/login_provider.dart';
 import 'package:payezy/services/routes.dart';
-import 'package:payezy/services/sign_in_with_facebook.dart';
-import 'package:payezy/services/sign_in_with_google.dart';
-import 'package:payezy/services/sign_in_with_twitter.dart';
 import 'package:payezy/themes/colors.dart';
 import 'package:payezy/themes/fonts.dart';
 import 'package:payezy/themes/string_constants.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -48,8 +43,8 @@ class _LoginState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-            final loginProvider=Provider.of<LoginProvider>(context,listen: true);
-
+    final getStartedProvider =
+        Provider.of<GetStartedProvider>(context, listen: false);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: mainBackgroundColor,
@@ -89,62 +84,43 @@ class _LoginState extends State<LoginPage> {
 
                       CustomButton(
                         onPressed: () async {
-                          FirebaseAuth auth = FirebaseAuth.instance;
-
                           final email = _email.text;
+                          //// getStartedProvider.setEmail(email);
                           final password = _password.text;
+                          // getStartedProvider.setPassword(password);
                           try {
-                            final UserCredential = await FirebaseAuth.instance
+                            final userCredential = await FirebaseAuth.instance
                                 .signInWithEmailAndPassword(
                                     email: email, password: password);
-                            final getStartedProvider =
-                                Provider.of<GetStartedProvider>(context,
-                                    listen: false);
                             getStartedProvider.setUser(
-                                UserCredential.user?.displayName.toString(),
-                                UserCredential.user?.email);
-                            print('details are $UserCredential');
+                                userCredential.user?.displayName.toString(),
+                                userCredential.user?.email);
+                            // getStartedProvider.setUserCredentials(userCredential);
+
                             Navigator.of(context).pushNamedAndRemoveUntil(
                                 mainScreen, (route) => false);
                           } on FirebaseAuthException catch (e) {
                             if (e.code == 'invalid-credential') {
                               devtools.log('AuthException occured:${e.code}');
+                            } else if (e.code ==
+                                'account-exists-with-different-credential') {
+                              // The account already exists with a different credential
+                              String? email = e.email;
+                              AuthCredential? pendingCredential = e.credential;
+                              devtools.log(
+                                  'User account exists with a different credential. Please try logging in by using any other provider.');
+                              if (pendingCredential?.signInMethod ==
+                                  'twitter.com') {
+                                //  getStartedProvider.setIsVisible();
+                                UserCredential userCredential =
+                                    getStartedProvider.userCredentials;
+                                if (userCredential.user!.email == email) {
+                                  await getStartedProvider.userCredentials.user
+                                      ?.linkWithCredential(pendingCredential!);
+                                }
+                              }
                             }
-//                            if (e.code == 'account-exists-with-different-credential') {
-//                           devtools.log('User account exists with a different credential. Please try logging in by using any other provider.');
-//                                AuthCredential? pendingCredential = e.credential;
-//                           if(loginProvider.loginType==LoginType.emailPassword){
-//  UserCredential userCredential = await auth.signInWithEmailAndPassword(
-//         email: email,
-//         password: password,
-//       );
-                          
-                          
-//       // Link the pending credential with the existing account
-//       await userCredential.user?.linkWithCredential(pendingCredential!);
-
-//       // Success! Go back to your application flow
-//       return null;
-//       }
-//       else if(loginProvider.loginType==LoginType.facebook){
-//          UserCredential? userCredential = await signInWithFacebook();
-//           await userCredential!.user?.linkWithCredential(pendingCredential!);
-// return null;
-//       }
-//        else if(loginProvider.loginType==LoginType.x){
-//          UserCredential? userCredential = await signInWithTwitter();
-//           await userCredential.user?.linkWithCredential(pendingCredential!);
-// return null;
-//       }
-      
-//        else if(loginProvider.loginType==LoginType.google){
-//          UserCredential? userCredential = await signInWithGoogle();
-//           await userCredential.user?.linkWithCredential(pendingCredential!);
-// return null;
-//       }
-//     }
-                           
-                          }catch (e){
+                          } catch (e) {
                             devtools.log('error is $e');
                           }
                         },

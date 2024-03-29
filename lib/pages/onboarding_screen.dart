@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
-import 'package:payezy/pages/get_started.dart';
 import 'package:payezy/pages/home_page.dart';
 import 'package:payezy/themes/colors.dart';
 import 'package:sizer/sizer.dart';
