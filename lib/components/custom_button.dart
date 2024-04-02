@@ -25,39 +25,43 @@ class CustomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     
-    return GestureDetector(
-      onTap: onPressed,
-      child: Container(
+    return InkWell(
+      splashFactory: InkSplash.splashFactory,
+      splashColor: lightBlueThemeColor,
+      child: GestureDetector(
+        onTap: onPressed,
+        child: Container(
+          
+                            decoration: BoxDecoration(
         
-                          decoration: BoxDecoration(
-      
-                              borderRadius: BorderRadius.circular(5),
-                              border: Border.all(color: buttonBorder),
-                              gradient: const LinearGradient(
-                                  colors: [
-                                    proceedButtonGradient1,
-                                    proceedButtonGradient2
-                                  ],
-                                  begin: Alignment.topCenter,
-                                  end: Alignment.bottomCenter)),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                             if (leftAssetValue != null)
-                              Image.asset(leftAssetValue!), //if icon is provided, then its shown on the left
-                              Padding(
-                                padding: EdgeInsets.symmetric(vertical: 0.7.h,horizontal: 2.w),
-                                child: Text(
-                                 text,
-                                  style: GoogleFonts.metrophobic(
-                                      color: color, fontSize: size),
+                                borderRadius: BorderRadius.circular(5),
+                                border: Border.all(color: buttonBorder),
+                                gradient: const LinearGradient(
+                                    colors: [
+                                      proceedButtonGradient1,
+                                      proceedButtonGradient2
+                                    ],
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter)),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                               if (leftAssetValue != null)
+                                Image.asset(leftAssetValue!), //if icon is provided, then its shown on the left
+                                Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 0.7.h,horizontal: 2.w),
+                                  child: Text(
+                                   text,
+                                    style: GoogleFonts.metrophobic(
+                                        color: color, fontSize: size),
+                                  ),
                                 ),
-                              ),
-                                  if (rightAssetValue != null)
-                                 Image.asset(rightAssetValue!),//if icon is provided, then its shown on the right
-                            ],
+                                    if (rightAssetValue != null)
+                                   Image.asset(rightAssetValue!),//if icon is provided, then its shown on the right
+                              ],
+                            ),
                           ),
-                        ),
+      ),
     );
 }
 }

@@ -202,7 +202,7 @@ class _FetchDataState extends State<FetchData> with SingleTickerProviderStateMix
                                                   ),
                                                   Container(
                                                       decoration: BoxDecoration(
-                                                        color: orange,
+                                                        color: yellow,
                                                         borderRadius:
                                                             BorderRadius.circular(
                                                                 3),
@@ -310,7 +310,7 @@ class _FetchDataState extends State<FetchData> with SingleTickerProviderStateMix
                                               metrophobicText(
                                                   'Please be patient,Your transfer order will be succesfully delievered within 2 hours.',
                                                   size: 10.sp,
-                                                  color: orange),
+                                                  color: yellow),
                                               SizedBox(
                                                 height: 3.h,
                                               ),

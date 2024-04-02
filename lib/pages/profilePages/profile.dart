@@ -124,13 +124,44 @@ return
               ),
               //-------------------------second section------------------------------------//
               SizedBox(height: 5.h),
-              metrophobicText('Support', size: 16.sp),
+              TextButton(
+                 style:   ButtonStyle(
+                  splashFactory: InkRipple.splashFactory,
+                  minimumSize: MaterialStatePropertyAll(Size(26.w, 5.h)),
+                  tapTargetSize: MaterialTapTargetSize.padded,
+                     padding: const MaterialStatePropertyAll(EdgeInsets.all(0)),
+                ),
+                onPressed: (){},
+                child: metrophobicText('Support', size: 16.sp)),
               SizedBox(height: 2.h),
-              metrophobicText('Privacy Policy', size: 16.sp),
+              TextButton(
+                 style:   ButtonStyle(
+                  splashFactory: InkRipple.splashFactory,
+                  minimumSize: MaterialStatePropertyAll(Size(40.w, 5.h)),
+                  tapTargetSize: MaterialTapTargetSize.padded,
+                     padding: const MaterialStatePropertyAll(EdgeInsets.all(0)),
+                ),
+                onPressed:(){},
+                child:metrophobicText('Privacy Policy', size: 16.sp)),
               SizedBox(height: 2.h),
-              metrophobicText('Terms of Use', size: 16.sp),
+              TextButton(
+                  style:   ButtonStyle(
+                  splashFactory: InkRipple.splashFactory,
+                  minimumSize: MaterialStatePropertyAll(Size(38.w, 5.h)),
+                  tapTargetSize: MaterialTapTargetSize.padded,
+                     padding: const MaterialStatePropertyAll(EdgeInsets.all(0)),
+                ),
+                onPressed: (){},
+                child: metrophobicText('Terms of Use', size: 16.sp)),
               SizedBox(height: 2.h),
-              TextButton(onPressed: () async{ 
+              TextButton(
+                 style:   ButtonStyle(
+                  splashFactory: InkRipple.splashFactory,
+                  minimumSize: MaterialStatePropertyAll(Size(25.w, 5.h)),
+                  tapTargetSize: MaterialTapTargetSize.padded,
+                     padding: const MaterialStatePropertyAll(EdgeInsets.all(0)),
+                ),
+                onPressed: () async{ 
                 switch(loginProvider.loginType){
 
                   case LoginType.emailPassword:

@@ -93,7 +93,7 @@ class _TransferHistoryState extends State<TransferHistory> {
                           ),
                           Container(
                               decoration: BoxDecoration(
-                                color: orange,
+                                color: yellow,
                                 borderRadius: BorderRadius.circular(3),
                               ),
                               child: Padding(
@@ -162,7 +162,7 @@ class _TransferHistoryState extends State<TransferHistory> {
                       metrophobicText(
                           'Please be patient,Your transfer order will be succesfully delievered within 2 hours.',
                           size: 11.sp,
-                          color: orange),
+                          color: yellow),
                       SizedBox(
                         height: 3.h,
                       ),

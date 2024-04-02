@@ -8,6 +8,7 @@ import 'package:sizer/sizer.dart';
 
 Widget customTextField(String text, String sideText1,
     {String? errorTextVal,
+    String? infoText='',
     String? details = '',
     bool? detailsVisible = false,
     String? label = '',
@@ -16,6 +17,7 @@ Widget customTextField(String text, String sideText1,
     onChanged,
     bool? readOnly = false,
     bool? sidetextVisibility = false,
+    bool? infoTextVisibility = false,
     TextInputType? textInputType,
     bool? obscure = false,
     Color sideTextcolor = greyFontThemeColor,
@@ -45,6 +47,14 @@ Widget customTextField(String text, String sideText1,
             padding:  EdgeInsets.only(top: 1.5.h,),
             child: metrophobicText(text,
                 color: greyFontThemeColor, size: 11.sp,height: 0.01.h),
+          ),
+          Visibility(
+            visible: infoTextVisibility!,
+            child: Padding(
+              padding:  EdgeInsets.only(top: 1.5.h,),
+              child: metrophobicText(infoText!,
+                  color: yellow, size: 11.sp,height: 0.01.h),
+            ),
           ), 
 //TextField
 //child3:row to arrange textfield and side text

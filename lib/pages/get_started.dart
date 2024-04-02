@@ -110,7 +110,7 @@ class _GetStartedState extends State<GetStarted> {
 //signing in with google
                           final user = await signInWithGoogle();
 //fetching the provider Id
-                          String? providerId;
+                          String? providerId;                          
                           if (user.user != null && user.user!.providerData.isNotEmpty) {
                             for (var userInfo in user.user!.providerData) {
                               providerId = userInfo.providerId;
@@ -135,24 +135,43 @@ class _GetStartedState extends State<GetStarted> {
                               mainScreen, (route) => false);
 //on firebaseexception
                         } on FirebaseAuthException catch (e) {
-// The account already exists with a different credential                          
+//exception handling                
                           if (e.code ==
                               'account-exists-with-different-credential') {
-//fetching the error causing email, error-causing credential
+                            // The account already exists with a different credential
+//fetch the error-causing email and credential
                             String? email = e.email;
                             AuthCredential? pendingCredential = e.credential;
-//setting the error to display                            
-                           errorProvider.setError('User account exists with a different credential. Please try logging in by using any other provider.');
-//checking the type of error-causing provider                     
-//if twitter      
-                            if (pendingCredential?.signInMethod ==
-                                'twitter.com') {
-//
-                              UserCredential userCredential =
-                                  getStartedProvider.userCredentials;
-                              if (userCredential.user!.email == email) {
-                                await getStartedProvider.userCredentials.user
+//logging the error
+                            log('User account exists with a different credential. Please try logging in by using any other provider.');
+//querying from firebase for the provider used to sign in with this email         
+                            QuerySnapshot query = await FirebaseFirestore
+                                .instance
+                                .collection('userData')
+                                .where("email", isEqualTo: email)
+                                .get();
+                            if (query.docs.isNotEmpty) {
+                              // Get the data from the first document and cast it to Map<String, dynamic>?
+                              Map<String, dynamic>? userData = query.docs.first
+                                  .data() as Map<String, dynamic>?;
+
+                              // Check if userData is not null and email is associated with facebook.com
+                              if (userData != null &&
+                                  userData['providerId'] == 'facebook.com') {
+                                final userCredential =
+                                    await signInWithFacebook();
+                                await userCredential!.user
                                     ?.linkWithCredential(pendingCredential!);
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                    mainScreen, (route) => false);
+                              }
+                              if (userData != null &&
+                                  userData['providerId'] == 'twitter.com') {
+                                final userCredential = await signInWithTwitter();
+                                await userCredential.user
+                                    ?.linkWithCredential(pendingCredential!);
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                    mainScreen, (route) => false);
                               }
                             }
                           }
@@ -201,28 +220,47 @@ class _GetStartedState extends State<GetStarted> {
                               Navigator.of(context).pushNamedAndRemoveUntil(
                                   mainScreen, (route) => false);
                             } on FirebaseAuthException catch (e) {
-                              if (e.code ==
-                                  'account-exists-with-different-credential') {
-                                // The account already exists with a different credential
-                                String? email = e.email;
-                                AuthCredential? pendingCredential =
-                                    e.credential;
+//exception handling                
+                          if (e.code ==
+                              'account-exists-with-different-credential') {
+                            // The account already exists with a different credential
+//fetch the error-causing email and credential
+                            String? email = e.email;
+                            AuthCredential? pendingCredential = e.credential;
+//logging the error
+                            log('User account exists with a different credential. Please try logging in by using any other provider.');
+//querying from firebase for the provider used to sign in with this email         
+                            QuerySnapshot query = await FirebaseFirestore
+                                .instance
+                                .collection('userData')
+                                .where("email", isEqualTo: email)
+                                .get();
+                            if (query.docs.isNotEmpty) {
+                              // Get the data from the first document and cast it to Map<String, dynamic>?
+                              Map<String, dynamic>? userData = query.docs.first
+                                  .data() as Map<String, dynamic>?;
 
-                                log('User account exists with a different credential. Please try logging in by using any other provider.');
-                                if (pendingCredential?.signInMethod ==
-                                    'twitter.com') {
-                                  //  getStartedProvider.setIsVisible();
-                                  UserCredential userCredential =
-                                      getStartedProvider.userCredentials;
-                                  if (userCredential.user!.email == email) {
-                                    await getStartedProvider
-                                        .userCredentials.user
-                                        ?.linkWithCredential(
-                                            pendingCredential!);
-                                  }
-                                }
+                              // Check if userData is not null and email is associated with facebook.com
+                              if (userData != null &&
+                                  userData['providerId'] == 'google.com') {
+                                final userCredential =
+                                    await signInWithGoogle();
+                                await userCredential.user
+                                    ?.linkWithCredential(pendingCredential!);
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                    mainScreen, (route) => false);
                               }
-                            } catch (e) {
+                              if (userData != null &&
+                                  userData['providerId'] == 'twitter.com') {
+                                final userCredential = await signInWithTwitter();
+                                await userCredential.user
+                                    ?.linkWithCredential(pendingCredential!);
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                    mainScreen, (route) => false);
+                              }
+                            }
+                          }
+                        }catch (e) {
                               log('error is $e');
                             }
                           },

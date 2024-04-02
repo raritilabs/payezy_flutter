@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:payezy/components/custom_button.dart';
 import 'package:payezy/components/custom_line.dart';
 import 'package:payezy/components/text_field.dart';
-import 'package:payezy/providers/fetch_exchange_rate.dart';
+import 'package:payezy/functions/fetch_exchange_rate.dart';
 import 'package:payezy/providers/send_provider.dart';
 import 'package:payezy/themes/colors.dart';
 import 'package:payezy/themes/fonts.dart';
@@ -21,12 +21,14 @@ class EnterAmount extends StatefulWidget {
 class _EnterAmountState extends State<EnterAmount> {
   late final TextEditingController _youSend;
     late Future<double> data;
+    //late Future<double> balance;
 
   
   @override
   void initState() {
     _youSend = TextEditingController();
     data=fetchExchangeRate();
+  //  balance=getInrTreasuryBalance();
     super.initState();
   }
 
