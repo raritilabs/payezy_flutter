@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:payezy/components/app_bar.dart';
 import 'package:payezy/components/custom_button.dart';
-import 'package:payezy/functions/enter_userData.dart';
+import 'package:payezy/functions/enter_user_data.dart';
 import 'package:payezy/providers/error_provider.dart';
 import 'package:payezy/providers/get_started_provider.dart';
 import 'package:payezy/providers/login_provider.dart';
@@ -16,7 +16,6 @@ import 'package:payezy/themes/fonts.dart';
 import 'package:payezy/themes/string_constants.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import 'dart:developer' show log;
 
 class GetStarted extends StatefulWidget {
   const GetStarted({super.key});
@@ -49,7 +48,7 @@ class _GetStartedState extends State<GetStarted> {
 //calling login provider
     final loginProvider = Provider.of<LoginProvider>(context, listen: false);
 //calling error provider to set errors
-        final errorProvider = Provider.of<ErrorProvider>(context, listen: false);
+        final errorProvider = Provider.of<ErrorProvider>(context, listen: true);
 
     return Scaffold(
 //prevents the bottom popping up with the keyboard
@@ -108,24 +107,26 @@ class _GetStartedState extends State<GetStarted> {
 //setting the logintype to google
                           loginProvider.setLoginType(LoginType.google);
 //signing in with google
-                          final user = await signInWithGoogle();
+                          final userCredential = await signInWithGoogle();
+                          
+
 //fetching the provider Id
                           String? providerId;                          
-                          if (user.user != null && user.user!.providerData.isNotEmpty) {
-                            for (var userInfo in user.user!.providerData) {
+                          if (userCredential.user != null && userCredential.user!.providerData.isNotEmpty) {
+                            for (var userInfo in userCredential.user!.providerData) {
                               providerId = userInfo.providerId;
-                            }
+                            }    
                           }
 //fetching the display name and email from usercredentials
 //
                           getStartedProvider.setUser(
-                              user.user?.displayName.toString(),
-                              user.user?.email);
+                              userCredential.user?.displayName.toString(),
+                              userCredential.user?.email);
 //adding the user data to firebase
                           addUserData(
                               'not initialised',
-                              user.user!.email.toString(),
-                              user.user!.displayName.toString(),
+                              userCredential.user!.email.toString(),
+                              userCredential.user!.displayName.toString(),
                               '',
                               0,
                               '',
@@ -143,7 +144,8 @@ class _GetStartedState extends State<GetStarted> {
                             String? email = e.email;
                             AuthCredential? pendingCredential = e.credential;
 //logging the error
-                            log('User account exists with a different credential. Please try logging in by using any other provider.');
+                            errorProvider.setError('User account exists with a different credential. Please try logging in by using any other provider.');
+                            errorProvider.setErrorVisibility();
 //querying from firebase for the provider used to sign in with this email         
                             QuerySnapshot query = await FirebaseFirestore
                                 .instance
@@ -176,7 +178,8 @@ class _GetStartedState extends State<GetStarted> {
                             }
                           }
                         } catch (e) {
-                          log('error is $e');
+                          errorProvider.setError('error is $e');
+                          errorProvider.setErrorVisibility();
                         }
                       },
                       text: google,
@@ -185,89 +188,88 @@ class _GetStartedState extends State<GetStarted> {
                     ),
                   ),
                   //facebook login
-                  Visibility(
-                    visible: getStartedProvider.isVisible,
-                    child: spaceBetween(
-                      CustomButton(
-                          onPressed: () async {
-                            try {
-                              loginProvider.setLoginType(LoginType.facebook);
-                              final user = await signInWithFacebook();
-                              String? providerId;
-
-// Check if user is not null before accessing user.user
-                              if (user != null &&
-                                  user.user != null &&
-                                  user.user!.providerData.isNotEmpty) {
-                                for (var userInfo in user.user!.providerData) {
-                                  providerId = userInfo.providerId;
-                                }
+                  spaceBetween(
+                    CustomButton(
+                        onPressed: () async {
+                          try {
+                            loginProvider.setLoginType(LoginType.facebook);
+                            final user = await signInWithFacebook();
+                            String? providerId;
+                  
+                  // Check if user is not null before accessing user.user
+                            if (user != null &&
+                                user.user != null &&
+                                user.user!.providerData.isNotEmpty) {
+                              for (var userInfo in user.user!.providerData) {
+                                providerId = userInfo.providerId;
                               }
-                              getStartedProvider.setUser(
-                                  user!.user?.displayName.toString(),
-                                  user.user?.email.toString());
-                              addUserData(
-                                  'not initialised',
-                                  user.user!.email.toString(),
-                                  user.user!.displayName.toString(),
-                                  '',
-                                  0,
-                                  '',
-                                  providerId!);
-
-                              getStartedProvider.setUserCredentials(user);
-
+                            }
+                            getStartedProvider.setUser(
+                                user!.user?.displayName.toString(),
+                                user.user?.email.toString());
+                            addUserData(
+                                'not initialised',
+                                user.user!.email.toString(),
+                                user.user!.displayName.toString(),
+                                '',
+                                0,
+                                '',
+                                providerId!);
+                  
+                            getStartedProvider.setUserCredentials(user);
+                  
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                                mainScreen, (route) => false);
+                          } on FirebaseAuthException catch (e) {
+                  //exception handling                
+                        if (e.code ==
+                            'account-exists-with-different-credential') {
+                          // The account already exists with a different credential
+                  //fetch the error-causing email and credential
+                          String? email = e.email;
+                          AuthCredential? pendingCredential = e.credential;
+                  //logging the error
+                          errorProvider.setError('User account exists with a different credential. Please try logging in by using any other provider.');
+                          errorProvider.setErrorVisibility();
+                  //querying from firebase for the provider used to sign in with this email         
+                          QuerySnapshot query = await FirebaseFirestore
+                              .instance
+                              .collection('userData')
+                              .where("email", isEqualTo: email)
+                              .get();
+                          if (query.docs.isNotEmpty) {
+                            // Get the data from the first document and cast it to Map<String, dynamic>?
+                            Map<String, dynamic>? userData = query.docs.first
+                                .data() as Map<String, dynamic>?;
+                  
+                            // Check if userData is not null and email is associated with facebook.com
+                            if (userData != null &&
+                                userData['providerId'] == 'google.com') {
+                              final userCredential =
+                                  await signInWithGoogle();
+                              await userCredential.user
+                                  ?.linkWithCredential(pendingCredential!);
                               Navigator.of(context).pushNamedAndRemoveUntil(
                                   mainScreen, (route) => false);
-                            } on FirebaseAuthException catch (e) {
-//exception handling                
-                          if (e.code ==
-                              'account-exists-with-different-credential') {
-                            // The account already exists with a different credential
-//fetch the error-causing email and credential
-                            String? email = e.email;
-                            AuthCredential? pendingCredential = e.credential;
-//logging the error
-                            log('User account exists with a different credential. Please try logging in by using any other provider.');
-//querying from firebase for the provider used to sign in with this email         
-                            QuerySnapshot query = await FirebaseFirestore
-                                .instance
-                                .collection('userData')
-                                .where("email", isEqualTo: email)
-                                .get();
-                            if (query.docs.isNotEmpty) {
-                              // Get the data from the first document and cast it to Map<String, dynamic>?
-                              Map<String, dynamic>? userData = query.docs.first
-                                  .data() as Map<String, dynamic>?;
-
-                              // Check if userData is not null and email is associated with facebook.com
-                              if (userData != null &&
-                                  userData['providerId'] == 'google.com') {
-                                final userCredential =
-                                    await signInWithGoogle();
-                                await userCredential.user
-                                    ?.linkWithCredential(pendingCredential!);
-                                Navigator.of(context).pushNamedAndRemoveUntil(
-                                    mainScreen, (route) => false);
-                              }
-                              if (userData != null &&
-                                  userData['providerId'] == 'twitter.com') {
-                                final userCredential = await signInWithTwitter();
-                                await userCredential.user
-                                    ?.linkWithCredential(pendingCredential!);
-                                Navigator.of(context).pushNamedAndRemoveUntil(
-                                    mainScreen, (route) => false);
-                              }
+                            }
+                            if (userData != null &&
+                                userData['providerId'] == 'twitter.com') {
+                              final userCredential = await signInWithTwitter();
+                              await userCredential.user
+                                  ?.linkWithCredential(pendingCredential!);
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                  mainScreen, (route) => false);
                             }
                           }
-                        }catch (e) {
-                              log('error is $e');
-                            }
-                          },
-                          text: meta,
-                          size: 16.sp,
-                          leftAssetValue: 'assets/metaIcon.png'),
-                    ),
+                        }
+                      }catch (e) {
+                            errorProvider.setError('error is $e');
+                            errorProvider.setErrorVisibility();
+                          }
+                        },
+                        text: meta,
+                        size: 16.sp,
+                        leftAssetValue: 'assets/metaIcon.png'),
                   ),
 
 //X login button
@@ -289,7 +291,6 @@ class _GetStartedState extends State<GetStarted> {
                               providerId = userInfo.providerId;
                             }
                           }
-
                           addUserData(
                               'not initialised',
                               userCredential.user!.email.toString(),
@@ -312,8 +313,9 @@ class _GetStartedState extends State<GetStarted> {
 //fetch the error-causing email and credential
                             String? email = e.email;
                             AuthCredential? pendingCredential = e.credential;
-//logging the error
-                            log('User account exists with a different credential. Please try logging in by using any other provider.');
+//setting the error
+                            errorProvider.setError('User account exists with a different credential. Please try logging in by using any other provider.');
+                            errorProvider.setErrorVisibility();
 //querying from firebase for the provider used to sign in with this email         
                             QuerySnapshot query = await FirebaseFirestore
                                 .instance
@@ -337,16 +339,24 @@ class _GetStartedState extends State<GetStarted> {
                               }
                               if (userData != null &&
                                   userData['providerId'] == 'google.com') {
-                                final userCredential = await signInWithGoogle();
+                                    try{
+                                      final userCredential = await signInWithGoogle();
                                 await userCredential.user
                                     ?.linkWithCredential(pendingCredential!);
                                 Navigator.of(context).pushNamedAndRemoveUntil(
                                     mainScreen, (route) => false);
+                                    }
+                                    catch(e)
+                                    {errorProvider.setError('exception $e');
+                                    errorProvider.setErrorVisibility();
+                                    }
+                                
                               }
                             }
                           }
                         } catch (e) {
-                          log('error is $e');
+                          errorProvider.setError('error is $e');
+                          errorProvider.setErrorVisibility();
                         }
                       },
                       text: signinwith,
@@ -354,8 +364,11 @@ class _GetStartedState extends State<GetStarted> {
                       size: 16.sp,
                     ),
                   ),
-                  spaceBetween(
-                    metrophobicText(errorProvider.error,color: Colors.red),
+                  Visibility(
+                    visible: errorProvider.errorVisibility,
+                    child: spaceBetween(
+                      metrophobicText(errorProvider.error,color: Colors.red),
+                    ),
                   ),
 
  //terms and privacy policy

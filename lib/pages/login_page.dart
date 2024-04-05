@@ -8,6 +8,7 @@ import 'package:payezy/components/app_bar.dart';
 import 'package:payezy/components/custom_button.dart';
 import 'package:payezy/components/text_field.dart';
 import 'package:payezy/firebase_options.dart';
+import 'package:payezy/providers/error_provider.dart';
 import 'package:payezy/providers/get_started_provider.dart';
 import 'package:payezy/services/routes.dart';
 import 'package:payezy/themes/colors.dart';
@@ -45,6 +46,8 @@ class _LoginState extends State<LoginPage> {
   Widget build(BuildContext context) {
     final getStartedProvider =
         Provider.of<GetStartedProvider>(context, listen: false);
+    final errorProvider =
+        Provider.of<ErrorProvider>(context, listen: false);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: mainBackgroundColor,
@@ -101,15 +104,17 @@ class _LoginState extends State<LoginPage> {
                                 mainScreen, (route) => false);
                           } on FirebaseAuthException catch (e) {
                             if (e.code == 'invalid-credential') {
-                              devtools.log('AuthException occured:${e.code}');
+                              errorProvider.setError('AuthException occured:${e.code}');
+                              errorProvider.setErrorVisibility();
                             } else if (e.code ==
                                 'account-exists-with-different-credential') {
                               // The account already exists with a different credential
                               String? email = e.email;
                               AuthCredential? pendingCredential = e.credential;
-                              devtools.log(
+                             errorProvider.setError(
                                   'User account exists with a different credential. Please try logging in by using any other provider.');
-                              if (pendingCredential?.signInMethod ==
+                              errorProvider.setErrorVisibility();
+                               if (pendingCredential?.signInMethod ==
                                   'twitter.com') {
                                 //  getStartedProvider.setIsVisible();
                                 UserCredential userCredential =
@@ -122,6 +127,8 @@ class _LoginState extends State<LoginPage> {
                             }
                           } catch (e) {
                             devtools.log('error is $e');
+                            errorProvider.setError('error is $e');
+                            errorProvider.setErrorVisibility();
                           }
                         },
                         text: login,
@@ -130,6 +137,15 @@ class _LoginState extends State<LoginPage> {
                       SizedBox(
                         height: 2.h,
                       ),
+
+  Visibility(
+    visible: errorProvider.errorVisibility,
+    child: SizedBox(
+                          height: 2.h,
+                        child: metrophobicText(errorProvider.error,color: Colors.red),),
+  ),
+
+                      
                       TextButton(
                         onPressed: () {
                           Navigator.of(context).pushNamedAndRemoveUntil(
@@ -142,7 +158,7 @@ class _LoginState extends State<LoginPage> {
                   ),
                 );
               default:
-                return const LinearProgressIndicator();
+                return const SizedBox();
             }
           }),
     );

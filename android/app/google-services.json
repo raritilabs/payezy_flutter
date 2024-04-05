@@ -1,45 +1,37 @@
 {
   "project_info": {
-    "project_number": "7964827841",
-    "project_id": "payezy-project",
-    "storage_bucket": "payezy-project.appspot.com"
+    "project_number": "6164723951",
+    "project_id": "devmode-payezy",
+    "storage_bucket": "devmode-payezy.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:7964827841:android:26f567239e1e01125d3440",
+        "mobilesdk_app_id": "1:6164723951:android:58174f56f85278b7b7431a",
         "android_client_info": {
           "package_name": "com.example.payezy"
         }
       },
       "oauth_client": [
         {
-          "client_id": "7964827841-1iupqcod3hf2uq7ufhp1gc2o2f78e1sh.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.payezy",
-            "certificate_hash": "c4d1208d9de724ce6e8b725ef8b5e064d0afe9a8"
-          }
-        },
-        {
-          "client_id": "7964827841-6btg1g84o48h75d2alucrcckp5rje6as.apps.googleusercontent.com",
+          "client_id": "6164723951-0e2vqhc6hkmg0nkj1ajkj85fblmfirim.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAzsWf6Ta3JPsMp4VHe_FU1IhR2b5C_TUQ"
+          "current_key": "AIzaSyAdEaxkHRFUzc8CqMa7qymCocMeb0swM_4"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "7964827841-6btg1g84o48h75d2alucrcckp5rje6as.apps.googleusercontent.com",
+              "client_id": "6164723951-0e2vqhc6hkmg0nkj1ajkj85fblmfirim.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "7964827841-mgpr62pglgftikfo5l1rl5tp9rsg9mdh.apps.googleusercontent.com",
+              "client_id": "6164723951-ot9jr06ihlrm7f3a88ellvgh4nrc1752.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.example.payezy"

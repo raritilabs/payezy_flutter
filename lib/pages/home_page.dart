@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:payezy/firebase_options.dart';
 import 'package:payezy/pages/get_started.dart';
 import 'package:payezy/pages/main_screen.dart';
+// ignore: unused_import
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -15,6 +17,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+    //initializing firebase
     return FutureBuilder(
             future: Firebase.initializeApp(
               options: DefaultFirebaseOptions.currentPlatform,
@@ -22,16 +25,18 @@ class _HomePageState extends State<HomePage> {
             builder: (context, snapshot) {
               switch (snapshot.connectionState) {
                 case ConnectionState.done:
-                  final user = FirebaseAuth.instance.currentUser;
-                  if (user != null) {
+                  final user = FirebaseAuth.instance.currentUser;              
+                  if (user != null)  {
                     return const MainScreen();
+                  
                   } else {
+                    //user logged out
+                  
                   return const GetStarted();    
                   }
                 default:
                 return const GetStarted();
               }
-  
 
             });
   }

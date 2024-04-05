@@ -8,6 +8,7 @@ enum ValidationMessage{
   bAccountNumberVM,
   confirmAccountVM,
   iFSCVMError,
+  iFSCVM
 }
 
 class EnterDetailsProvider extends ChangeNotifier{

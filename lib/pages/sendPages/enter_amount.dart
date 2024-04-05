@@ -4,6 +4,7 @@ import 'package:payezy/components/custom_button.dart';
 import 'package:payezy/components/custom_line.dart';
 import 'package:payezy/components/text_field.dart';
 import 'package:payezy/functions/fetch_exchange_rate.dart';
+import 'package:payezy/functions/get_inr_treasury_balance.dart';
 import 'package:payezy/providers/send_provider.dart';
 import 'package:payezy/themes/colors.dart';
 import 'package:payezy/themes/fonts.dart';
@@ -21,14 +22,14 @@ class EnterAmount extends StatefulWidget {
 class _EnterAmountState extends State<EnterAmount> {
   late final TextEditingController _youSend;
     late Future<double> data;
-    //late Future<double> balance;
+    late Future<double> balance;
 
   
   @override
   void initState() {
     _youSend = TextEditingController();
     data=fetchExchangeRate();
-  //  balance=getInrTreasuryBalance();
+    balance=getInrTreasuryBalance();
     super.initState();
   }
 
@@ -41,7 +42,6 @@ class _EnterAmountState extends State<EnterAmount> {
   @override
   Widget build(BuildContext context) {
 final sendPageProvider=Provider.of<SendPageProvider>(context);
-//final exchangeRateApiProvider=Provider.of<ExchangeRateApiProvider>(context);
 
     return Column(
       children: [
@@ -129,6 +129,7 @@ final sendPageProvider=Provider.of<SendPageProvider>(context);
               'USD',
               label: '00.00',
               inputFormatters:[FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}'))],
+
               controller: _youSend,
               sidetextVisibility: true,
               onChanged: (value){
@@ -153,7 +154,12 @@ final sendPageProvider=Provider.of<SendPageProvider>(context);
                       builder: (context,snapshot) {
                         if(snapshot.connectionState==ConnectionState.waiting)
                         {
-                          return const CircularProgressIndicator();
+                          return SizedBox(
+                            height: 3.h,
+                            width: 3.h,
+                            child: const CircularProgressIndicator(color: lightBlueThemeColor,
+                            ),
+                          );
                         }
                         else if(snapshot.hasError)
                         {
@@ -162,7 +168,9 @@ final sendPageProvider=Provider.of<SendPageProvider>(context);
                         else
                         {
                           sendPageProvider.setExchangeRate(snapshot.data as double);
+
                           return metrophobicText('\$${snapshot.data.toString()}',size: 12.sp, color: lightBlueThemeColor);
+                         
                         }
                         
                       }
@@ -209,8 +217,6 @@ final sendPageProvider=Provider.of<SendPageProvider>(context);
             else{
               sendPageProvider.setSendPage(SendPages.enterDetails);
             }
-            
-             
             },
             text: proceed,
             size: 17.sp,
@@ -230,7 +236,6 @@ final sendPageProvider=Provider.of<SendPageProvider>(context);
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-             SizedBox(height: 2.h,),
                 metrophobicText('Charges Breakdown', color: lightGrey,size: 10.sp),
                 SizedBox(height: 0.5.h,),
                 Row(

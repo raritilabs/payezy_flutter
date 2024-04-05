@@ -6,6 +6,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:payezy/components/app_bar.dart';
 import 'package:payezy/components/custom_container.dart';
 import 'package:payezy/firebase_options.dart';
+import 'package:payezy/providers/error_provider.dart';
 import 'package:payezy/providers/get_started_provider.dart';
 import 'package:payezy/providers/login_provider.dart';
 import 'package:payezy/services/routes.dart';
@@ -21,6 +22,8 @@ class Profile extends StatelessWidget {
   Widget build(BuildContext context) {
         final getStartedProvider=Provider.of<GetStartedProvider>(context,listen: true);
         final loginProvider=Provider.of<LoginProvider>(context,listen: true);
+        final errorProvider=Provider.of<ErrorProvider>(context,listen: true);//resets the sign in error
+      
 
     return 
      Scaffold(
@@ -162,6 +165,7 @@ return
                      padding: const MaterialStatePropertyAll(EdgeInsets.all(0)),
                 ),
                 onPressed: () async{ 
+                  errorProvider.reset();
                 switch(loginProvider.loginType){
 
                   case LoginType.emailPassword:

@@ -15,6 +15,6 @@ addUserData(String kyc, String email, String firstname, String lastname, int pho
         "phoneNumber": phonenumber,
         "stripeCustomerId": stripecustomerid,
         "providerId": providerid,
-      }).then((value) => log('inserted'));
+      });
     }
   }

@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -28,7 +29,6 @@ class _EnterDetailsState extends State<EnterDetails> {
   final TextEditingController _confirmAccount = TextEditingController();
 
 
-
 @override
   void dispose() {
         _fName.dispose();
@@ -39,16 +39,13 @@ class _EnterDetailsState extends State<EnterDetails> {
     super.dispose();
   }
 
-
-
-
-
   @override
   Widget build(BuildContext context) {
     final enterDetailsProvider = Provider.of<EnterDetailsProvider>(
       context,listen: true
     );
     final ifscApiProvider=Provider.of<ApiProvider>(context,listen: true);
+
     return SingleChildScrollView(
       reverse: true,
       child: Column(
@@ -96,61 +93,62 @@ class _EnterDetailsState extends State<EnterDetails> {
           details(ifsc
           ,
               controller: _iFSC,
-              visible: enterDetailsProvider.visiblity,
+              inputFormatters: [UpperCaseTextFormatter()],
               onChanged: (value) async{
                 enterDetailsProvider.setVisibility(false);
                 try{
-                  ifscApiProvider.setiFSC((value));
+               ifscApiProvider.setiFSC((value));
                var result= await ifscApiProvider.getDataFromAPI();
-                if(result=='404'){
+               if(result=='404'){
                   enterDetailsProvider.setValidationMessage(ValidationMessage.iFSCVMError);
                 }
                 else{
-               enterDetailsProvider.setValidationMessage(ValidationMessage.initial);
-                enterDetailsProvider.setIFSCDetails(result.branch,result.city,result.bank);
-                  enterDetailsProvider.setVisibility(true);
+               enterDetailsProvider.setValidationMessage(ValidationMessage.iFSCVM);
+               enterDetailsProvider.setIFSCDetails(result.branch,result.city,result.bank);
+               enterDetailsProvider.setVisibility(true);
                 }
                 }
                 catch(e){
-
+                  log(e.toString());
                 }
                 
-
-                
               },
-              details: "Branch:${enterDetailsProvider.branch}\nCity:${enterDetailsProvider.city}\nBank:${enterDetailsProvider.bank}\n"),
-          SizedBox(
-            child: switch (enterDetailsProvider.validationMessage) {
-              ValidationMessage.fnameVM => metrophobicText(
-                 
-                      "Please enter a full name",
-                     
-                  color: Colors.red,
-                  size: 11.sp),
-              ValidationMessage.bAccountNumberVM => metrophobicText(
-                       "Please enter a valid account number",
-                  color: Colors.red,
-                  size: 11.sp),
-              ValidationMessage.confirmAccountVM => metrophobicText(
-                 
-                       "Please confirm the account number"
+              ),
+          Padding(
+            padding:  EdgeInsets.symmetric(horizontal: 5.w),
+            child: SizedBox(
+              width: double.infinity,
+              child: switch (enterDetailsProvider.validationMessage) {
+                ValidationMessage.fnameVM => metrophobicText(
+                   "Please enter a full name",
+                       
+                    color: Colors.red,
+                    size: 11.sp),
+                ValidationMessage.bAccountNumberVM => metrophobicText(
+                         "Please enter a valid account number",
+                    color: Colors.red,
+                    size: 11.sp),
+                ValidationMessage.confirmAccountVM => metrophobicText(
+                   
+                         "Please confirm the account number"
+                        ,
+                    color: Colors.red,
+                    size: 11.sp),
+                ValidationMessage.iFSCVMError => metrophobicText(
+                        "IFSC should be 4 letters, followed by 7 letters or digits"
                       ,
-                  color: Colors.red,
-                  size: 11.sp),
-              ValidationMessage.iFSCVMError => metrophobicText(
-                      "IFSC should be 4 letters, followed by 7 letters or digits"
-                    ,
-                  color: Colors.red,
-                  size: 11.sp),
-              ValidationMessage.phoneVM => metrophobicText(
-                       "Please enter a 10-digit phone number"
-                    ,
-                  color: Colors.red,
-                  size: 11.sp),
-              ValidationMessage.initial => metrophobicText(''),
-              
-      
-            },
+                    color: Colors.red,
+                    size: 11.sp),
+                ValidationMessage.phoneVM => metrophobicText(
+                         "Please enter a 10-digit phone number"
+                      ,
+                    color: Colors.red,
+                    size: 11.sp),
+                ValidationMessage.initial => metrophobicText(''),
+                  
+                ValidationMessage.iFSCVM => metrophobicText("Branch:${enterDetailsProvider.branch}\nCity:${enterDetailsProvider.city}\nBank:${enterDetailsProvider.bank}\n",textAlign: TextAlign.left),
+              },
+            ),
           ),
           Padding(
             padding:
@@ -170,15 +168,11 @@ class _EnterDetailsState extends State<EnterDetails> {
                 
                 else if (enterDetailsProvider.confirmAccount !=
                     enterDetailsProvider.bAccountNumber) {
-      
-                                 enterDetailsProvider.setValidationMessage(ValidationMessage.confirmAccountVM);
-      
+      enterDetailsProvider.setValidationMessage(ValidationMessage.confirmAccountVM);
                 } 
-                
                 else 
                 {
-                 
-                  enterDetailsProvider.setValidationMessage(ValidationMessage.initial);
+                  enterDetailsProvider.setVisibility(false);
                   showDialog(
                       barrierColor: blurColor,
                       context: context,
@@ -256,10 +250,16 @@ Widget details(String title,
         controller: controller, onChanged: onChanged,
         inputFormatters:inputFormatters,
         textInputType: textInputType,
-        detailsVisible: visible!,
-        details: details
-
         ),
   );
 }
 
+class UpperCaseTextFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+    return TextEditingValue(
+      text: newValue.text.toUpperCase(),
+      selection: newValue.selection,
+    );
+  }
+}

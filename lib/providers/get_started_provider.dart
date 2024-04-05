@@ -1,14 +1,20 @@
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class GetStartedProvider extends ChangeNotifier{
  
+//email/password sign in
+//fetch email 
  String _email='';
 String get email=>_email;
+//fetch name
  String _name='';
 String get name=>_name;
+//fetch password
 String _password='';
 String get password=>_password;
+//confirm password
 String _confirmPassword='';
 String get confirmPassword=>_confirmPassword;
 bool _wrongPassword=false;
@@ -23,6 +29,7 @@ late UserCredential _userCredentials;
 UserCredential get userCredentials=>_userCredentials;
 final String _type='';
 String get type=>_type;
+//setting error message
 
 void setEmail(String value){
   _email = value;
@@ -69,4 +76,9 @@ void setUserCredentials(user){
   _userCredentials=user;
   notifyListeners();
 }
+
+
+
+
+
 }

@@ -1,0 +1,23 @@
+<svg width="7" height="13" viewBox="0 0 7 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="7" height="13" fill="#EBEBEB"/>
+<g id="Send">
+<rect width="375" height="812" transform="translate(-230 -460)" fill="#081527"/>
+<path id="Rectangle 34" opacity="0.1" d="M-215 -329C-215 -331.761 -212.761 -334 -210 -334H124C126.761 -334 129 -331.761 129 -329V39C129 41.7614 126.761 44 124 44H-210C-212.761 44 -215 41.7614 -215 39V-329Z" fill="url(#paint0_linear_0_1)"/>
+<g id="Group 133698">
+<rect id="Rectangle 408" opacity="0.1" x="-192" y="-16" width="302" height="42" rx="4" fill="url(#paint1_linear_0_1)" stroke="white"/>
+<g id="Group 133697">
+<path id="next icon" d="M1.09756 0.192202C0.846189 -0.0640674 0.439259 -0.0640674 0.188529 0.192202C-0.0628429 0.448472 -0.0628429 0.863423 0.188529 1.11969L5.45558 6.5L0.188529 11.8803C-0.0628429 12.1366 -0.0628429 12.5515 0.188529 12.8078C0.4399 13.0641 0.84683 13.0641 1.09756 12.8078L6.81851 6.96377C6.95675 6.8239 7.01201 6.64376 6.99785 6.45188C6.98689 6.30293 6.92394 6.14295 6.81851 6.03563L1.09756 0.192202Z" fill="white"/>
+</g>
+</g>
+</g>
+<defs>
+<linearGradient id="paint0_linear_0_1" x1="-43.3591" y1="-334" x2="-43.3591" y2="44" gradientUnits="userSpaceOnUse">
+<stop stop-color="white"/>
+<stop offset="1" stop-color="white" stop-opacity="0.3"/>
+</linearGradient>
+<linearGradient id="paint1_linear_0_1" x1="-41.3152" y1="-16" x2="-41.3152" y2="26" gradientUnits="userSpaceOnUse">
+<stop stop-color="white"/>
+<stop offset="1" stop-color="white" stop-opacity="0.3"/>
+</linearGradient>
+</defs>
+</svg>

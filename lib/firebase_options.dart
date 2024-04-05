@@ -44,37 +44,39 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBN-6t0DgppGZa5kw8Aase6AE_FJWp3wzs',
-    appId: '1:7964827841:web:b9c88abfce9df9a15d3440',
-    messagingSenderId: '7964827841',
-    projectId: 'payezy-project',
-    authDomain: 'payezy-project.firebaseapp.com',
-    storageBucket: 'payezy-project.appspot.com',
+    apiKey: 'AIzaSyDJaFlbsggFaOohW2V2HnSrPADs7SH2Gg4',
+    appId: '1:6164723951:web:bbf957746186fbd4b7431a',
+    messagingSenderId: '6164723951',
+    projectId: 'devmode-payezy',
+    authDomain: 'devmode-payezy.firebaseapp.com',
+    storageBucket: 'devmode-payezy.appspot.com',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAzsWf6Ta3JPsMp4VHe_FU1IhR2b5C_TUQ',
-    appId: '1:7964827841:android:26f567239e1e01125d3440',
-    messagingSenderId: '7964827841',
-    projectId: 'payezy-project',
-    storageBucket: 'payezy-project.appspot.com',
+    apiKey: 'AIzaSyAdEaxkHRFUzc8CqMa7qymCocMeb0swM_4',
+    appId: '1:6164723951:android:58174f56f85278b7b7431a',
+    messagingSenderId: '6164723951',
+    projectId: 'devmode-payezy',
+    storageBucket: 'devmode-payezy.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBVnShJ2UhJutikYjvVa9JMypT6UUhAL-M',
-    appId: '1:7964827841:ios:2a797290b42ff8935d3440',
-    messagingSenderId: '7964827841',
-    projectId: 'payezy-project',
-    storageBucket: 'payezy-project.appspot.com',
+    apiKey: 'AIzaSyCUr3vPBxWda44NcgS9heVk0-FcIRwKhmg',
+    appId: '1:6164723951:ios:50c9efe6431ca438b7431a',
+    messagingSenderId: '6164723951',
+    projectId: 'devmode-payezy',
+    storageBucket: 'devmode-payezy.appspot.com',
+    iosClientId: '6164723951-ot9jr06ihlrm7f3a88ellvgh4nrc1752.apps.googleusercontent.com',
     iosBundleId: 'com.example.payezy',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyBVnShJ2UhJutikYjvVa9JMypT6UUhAL-M',
-    appId: '1:7964827841:ios:fa1c6ffc83d05cc15d3440',
-    messagingSenderId: '7964827841',
-    projectId: 'payezy-project',
-    storageBucket: 'payezy-project.appspot.com',
+    apiKey: 'AIzaSyCUr3vPBxWda44NcgS9heVk0-FcIRwKhmg',
+    appId: '1:6164723951:ios:c1166ef9645e9688b7431a',
+    messagingSenderId: '6164723951',
+    projectId: 'devmode-payezy',
+    storageBucket: 'devmode-payezy.appspot.com',
+    iosClientId: '6164723951-ggvofojl7va20o02it1hjucoa0mpudtn.apps.googleusercontent.com',
     iosBundleId: 'com.example.payezy.RunnerTests',
   );
 }
