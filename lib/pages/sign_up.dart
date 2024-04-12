@@ -47,7 +47,8 @@ class _SignUpState extends State<SignUp> {
     return Scaffold(
       resizeToAvoidBottomInset: false, //prevents overflow when keyboard pops up
       backgroundColor: mainBackgroundColor, //imported from colors.dart
-      appBar: const CustomAppBar(title: 'Sign Up'), //appbar with notification icon disabled
+      appBar: const CustomAppBar(
+          title: 'Sign Up'), //appbar with notification icon disabled
       body: FutureBuilder(
           future: Firebase.initializeApp(
             options: DefaultFirebaseOptions.currentPlatform,
@@ -63,7 +64,7 @@ class _SignUpState extends State<SignUp> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                          customTextField('Full Name', '',
+                        customTextField('Full Name', '',
                             controller: _name,
                             label: emailProvider.email,
                             readOnly: false,
@@ -88,8 +89,8 @@ class _SignUpState extends State<SignUp> {
                         SizedBox(
                           height: 3.h,
                         ),
-                        customTextField(password, '', controller: _password,
-                        enableSuggestions: false,
+                        customTextField(password, '',
+                            controller: _password, enableSuggestions: false,
                             onFieldSubmitted: (value) {
                           emailProvider.setPassword(value);
                         },
@@ -123,38 +124,32 @@ class _SignUpState extends State<SignUp> {
                         CustomButton(
                           onPressed: () async {
                             if (_password.text != _confirmPassword.text) {
-                              log('password is ${emailProvider.password}');
-                              log(
-                                  'confirmpassword is ${emailProvider.confirmPassword}');
-
                               emailProvider.setWrongPasswordValidation();
                             } else {
-                              final displayName=_name.text;
-
+                              final displayName = _name.text;
                               try {
+                                FirebaseAuth.instance
+                                    .createUserWithEmailAndPassword(
+                                        email: _email.text,
+                                        password: _password.text);
+                                log('email is ${_email.text} and password is ${_password.text}');
                                 final user = FirebaseAuth.instance.currentUser;
                                 user?.updateDisplayName(displayName);
                                 await user?.sendEmailVerification();
                                 Navigator.of(context).pushNamed(verifyEmail);
-                    
                               } on FirebaseAuthException catch (e) {
-                                 if (e.code == 'weak-password') {
-                                   log('Weak Password');
-                                 } 
-                                  else if (e.code == 'email-already-in-use') 
-                                  {
-                                    log("Email is already in use by another account");
-                                  }
-                                   else if (e.code == 'invalid-email') 
-                                  {
-                                    log("Email is already in use by another account");
-                                  }
-                                  else{ 
-                                  log("Invalid email entered");
-
-                                  }
-                              } 
-              
+                                if (e.code == 'weak-password') {
+                                  log('Weak Password');
+                                } else if (e.code == 'email-already-in-use') {
+                                  log("Email is already in use by another account");
+                                } else if (e.code == 'invalid-email') {
+                                  log("Invalid Email entered");
+                                } else {
+                                  log(e.code);
+                                }
+                              } catch (e) {
+                                log(e.toString());
+                              }
                             }
                           },
                           text: signup,

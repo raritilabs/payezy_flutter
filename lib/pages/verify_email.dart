@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:payezy/components/app_bar.dart';
@@ -45,6 +47,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
                               child: CustomButton(
                                 onPressed: () async {
                                  final user = FirebaseAuth.instance.currentUser;
+                                 log(user.toString());
                                 await user?.sendEmailVerification();       
                                   },
                                       

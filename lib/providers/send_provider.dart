@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:payezy/functions/truncate_to_decimal.dart';
+import 'dart:developer' as devtools show log;
 
 enum SendPages{
   enterAmount,
@@ -16,8 +17,11 @@ class SendPageProvider with ChangeNotifier {
   //text field values
    num _youSend=00.00;
 num get youSend=>_youSend;
-num _youReceive=00.00;
-num get youReceive=>_youReceive;
+num _youReceiveBank=00.00;
+num get youReceiveBank=>_youReceiveBank;
+
+num _youReceiveCard=00.00;
+num get youReceiveCard=>_youReceiveCard;
 
 bool _expanded=false;
 bool get expanded=>_expanded;
@@ -47,10 +51,10 @@ num _totalCharges=00.00;
 num get totalCharges=>_totalCharges;
 num _amountExchanged=00.00;
 num get amountExchanged=>_amountExchanged;
- num _effectiveMidMarketRate=00.00;
- num get effectiveMidMarketRate=> _effectiveMidMarketRate;
-//card payment expanded details initialisation
+ num _effectiveMidMarketRateBank=00.00;
+ num get effectiveMidMarketRateBank=> _effectiveMidMarketRateBank;
 
+//card payment expanded details initialisation
 
 num _cardTransferCharge=00.00;
 num get cardTransferCharge=>_cardTransferCharge;
@@ -58,54 +62,61 @@ num _cardAmountExchanged=00.00;
 num get cardAmountExchanged=>_cardAmountExchanged;
 double _exchangeRate=0.0;
 double get exchangeRate=>_exchangeRate;
+double _treasuryBalance=0.0;
+double get treasuryBalance=>_treasuryBalance;
+
+ num _effectiveMidMarketRateCard=00.00;
+ num get effectiveMidMarketRateCard=> _effectiveMidMarketRateCard;
 
   void setSendPage(SendPages sendPage)
   {
     _sendPage=sendPage;
     notifyListeners();
   }
+void setBankIsSelected(){
+  _bankIsSelected=true;
+  _cardIsSelected=false;
+  notifyListeners();
+ }
 
-  void setExchangeRate(double rate) async
+ void setCardIsSelected(){
+  _cardIsSelected=true;
+  _bankIsSelected=false;
+ notifyListeners();
+ }
+  void setExchangeRate(double rate) 
   {
     _exchangeRate=rate;
+    notifyListeners();
   }
 
-  void setSendAmount(String value){
-
-  
-       _noValueValidationMessage=false;
-    _maxValueValidationMessage=false;
+  void setSendAmount(String value){  
+  _noValueValidationMessage=false; //when typing validation msg is set to false
+  _maxValueValidationMessage=false;//maximum value validation msg set to false while typing
   _youSend = num.tryParse(value)??0;
-  
+
   //bank transfer calculations
  _bankTransferCharge=(_youSend*0.008);
+
 if(_bankTransferCharge>5)
 {
   _bankTransferCharge=5;
-}
- 
+} 
   num _payezyPlatformfees=00.00;
   _totalCharges=_bankTransferCharge+_payezyPlatformfees;
   _amountExchanged=_youSend - _totalCharges;
-
-  //card transfer calculations1
-  _cardTransferCharge=(_youSend*0.04);
-  _cardAmountExchanged=_youSend-_cardTransferCharge;
-
-if(_bankIsSelected==true){
-_youReceive=(_amountExchanged*_exchangeRate).truncateToDecimalPlaces(2);
+_youReceiveBank=(_amountExchanged*_exchangeRate).truncateToDecimalPlaces(2);
+devtools.log(_youReceiveBank.toString());
+_effectiveMidMarketRateBank=(_youReceiveBank/_youSend).truncateToDecimalPlaces(2); 
+  //card transfer calculations
+_cardTransferCharge=(_youSend*0.04);
+_cardAmountExchanged=_youSend-_cardTransferCharge;
+_youReceiveCard=(_cardAmountExchanged*_exchangeRate).truncateToDecimalPlaces(2);
+devtools.log(_youReceiveCard.toString());
+_effectiveMidMarketRateCard=(_youReceiveCard/_youSend).truncateToDecimalPlaces(2); 
+_expanded=true;
+notifyListeners();
 }
-else{
-  _youReceive=(_cardAmountExchanged*_exchangeRate).truncateToDecimalPlaces(2);
-
-}
- 
- _effectiveMidMarketRate=(_youReceive/_youSend).truncateToDecimalPlaces(2);
-
-  _expanded=true;
-   notifyListeners();
-   
-  }
   
   void setnoValueValidationMessage(){
     _noValueValidationMessage=true;
@@ -117,19 +128,9 @@ else{
     notifyListeners();
  }
 
- void setBankIsSelected(){
-  _bankIsSelected=true;
-    _cardIsSelected=false;
-notifyListeners();
- }
-
- void setCardIsSelected(){
-  _cardIsSelected=true;
-  _bankIsSelected=false;
- notifyListeners();
- }
+  void setTreasuryBalance(double balance) async
+  {
+    _treasuryBalance=balance; 
+    notifyListeners();
   }
-
-    
- 
-
+  }

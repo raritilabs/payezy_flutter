@@ -17,7 +17,10 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -25,7 +28,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -43,15 +49,6 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDJaFlbsggFaOohW2V2HnSrPADs7SH2Gg4',
-    appId: '1:6164723951:web:bbf957746186fbd4b7431a',
-    messagingSenderId: '6164723951',
-    projectId: 'devmode-payezy',
-    authDomain: 'devmode-payezy.firebaseapp.com',
-    storageBucket: 'devmode-payezy.appspot.com',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAdEaxkHRFUzc8CqMa7qymCocMeb0swM_4',
     appId: '1:6164723951:android:58174f56f85278b7b7431a',
@@ -66,17 +63,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '6164723951',
     projectId: 'devmode-payezy',
     storageBucket: 'devmode-payezy.appspot.com',
+    androidClientId: '6164723951-542agv5ct6sv5msvpe6eo29kn5q1aj6t.apps.googleusercontent.com',
     iosClientId: '6164723951-ot9jr06ihlrm7f3a88ellvgh4nrc1752.apps.googleusercontent.com',
     iosBundleId: 'com.example.payezy',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyCUr3vPBxWda44NcgS9heVk0-FcIRwKhmg',
-    appId: '1:6164723951:ios:c1166ef9645e9688b7431a',
-    messagingSenderId: '6164723951',
-    projectId: 'devmode-payezy',
-    storageBucket: 'devmode-payezy.appspot.com',
-    iosClientId: '6164723951-ggvofojl7va20o02it1hjucoa0mpudtn.apps.googleusercontent.com',
-    iosBundleId: 'com.example.payezy.RunnerTests',
   );
 }

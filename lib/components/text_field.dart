@@ -49,7 +49,7 @@ Widget customTextField(String text, String sideText1,
           Visibility(
             visible: infoTextVisibility!,
             child: Padding(
-              padding:  EdgeInsets.only(top: 1.5.h,),
+              padding:  EdgeInsets.only(top: 2.5.h,),
               child: metrophobicText(infoText!,
                   color: yellow, size: 11.sp,height: 0.01.h),
             ),

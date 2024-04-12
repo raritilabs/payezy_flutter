@@ -2,18 +2,22 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CLIENT_ID</key>
+	<string>6164723951-ot9jr06ihlrm7f3a88ellvgh4nrc1752.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.6164723951-ot9jr06ihlrm7f3a88ellvgh4nrc1752</string>
 	<key>API_KEY</key>
-	<string>AIzaSyBVnShJ2UhJutikYjvVa9JMypT6UUhAL-M</string>
+	<string>AIzaSyCUr3vPBxWda44NcgS9heVk0-FcIRwKhmg</string>
 	<key>GCM_SENDER_ID</key>
-	<string>7964827841</string>
+	<string>6164723951</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.example.payezy</string>
 	<key>PROJECT_ID</key>
-	<string>payezy-project</string>
+	<string>devmode-payezy</string>
 	<key>STORAGE_BUCKET</key>
-	<string>payezy-project.appspot.com</string>
+	<string>devmode-payezy.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:7964827841:ios:2a797290b42ff8935d3440</string>
+	<string>1:6164723951:ios:50c9efe6431ca438b7431a</string>
 </dict>
 </plist>

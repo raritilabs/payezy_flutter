@@ -3,7 +3,6 @@ import 'package:payezy/components/app_bar.dart'; //custom app bar
 import 'package:payezy/components/custom_container.dart'; // custom main body card
 import 'package:payezy/pages/sendPages/enter_amount.dart';
 import 'package:payezy/pages/sendPages/enter_details.dart';
-import 'package:payezy/providers/enter_details_provider.dart';
 import 'package:payezy/providers/send_provider.dart';
 import 'package:payezy/themes/string_constants.dart';
 import 'package:provider/provider.dart';
@@ -23,9 +22,7 @@ class _SendPageState extends State<SendPage> {
   @override
   Widget build(BuildContext context) {
 
-    final enterDetailsProvider = Provider.of<EnterDetailsProvider>(
-      context,listen: false
-    );
+   
      return ChangeNotifierProvider(
       create: (context) => SendPageProvider(),
       child:

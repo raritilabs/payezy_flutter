@@ -88,10 +88,11 @@ class _LoginState extends State<LoginPage> {
                       CustomButton(
                         onPressed: () async {
                           final email = _email.text;
-                          //// getStartedProvider.setEmail(email);
                           final password = _password.text;
-                          // getStartedProvider.setPassword(password);
+                         devtools.log('email is $email and password is $password');
+
                           try {
+
                             final userCredential = await FirebaseAuth.instance
                                 .signInWithEmailAndPassword(
                                     email: email, password: password);
@@ -104,7 +105,7 @@ class _LoginState extends State<LoginPage> {
                                 mainScreen, (route) => false);
                           } on FirebaseAuthException catch (e) {
                             if (e.code == 'invalid-credential') {
-                              errorProvider.setError('AuthException occured:${e.code}');
+                              errorProvider.setError('Invalid credential');
                               errorProvider.setErrorVisibility();
                             } else if (e.code ==
                                 'account-exists-with-different-credential') {

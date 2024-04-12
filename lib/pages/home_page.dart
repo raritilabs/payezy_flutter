@@ -31,7 +31,6 @@ class _HomePageState extends State<HomePage> {
                   
                   } else {
                     //user logged out
-                  
                   return const GetStarted();    
                   }
                 default:

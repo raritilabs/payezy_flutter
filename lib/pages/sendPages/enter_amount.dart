@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:payezy/components/custom_button.dart';
@@ -5,6 +6,7 @@ import 'package:payezy/components/custom_line.dart';
 import 'package:payezy/components/text_field.dart';
 import 'package:payezy/functions/fetch_exchange_rate.dart';
 import 'package:payezy/functions/get_inr_treasury_balance.dart';
+import 'package:payezy/functions/truncate_to_decimal.dart';
 import 'package:payezy/providers/send_provider.dart';
 import 'package:payezy/themes/colors.dart';
 import 'package:payezy/themes/fonts.dart';
@@ -21,18 +23,16 @@ class EnterAmount extends StatefulWidget {
 
 class _EnterAmountState extends State<EnterAmount> {
   late final TextEditingController _youSend;
-    late Future<double> data;
-    late Future<double> balance;
-
+ double maxAllowed=2000;
+ double exchangeRate=0;
+ double maximumAllowed=0;
   
   @override
   void initState() {
     _youSend = TextEditingController();
-    data=fetchExchangeRate();
-    balance=getInrTreasuryBalance();
     super.initState();
+    
   }
-
   @override
   void dispose() {
     _youSend.dispose();
@@ -40,8 +40,29 @@ class _EnterAmountState extends State<EnterAmount> {
   }
 
   @override
+void didChangeDependencies() async {
+  super.didChangeDependencies();
+      maxAllowed=await getInrTreasuryBalance();
+      exchangeRate=await fetchExchangeRate();
+  super.setState(() {}); // to update widget data
+}
+
+double calculatemaxAllowed(){
+  if(exchangeRate !=0){
+maximumAllowed=maxAllowed/exchangeRate;
+if(maximumAllowed<2000) {
+  maximumAllowed=maximumAllowed;
+  return maximumAllowed;
+} else{
+  maximumAllowed=2000;
+  return maximumAllowed;
+}
+  }
+return 0;
+}
+  @override
   Widget build(BuildContext context) {
-final sendPageProvider=Provider.of<SendPageProvider>(context);
+final sendPageProvider=Provider.of<SendPageProvider>(context,listen: true);
 
     return Column(
       children: [
@@ -90,7 +111,7 @@ final sendPageProvider=Provider.of<SendPageProvider>(context);
                  onTap: () {
                                   
                   sendPageProvider.setCardIsSelected();
-    
+                  
                  },
                  child: Container(
                      width: 40.w,
@@ -128,13 +149,15 @@ final sendPageProvider=Provider.of<SendPageProvider>(context);
               youSend,
               'USD',
               label: '00.00',
+              infoText:calculatemaxAllowed()==0?'':'Maximum allowed: \$${(maximumAllowed).truncateToDecimalPlaces(2)}',
+              infoTextVisibility: true,
               inputFormatters:[FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}'))],
-
               controller: _youSend,
               sidetextVisibility: true,
               onChanged: (value){
-                
-                               sendPageProvider.setSendAmount(value);
+                sendPageProvider.setExchangeRate(exchangeRate);
+                //setting the value of sendAmt in SendPageProvider
+                               sendPageProvider.setSendAmount(value??0);
                 },
              
               textInputType: const TextInputType.numberWithOptions(decimal: true),
@@ -149,32 +172,9 @@ final sendPageProvider=Provider.of<SendPageProvider>(context);
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   metrophobicText('Exchange Rate (Best Price)',color: lightBlueThemeColor,size: 12.sp),
-                  FutureBuilder(
-                      future: data,
-                      builder: (context,snapshot) {
-                        if(snapshot.connectionState==ConnectionState.waiting)
-                        {
-                          return SizedBox(
-                            height: 3.h,
-                            width: 3.h,
-                            child: const CircularProgressIndicator(color: lightBlueThemeColor,
-                            ),
-                          );
-                        }
-                        else if(snapshot.hasError)
-                        {
-                          return metrophobicText('Error');
-                        }
-                        else
-                        {
-                          sendPageProvider.setExchangeRate(snapshot.data as double);
+                  exchangeRate>0?
+               metrophobicText('\$${(exchangeRate).truncateToDecimalPlaces(2)}',size: 12.sp, color: lightBlueThemeColor):SizedBox(height: 3.h,width:3.h, child: const CircularProgressIndicator(color: lightBlueThemeColor,)),
 
-                          return metrophobicText('\$${snapshot.data.toString()}',size: 12.sp, color: lightBlueThemeColor);
-                         
-                        }
-                        
-                      }
-                    ),
                 ],
               ),
             ),
@@ -189,7 +189,8 @@ final sendPageProvider=Provider.of<SendPageProvider>(context);
             recipientGets,
             'INR',
             sidetextVisibility: true,
-            label:sendPageProvider.expanded?sendPageProvider.youReceive.toString():'00.00',
+            label:sendPageProvider.expanded?sendPageProvider.bankIsSelected?
+            sendPageProvider.youReceiveBank.toString():sendPageProvider.youReceiveCard.toString():'00.00',
              sideTextcolor: sendPageProvider.expanded?white:greyFontThemeColor,
              color: sendPageProvider.expanded?white:greyFontThemeColor,
             readOnly: true,
@@ -229,7 +230,7 @@ final sendPageProvider=Provider.of<SendPageProvider>(context);
   }
   
   Widget bankTransfer() {
-    final sendPageProvider = Provider.of<SendPageProvider>(context);
+    final sendPageProvider = Provider.of<SendPageProvider>(context,listen: true);
 
   return  Padding(
             padding: EdgeInsets.symmetric(horizontal: 5.w),
@@ -298,14 +299,14 @@ final sendPageProvider=Provider.of<SendPageProvider>(context);
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     metrophobicText('Total INR Transferred',color: lightBlueThemeColor, size: 11.sp),
-                    metrophobicText(sendPageProvider.youReceive.toString(),size: 11.sp)
+                    metrophobicText(sendPageProvider.youReceiveBank.toString(),size: 11.sp)
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     metrophobicText('Effective mid-market rate',color: lightBlueThemeColor, size: 11.sp),
-                    metrophobicText(sendPageProvider.effectiveMidMarketRate.toString(),size: 11.sp),
+                    metrophobicText(sendPageProvider.effectiveMidMarketRateBank.toString(),size: 11.sp),
                   ],
                 ),
                                     metrophobicText('(inc.taxes and charges)',size: 11.sp),
@@ -318,13 +319,12 @@ final sendPageProvider=Provider.of<SendPageProvider>(context);
   }
   
  Widget creditCard() {
-    final sendPageProvider = Provider.of<SendPageProvider>(context);
+    final sendPageProvider = Provider.of<SendPageProvider>(context,listen: false);
   return  Padding(
             padding: EdgeInsets.symmetric(horizontal: 5.w),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-             SizedBox(height: 2.h,),
                 metrophobicText('Charges Breakdown', color: lightGrey,size: 10.sp),
                 SizedBox(height: 0.5.h,),
                 Row(
@@ -379,14 +379,14 @@ final sendPageProvider=Provider.of<SendPageProvider>(context);
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     metrophobicText('Total INR Transferred',color: lightBlueThemeColor, size: 11.sp),
-                    metrophobicText(sendPageProvider.youReceive.toString(),size: 11.sp)
+                    metrophobicText(sendPageProvider.youReceiveCard.toString(),size: 11.sp)
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     metrophobicText('Effective mid-market rate',color: lightBlueThemeColor, size: 11.sp),
-                    metrophobicText('--',size: 11.sp),
+                    metrophobicText(sendPageProvider.effectiveMidMarketRateCard.toString(),size: 11.sp),
                   ],
                 ),
                                     metrophobicText('(inc.taxes and charges)',size: 11.sp),

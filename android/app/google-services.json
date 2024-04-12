@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "6164723951-542agv5ct6sv5msvpe6eo29kn5q1aj6t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.payezy",
+            "certificate_hash": "eb056f2e61cc2167b207d2a309dc029c59c2d5cd"
+          }
+        },
+        {
           "client_id": "6164723951-0e2vqhc6hkmg0nkj1ajkj85fblmfirim.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -31,10 +39,10 @@
               "client_type": 3
             },
             {
-              "client_id": "6164723951-ot9jr06ihlrm7f3a88ellvgh4nrc1752.apps.googleusercontent.com",
+              "client_id": "6164723951-ggvofojl7va20o02it1hjucoa0mpudtn.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.payezy"
+                "bundle_id": "com.example.payezy.RunnerTests"
               }
             }
           ]

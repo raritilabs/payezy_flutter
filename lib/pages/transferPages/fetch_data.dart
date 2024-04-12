@@ -1,9 +1,9 @@
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:payezy/components/app_bar.dart';
 import 'package:payezy/components/custom_button.dart';
 import 'package:payezy/components/custom_container.dart';
+import 'package:payezy/functions/get_user_transaction_history.dart';
 import 'package:payezy/themes/colors.dart';
 import 'package:payezy/themes/fonts.dart';
 import 'package:sizer/sizer.dart';
@@ -23,6 +23,7 @@ class _FetchDataState extends State<FetchData> with SingleTickerProviderStateMix
  @override
   void initState() {
     super.initState();
+    getUserTransactionHistory();
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 500), // Adjust duration as needed
@@ -72,18 +73,20 @@ class _FetchDataState extends State<FetchData> with SingleTickerProviderStateMix
             left: 5.w,
             right: 5.w,
           ),
-          child: StreamBuilder(
+          child: 
+          // StreamBuilder(
 
-              ///fetches data continously
-              stream:
-                  FirebaseFirestore.instance.collection('Users').snapshots(),
-              builder: (
-                context,
-                snapshot,
-              ) {
-                if (snapshot.connectionState == ConnectionState.active) {
-                  if (snapshot.hasData) {
-                    return Column(
+          //     ///fetches data continously
+          //     stream:
+          //         FirebaseFirestore.instance.collection('userData').snapshots(),
+          //     builder: (
+          //       context,
+          //       snapshot,
+          //     ) {
+          //       if (snapshot.connectionState == ConnectionState.active) {
+          //         if (snapshot.hasData) {
+                  //  return 
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         //----------------------------transfer history---------------------------------------//
@@ -146,10 +149,10 @@ class _FetchDataState extends State<FetchData> with SingleTickerProviderStateMix
                                                 ),
                                               ),
                                               metrophobicText(
-                                                  (((snapshot.data!.docs[index]["First Name"]).toString().length)>6)?
-                                                  (snapshot.data!.docs[index]["First Name"]).toString().substring(0,6):
-                                                  (snapshot.data!.docs[index]["First Name"]).toString(),
-                                                  
+                                              //    (((snapshot.data!.docs[index]["First Name"]).toString().length)>6)?
+                                                //  (snapshot.data!.docs[index]["First Name"]).toString().substring(0,6):
+                                                  //(snapshot.data!.docs[index]["First Name"]).toString(),
+                                                  ('---'),
                                                   size: 13.sp),
                                             ],
                                           ),
@@ -251,7 +254,8 @@ class _FetchDataState extends State<FetchData> with SingleTickerProviderStateMix
                                                   Expanded(
                                                       child: SizedBox(
                                                     child: metrophobicText(
-                                                        "${snapshot.data!.docs[index]['Bank Acc Number']}",
+                                                        //"${snapshot.data!.docs[index]['Bank Acc Number']}",
+                                                  'text',
                                                         size: 12.sp),
                                                   )),
                                                 ],
@@ -291,15 +295,15 @@ class _FetchDataState extends State<FetchData> with SingleTickerProviderStateMix
                                                   Expanded(
                                                       child: SizedBox(
                                                     child: metrophobicText(
-                                                        "${snapshot.data!.docs[index]['IFSC Code']}",
-                                                        size: 12.sp),
+                                                       // "${snapshot.data!.docs[index]['IFSC Code']}",
+                                                        'text',size: 12.sp),
                                                   )),
                                                                               
                                                   Expanded(
                                                       child: SizedBox(
                                                     child: metrophobicText(
-                                                        "${snapshot.data!.docs[index]['Phone']}",
-                                                        size: 12.sp),
+                                                     //   "${snapshot.data!.docs[index]['Phone']}",
+                                                     'text',   size: 12.sp),
                                                   )),
                                                                               
                                                   // Expanded(child: SizedBox()),
@@ -331,15 +335,16 @@ class _FetchDataState extends State<FetchData> with SingleTickerProviderStateMix
                                 ),
                               );
                             },
-                            itemCount: snapshot.data!.docs.length,
+                           itemCount: 5
+                           //snapshot.data!.docs.length,
                           ),
                         ),
                       ],
-                    );
+                    )));
                   }
                 }
-                return const SizedBox();
-              }),
-        ));
-  }
-}
+             //   return const SizedBox();
+           //   }),
+      //  ));
+//  }
+//}

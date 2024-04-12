@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +31,7 @@ class _GetStartedState extends State<GetStarted> {
   @override
   void initState() {
     _email = TextEditingController(); //controls the email text field
-    Provider.of<GetStartedProvider>(context, listen: false);
+   // Provider.of<GetStartedProvider>(context, listen: false);
     super.initState();
   }
 
@@ -108,15 +109,7 @@ class _GetStartedState extends State<GetStarted> {
                           loginProvider.setLoginType(LoginType.google);
 //signing in with google
                           final userCredential = await signInWithGoogle();
-                          
 
-//fetching the provider Id
-                          String? providerId;                          
-                          if (userCredential.user != null && userCredential.user!.providerData.isNotEmpty) {
-                            for (var userInfo in userCredential.user!.providerData) {
-                              providerId = userInfo.providerId;
-                            }    
-                          }
 //fetching the display name and email from usercredentials
 //
                           getStartedProvider.setUser(
@@ -125,12 +118,12 @@ class _GetStartedState extends State<GetStarted> {
 //adding the user data to firebase
                           addUserData(
                               'not initialised',
-                              userCredential.user!.email.toString(),
+                              userCredential.user!.toString(),
                               userCredential.user!.displayName.toString(),
                               '',
-                              0,
                               '',
-                              providerId!);
+                              '',
+                              );
 //navigating to main page after sign in                              
                           Navigator.of(context).pushNamedAndRemoveUntil(
                               mainScreen, (route) => false);
@@ -146,38 +139,40 @@ class _GetStartedState extends State<GetStarted> {
 //logging the error
                             errorProvider.setError('User account exists with a different credential. Please try logging in by using any other provider.');
                             errorProvider.setErrorVisibility();
+                           
 //querying from firebase for the provider used to sign in with this email         
-                            QuerySnapshot query = await FirebaseFirestore
-                                .instance
-                                .collection('userData')
-                                .where("email", isEqualTo: email)
-                                .get();
-                            if (query.docs.isNotEmpty) {
-                              // Get the data from the first document and cast it to Map<String, dynamic>?
-                              Map<String, dynamic>? userData = query.docs.first
-                                  .data() as Map<String, dynamic>?;
+                            //  QuerySnapshot query = await FirebaseFirestore
+                            //      .instance
+                            //      .collection('userData')
+                            //      .where("email", isEqualTo: email)
+                            //      .get();
+                            //  if (query.docs.isNotEmpty) {
+                            //    // Get the data from the first document and cast it to Map<String, dynamic>?
+                            //    Map<String, dynamic>? userData = query.docs.first
+                            //        .data() as Map<String, dynamic>?;
 
-                              // Check if userData is not null and email is associated with facebook.com
-                              if (userData != null &&
-                                  userData['providerId'] == 'facebook.com') {
-                                final userCredential =
-                                    await signInWithFacebook();
-                                await userCredential!.user
-                                    ?.linkWithCredential(pendingCredential!);
-                                Navigator.of(context).pushNamedAndRemoveUntil(
-                                    mainScreen, (route) => false);
-                              }
-                              if (userData != null &&
-                                  userData['providerId'] == 'twitter.com') {
-                                final userCredential = await signInWithTwitter();
-                                await userCredential.user
-                                    ?.linkWithCredential(pendingCredential!);
-                                Navigator.of(context).pushNamedAndRemoveUntil(
-                                    mainScreen, (route) => false);
-                              }
-                            }
+                            // //   // Check if userData is not null and email is associated with facebook.com
+                            //    if (userData != null &&
+                            //        userData['providerId'] == 'facebook.com') {
+                            //      final userCredential =
+                            //          await signInWithFacebook();
+                            //      await userCredential!.user
+                            //          ?.linkWithCredential(pendingCredential!);
+                            //      Navigator.of(context).pushNamedAndRemoveUntil(
+                            //          mainScreen, (route) => false);
+                            //    }
+                            //    if (userData != null &&
+                            //        userData['providerId'] == 'twitter.com') {
+                            //      final userCredential = await signInWithTwitter();
+                            //      await userCredential.user
+                            //          ?.linkWithCredential(pendingCredential!);
+                            //      Navigator.of(context).pushNamedAndRemoveUntil(
+                            //          mainScreen, (route) => false);
+                            //   }
+                            // }
                           }
                         } catch (e) {
+                          log(e.toString());
                           errorProvider.setError('error is $e');
                           errorProvider.setErrorVisibility();
                         }
@@ -193,17 +188,7 @@ class _GetStartedState extends State<GetStarted> {
                         onPressed: () async {
                           try {
                             loginProvider.setLoginType(LoginType.facebook);
-                            final user = await signInWithFacebook();
-                            String? providerId;
-                  
-                  // Check if user is not null before accessing user.user
-                            if (user != null &&
-                                user.user != null &&
-                                user.user!.providerData.isNotEmpty) {
-                              for (var userInfo in user.user!.providerData) {
-                                providerId = userInfo.providerId;
-                              }
-                            }
+                            final user = await signInWithFacebook();                  
                             getStartedProvider.setUser(
                                 user!.user?.displayName.toString(),
                                 user.user?.email.toString());
@@ -212,12 +197,11 @@ class _GetStartedState extends State<GetStarted> {
                                 user.user!.email.toString(),
                                 user.user!.displayName.toString(),
                                 '',
-                                0,
                                 '',
-                                providerId!);
+                                '',
+                                );
                   
                             getStartedProvider.setUserCredentials(user);
-                  
                             Navigator.of(context).pushNamedAndRemoveUntil(
                                 mainScreen, (route) => false);
                           } on FirebaseAuthException catch (e) {
@@ -231,36 +215,10 @@ class _GetStartedState extends State<GetStarted> {
                   //logging the error
                           errorProvider.setError('User account exists with a different credential. Please try logging in by using any other provider.');
                           errorProvider.setErrorVisibility();
-                  //querying from firebase for the provider used to sign in with this email         
-                          QuerySnapshot query = await FirebaseFirestore
-                              .instance
-                              .collection('userData')
-                              .where("email", isEqualTo: email)
-                              .get();
-                          if (query.docs.isNotEmpty) {
-                            // Get the data from the first document and cast it to Map<String, dynamic>?
-                            Map<String, dynamic>? userData = query.docs.first
-                                .data() as Map<String, dynamic>?;
-                  
-                            // Check if userData is not null and email is associated with facebook.com
-                            if (userData != null &&
-                                userData['providerId'] == 'google.com') {
-                              final userCredential =
-                                  await signInWithGoogle();
-                              await userCredential.user
-                                  ?.linkWithCredential(pendingCredential!);
-                              Navigator.of(context).pushNamedAndRemoveUntil(
-                                  mainScreen, (route) => false);
+                         if(loginProvider.loginType==LoginType.x) {
+                             final userCredential=await signInWithTwitter();
+                             userCredential.user?.linkWithCredential(pendingCredential!);
                             }
-                            if (userData != null &&
-                                userData['providerId'] == 'twitter.com') {
-                              final userCredential = await signInWithTwitter();
-                              await userCredential.user
-                                  ?.linkWithCredential(pendingCredential!);
-                              Navigator.of(context).pushNamedAndRemoveUntil(
-                                  mainScreen, (route) => false);
-                            }
-                          }
                         }
                       }catch (e) {
                             errorProvider.setError('error is $e');
@@ -281,24 +239,15 @@ class _GetStartedState extends State<GetStarted> {
                         try {
                           UserCredential userCredential =
                               await signInWithTwitter();
-                          String? providerId;
 
-// Check if user is not null before accessing user.user
-                          if (userCredential.user != null &&
-                              userCredential.user!.providerData.isNotEmpty) {
-                            for (var userInfo
-                                in userCredential.user!.providerData) {
-                              providerId = userInfo.providerId;
-                            }
-                          }
                           addUserData(
                               'not initialised',
                               userCredential.user!.email.toString(),
                               userCredential.user!.displayName.toString(),
                               '',
-                              0,
                               '',
-                              providerId!);
+                              '',
+                              );
                           getStartedProvider.setUser(
                               userCredential.user?.displayName.toString(),
                               userCredential.user?.email.toString());
@@ -316,44 +265,15 @@ class _GetStartedState extends State<GetStarted> {
 //setting the error
                             errorProvider.setError('User account exists with a different credential. Please try logging in by using any other provider.');
                             errorProvider.setErrorVisibility();
-//querying from firebase for the provider used to sign in with this email         
-                            QuerySnapshot query = await FirebaseFirestore
-                                .instance
-                                .collection('userData')
-                                .where("email", isEqualTo: email)
-                                .get();
-                            if (query.docs.isNotEmpty) {
-                              // Get the data from the first document and cast it to Map<String, dynamic>?
-                              Map<String, dynamic>? userData = query.docs.first
-                                  .data() as Map<String, dynamic>?;
 
-                              // Check if userData is not null and email is associated with facebook.com
-                              if (userData != null &&
-                                  userData['providerId'] == 'facebook.com') {
-                                final userCredential =
-                                    await signInWithFacebook();
-                                await userCredential!.user
-                                    ?.linkWithCredential(pendingCredential!);
-                                Navigator.of(context).pushNamedAndRemoveUntil(
-                                    mainScreen, (route) => false);
-                              }
-                              if (userData != null &&
-                                  userData['providerId'] == 'google.com') {
-                                    try{
-                                      final userCredential = await signInWithGoogle();
-                                await userCredential.user
-                                    ?.linkWithCredential(pendingCredential!);
-                                Navigator.of(context).pushNamedAndRemoveUntil(
-                                    mainScreen, (route) => false);
-                                    }
-                                    catch(e)
-                                    {errorProvider.setError('exception $e');
-                                    errorProvider.setErrorVisibility();
-                                    }
-                                
-                              }
+                          if(loginProvider.loginType==LoginType.x) {
+                             final userCredential=await signInWithTwitter();
+                             userCredential.user?.linkWithCredential(pendingCredential!);
                             }
-                          }
+
+//querying from firebase for the provider used to sign in with this email      
+                            }
+                          
                         } catch (e) {
                           errorProvider.setError('error is $e');
                           errorProvider.setErrorVisibility();
