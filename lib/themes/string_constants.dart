@@ -15,6 +15,7 @@ const proceed='Proceed';
 //EnterDetails
 
 const enterthedetails="Enter the details of the recipient";
+const nickname="Nick Name";
 const fullname = "Full Name";
 const phone="Phone";
 const bankaccnum="Bank Account Number";

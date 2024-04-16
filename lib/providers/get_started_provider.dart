@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -26,9 +28,20 @@ bool _isVisible=true;
 bool get isVisible=>_isVisible;
 late UserCredential _userCredentials;
 UserCredential get userCredentials=>_userCredentials;
+
 final String _type='';
 String get type=>_type;
-//setting error message
+
+String _pendingCredential='';
+String get pendingCredential=>_pendingCredential;
+
+//pending credential email
+String _pendingCredentialEmail='';
+String get pendingCredentialEmail=>_pendingCredentialEmail;
+
+//error for pending credential
+bool _pendingCredentialError=false;
+bool get pendingCredentialError=>_pendingCredentialError; 
 
 void setEmail(String value){
   _email = value;
@@ -75,9 +88,27 @@ void setUserCredentials(user){
   _userCredentials=user;
   notifyListeners();
 }
+void setPendingCredentials(value){
+  _pendingCredential=value;
+  notifyListeners();
+  }
 
+  void setPendingCredentialsEmail(value){
+  _pendingCredentialEmail=value;
+  notifyListeners();
+  }
+  
+  //error function for pending credential error
+  void setPendingCredentialsError(){
+    _pendingCredentialError=true;
+    notifyListeners();
+  }
 
-
+void resetpendingCredentialsError(){
+  _pendingCredential='';
+  _pendingCredentialEmail='';
+  _pendingCredentialError=false;
+}
 
 
 }

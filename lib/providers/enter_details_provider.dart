@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 
 enum ValidationMessage{
   initial,
+  nicknameVM,
   fnameVM,
   phoneVM,
+  emailVM,
   bAccountNumberVM,
   confirmAccountVM,
   iFSCVMError,
@@ -20,15 +22,21 @@ bool get visiblity=>_visibility;
 
   bool _fnameValidationMessage=false;
   bool get fnameValidationMessage=>_fnameValidationMessage;
+   bool _nickNameValidationMessage=false;
+  bool get nickNameValidationMessage=>_nickNameValidationMessage;
      bool _phoneValidationMessage=false;
   bool get phoneValidationMessage=>_phoneValidationMessage;
+   bool _emailValidationMessage=false;
+  bool get emailValidationMessage=>_emailValidationMessage;
      bool _bAccountValidationMessage=false;
   bool get bAccountValidationMessage=>_bAccountValidationMessage;
      bool _confirmAccountValidationMessage=false;
   bool get confirmAccountValidationMessage=>_confirmAccountValidationMessage;
      bool _iFSCValidationMessage=false;
   bool get iFSCValidationMessage=>_iFSCValidationMessage;
-  
+
+ String _nickName='';
+String get nickName=>_nickName;  
  
  String _fName='';
 String get fname=>_fName;
@@ -36,13 +44,16 @@ String get fname=>_fName;
 int _phone=0;
 int get phone=>_phone;
 
+String _email='';
+String get email=>_email;
+
 int _bAccountNumber=0;
 int get bAccountNumber=>_bAccountNumber;
 
 int _confirmAccount=0;
 int get confirmAccount=>_confirmAccount;
 
-Object _iFSC=0;
+Object _iFSC='';
 Object get iFSC=>_iFSC;
 
 String _branch='';
@@ -59,11 +70,23 @@ void setfName(String value){
   _fName = value;
   notifyListeners();
 }
+void setnickName(String value){
+  _nickNameValidationMessage=false;
+  _nickName = value;
+  notifyListeners();
+}
 void setPhone(int value){
   _phoneValidationMessage=false;
   _phone= value;
   notifyListeners();
 }
+
+void setEmail(String value){
+  _emailValidationMessage=false;
+  _email= value;
+  notifyListeners();
+}
+
 void setBankAccNum(int value){
   _bAccountValidationMessage=false;
   _bAccountNumber = value;
@@ -76,7 +99,6 @@ void setconfirmAcc(int value){
 }  
 void setiFSC(Object value){
  _iFSCValidationMessage=false;
-
   _iFSC = value;
   notifyListeners();
 }
@@ -88,27 +110,29 @@ _city=city;
   notifyListeners();
 }
 
-void setfnameValidationMessage(){
-    _fnameValidationMessage=true;
-    notifyListeners();
- }
+// void setfnameValidationMessage(){
+//     _fnameValidationMessage=true;
+//     notifyListeners();
+//  }
 
- void setphoneValidationMessage(){
-    _phoneValidationMessage=true;
-    notifyListeners();
- }
- void setbAccountValidationMessage(){
-    _bAccountValidationMessage=true;
-    notifyListeners();
- }
- void setconfirmAccountValidationMessage(){
-    _confirmAccountValidationMessage=true;
-    notifyListeners();
- }
- void setiFSCValidationMessage(){
-    _iFSCValidationMessage=true;
-    notifyListeners();
- }
+//  void setphoneValidationMessage(){
+//     _phoneValidationMessage=true;
+//     notifyListeners();
+//  }
+
+ 
+//  void setbAccountValidationMessage(){
+//     _bAccountValidationMessage=true;
+//     notifyListeners();
+//  }
+//  void setconfirmAccountValidationMessage(){
+//     _confirmAccountValidationMessage=true;
+//     notifyListeners();
+//  }
+//  void setiFSCValidationMessage(){
+//     _iFSCValidationMessage=true;
+//     notifyListeners();
+//  }
 
   void setValidationMessage(ValidationMessage validationMessage)
   {

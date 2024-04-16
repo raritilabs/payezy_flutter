@@ -1,4 +1,6 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:payezy/components/app_bar.dart';
 import 'package:payezy/components/custom_button.dart';
@@ -36,8 +38,7 @@ class _FetchDataState extends State<FetchData> with SingleTickerProviderStateMix
     ).
     animate(CurvedAnimation(parent: _controller, curve: Curves.ease));*/
   }
-
-
+  String email=FirebaseAuth.instance.currentUser!.email.toString();
   int selectedItemIndex = -1;
   
 
@@ -54,9 +55,11 @@ class _FetchDataState extends State<FetchData> with SingleTickerProviderStateMix
       }
     });
   }
-
   @override
   Widget build(BuildContext context) {
+    final stream1=FirebaseFirestore.instance.collection('transferHistory').where('Email', isEqualTo: email).snapshots();
+final stream2=FirebaseFirestore.instance.collection('userData').where('email', isEqualTo: email).snapshots();
+
     //calling fetchDataProvider
     //final fetchDataProvider = Provider.of<FetchDataProvider>(context,listen: true);
     return Scaffold(
@@ -74,19 +77,20 @@ class _FetchDataState extends State<FetchData> with SingleTickerProviderStateMix
             right: 5.w,
           ),
           child: 
-          // StreamBuilder(
+           StreamBuilder(
 
-          //     ///fetches data continously
-          //     stream:
-          //         FirebaseFirestore.instance.collection('userData').snapshots(),
-          //     builder: (
-          //       context,
-          //       snapshot,
-          //     ) {
-          //       if (snapshot.connectionState == ConnectionState.active) {
-          //         if (snapshot.hasData) {
-                  //  return 
-                    Column(
+               ///fetches data continously
+               stream:stream1,
+               builder: (
+                 context,
+                 snapshot1,
+               ) {
+                return StreamBuilder(
+                  stream: stream2,
+                  builder: (context,snapshot2) {
+                   if (!snapshot2.hasData) return const Text('Loading...');
+                   if (!snapshot1.hasData) return const Text('Loading...');      
+                  return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         //----------------------------transfer history---------------------------------------//
@@ -131,8 +135,8 @@ class _FetchDataState extends State<FetchData> with SingleTickerProviderStateMix
                                                 padding: EdgeInsets.symmetric(
                                                     horizontal: 0.5.h),
                                                 child: metrophobicText(
-                                                    '83,223.00',
-                                                    size: 13.sp),
+                                                            snapshot1.data!.docs.first['INR Amount'].toString(),
+                                                            size: 13.sp),
                                               ),
                                             ],
                                           ),
@@ -149,14 +153,15 @@ class _FetchDataState extends State<FetchData> with SingleTickerProviderStateMix
                                                 ),
                                               ),
                                               metrophobicText(
-                                              //    (((snapshot.data!.docs[index]["First Name"]).toString().length)>6)?
-                                                //  (snapshot.data!.docs[index]["First Name"]).toString().substring(0,6):
-                                                  //(snapshot.data!.docs[index]["First Name"]).toString(),
-                                                  ('---'),
+                                                  snapshot2.data!.docs.first['firstName'].toString().length>6?
+                                                 (snapshot2.data!.docs[index]['firstName']).toString().substring(0,6):
+                                                  (snapshot2.data!.docs[index]["firstName"]).toString(),
+                                                  
                                                   size: 13.sp),
                                             ],
                                           ),
-                                          metrophobicText('25/06/24 12.50 PM',
+                                         
+                                          metrophobicText(snapshot1.data!.docs.first['Time'].toString(),
                                               size: 9.sp, color: lightGrey),
                                         ],
                                       ),
@@ -198,7 +203,7 @@ class _FetchDataState extends State<FetchData> with SingleTickerProviderStateMix
                                                                 horizontal:
                                                                     0.5.h),
                                                         child: metrophobicText(
-                                                            '\$ 1000.00',
+                                                            snapshot1.data!.docs.first['USD Amount'].toString(),
                                                             size: 13.sp),
                                                       ),
                                                     ],
@@ -248,14 +253,13 @@ class _FetchDataState extends State<FetchData> with SingleTickerProviderStateMix
                                                   Expanded(
                                                       child: SizedBox(
                                                     child: metrophobicText(
-                                                        '37823727272',
-                                                        size: 12.sp),
+                                                        (snapshot1.data!.docs[index]['Transfer ID']).toString().substring(0,10),
+                                                          size: 12.sp),
                                                   )),
                                                   Expanded(
                                                       child: SizedBox(
                                                     child: metrophobicText(
-                                                        //"${snapshot.data!.docs[index]['Bank Acc Number']}",
-                                                  'text',
+                                                (snapshot1.data!.docs.first['Account Number'].toString()),                                      
                                                         size: 12.sp),
                                                   )),
                                                 ],
@@ -295,15 +299,14 @@ class _FetchDataState extends State<FetchData> with SingleTickerProviderStateMix
                                                   Expanded(
                                                       child: SizedBox(
                                                     child: metrophobicText(
-                                                       // "${snapshot.data!.docs[index]['IFSC Code']}",
-                                                        'text',size: 12.sp),
+                                                       (snapshot1.data!.docs.first['IFSC'].toString()),size: 12.sp),
                                                   )),
                                                                               
                                                   Expanded(
                                                       child: SizedBox(
                                                     child: metrophobicText(
-                                                     //   "${snapshot.data!.docs[index]['Phone']}",
-                                                     'text',   size: 12.sp),
+                                                     (snapshot1.data!.docs.first['Phone'].toString()),
+                                                       size: 12.sp),
                                                   )),
                                                                               
                                                   // Expanded(child: SizedBox()),
@@ -335,16 +338,17 @@ class _FetchDataState extends State<FetchData> with SingleTickerProviderStateMix
                                 ),
                               );
                             },
-                           itemCount: 5
-                           //snapshot.data!.docs.length,
+                           itemCount:snapshot1.data!.docs.length,
                           ),
                         ),
-                      ],
-                    )));
-                  }
-                }
-             //   return const SizedBox();
-           //   }),
-      //  ));
-//  }
-//}
+                      ]
+                    
+                   
+            ); }
+           );}
+                              
+              )));}
+              
+    
+  }
+

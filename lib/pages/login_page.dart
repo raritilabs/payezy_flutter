@@ -89,7 +89,6 @@ class _LoginState extends State<LoginPage> {
                         onPressed: () async {
                           final email = _email.text;
                           final password = _password.text;
-                         devtools.log('email is $email and password is $password');
 
                           try {
 

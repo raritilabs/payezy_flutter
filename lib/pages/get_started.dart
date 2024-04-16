@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:payezy/components/app_bar.dart';
@@ -105,16 +104,29 @@ class _GetStartedState extends State<GetStarted> {
                     CustomButton(
                       onPressed: () async {
                         try {
+                          //check if there is a 'different account exists' error
+                           if(getStartedProvider.pendingCredentialError==true){
+                                //signing in with google
+                          final userCredential = await signInWithGoogle();
+                          //compare the current email with the stored error email and link if its the same
+                              if(userCredential.user?.email==getStartedProvider.pendingCredentialEmail){
+                                await userCredential.user?.linkWithCredential(getStartedProvider.pendingCredential as AuthCredential);
+                                getStartedProvider.resetpendingCredentialsError();
+                              }
+                           }
+                           else {
+                             final userCredential = await signInWithGoogle();
+                           
 //setting the logintype to google
                           loginProvider.setLoginType(LoginType.google);
-//signing in with google
-                          final userCredential = await signInWithGoogle();
 
+                        
 //fetching the display name and email from usercredentials
 //
                           getStartedProvider.setUser(
                               userCredential.user?.displayName.toString(),
                               userCredential.user?.email);
+                             
 //adding the user data to firebase
                           addUserData(
                               'not initialised',
@@ -126,7 +138,7 @@ class _GetStartedState extends State<GetStarted> {
                               );
 //navigating to main page after sign in                              
                           Navigator.of(context).pushNamedAndRemoveUntil(
-                              mainScreen, (route) => false);
+                              mainScreen, (route) => false);}
 //on firebaseexception
                         } on FirebaseAuthException catch (e) {
 //exception handling                
@@ -134,11 +146,14 @@ class _GetStartedState extends State<GetStarted> {
                               'account-exists-with-different-credential') {
                             // The account already exists with a different credential
 //fetch the error-causing email and credential
-                            String? email = e.email;
-                            AuthCredential? pendingCredential = e.credential;
+                           // String? email = e.email;
+                            //uthCredential? pendingCredential = e.credential;
 //logging the error
                             errorProvider.setError('User account exists with a different credential. Please try logging in by using any other provider.');
                             errorProvider.setErrorVisibility();
+                            getStartedProvider.setPendingCredentials(e.credential);
+                            getStartedProvider.setPendingCredentialsEmail(e.email);
+                            getStartedProvider.setPendingCredentialsError();
                            
 //querying from firebase for the provider used to sign in with this email         
                             //  QuerySnapshot query = await FirebaseFirestore
@@ -192,6 +207,15 @@ class _GetStartedState extends State<GetStarted> {
                             getStartedProvider.setUser(
                                 user!.user?.displayName.toString(),
                                 user.user?.email.toString());
+
+                               if(getStartedProvider.pendingCredentialError==true){
+                              if(getStartedProvider.email==getStartedProvider.pendingCredentialEmail){
+                                await user.user?.linkWithCredential(getStartedProvider.pendingCredential as AuthCredential);
+                               getStartedProvider.resetpendingCredentialsError(); 
+                              }}
+
+
+                                
                             addUserData(
                                 'not initialised',
                                 user.user!.email.toString(),
@@ -210,16 +234,15 @@ class _GetStartedState extends State<GetStarted> {
                             'account-exists-with-different-credential') {
                           // The account already exists with a different credential
                   //fetch the error-causing email and credential
-                          String? email = e.email;
-                          AuthCredential? pendingCredential = e.credential;
+                        //  String? email = e.email;
+                        //  AuthCredential? pendingCredential = e.credential;
                   //logging the error
                           errorProvider.setError('User account exists with a different credential. Please try logging in by using any other provider.');
                           errorProvider.setErrorVisibility();
-                         if(loginProvider.loginType==LoginType.x) {
-                             final userCredential=await signInWithTwitter();
-                             userCredential.user?.linkWithCredential(pendingCredential!);
-                            }
-                        }
+                         getStartedProvider.setPendingCredentials(e.credential);
+                         getStartedProvider.setPendingCredentialsEmail(e.email);
+                         getStartedProvider.setPendingCredentialsError();
+                     }
                       }catch (e) {
                             errorProvider.setError('error is $e');
                             errorProvider.setErrorVisibility();
@@ -234,12 +257,18 @@ class _GetStartedState extends State<GetStarted> {
                   spaceBetween(
                     CustomButton(
                       onPressed: () async {
+                      
                         loginProvider.setLoginType(LoginType.x);
-
+                            
                         try {
                           UserCredential userCredential =
                               await signInWithTwitter();
-
+ if(getStartedProvider.pendingCredentialError==true){
+                              if(userCredential.user?.email==getStartedProvider.pendingCredentialEmail){
+                                await userCredential.user?.linkWithCredential(getStartedProvider.pendingCredential as AuthCredential);
+                                getStartedProvider.resetpendingCredentialsError();
+                              }
+ }
                           addUserData(
                               'not initialised',
                               userCredential.user!.email.toString(),
@@ -259,17 +288,20 @@ class _GetStartedState extends State<GetStarted> {
                           if (e.code ==
                               'account-exists-with-different-credential') {
                             // The account already exists with a different credential
-//fetch the error-causing email and credential
-                            String? email = e.email;
-                            AuthCredential? pendingCredential = e.credential;
-//setting the error
+                            
+//setting the error         
                             errorProvider.setError('User account exists with a different credential. Please try logging in by using any other provider.');
                             errorProvider.setErrorVisibility();
+//fetch the error-causing email and credential
+                         //String? email = e.email;
+                            getStartedProvider.setPendingCredentialsEmail(e.email);
+                           // AuthCredential? pendingCredential = e.credential;
+                            getStartedProvider.setPendingCredentials(e.credential); 
 
-                          if(loginProvider.loginType==LoginType.x) {
-                             final userCredential=await signInWithTwitter();
-                             userCredential.user?.linkWithCredential(pendingCredential!);
-                            }
+                            getStartedProvider.setPendingCredentialsError();
+
+                            
+                            
 
 //querying from firebase for the provider used to sign in with this email      
                             }

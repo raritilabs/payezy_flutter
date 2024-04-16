@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:payezy/functions/truncate_to_decimal.dart';
-import 'dart:developer' as devtools show log;
 
 enum SendPages{
   enterAmount,
@@ -31,7 +30,7 @@ bool get expanded=>_expanded;
 
 bool _noValueValidationMessage=false; //turns true when no value is typed
 bool get noValueValidationMessage=>_noValueValidationMessage;
-bool _maxValueValidationMessage=false; //turns true when value exceeds 2000
+bool _maxValueValidationMessage=false; //turns true when value exceeds maxAllowed value
 bool get maxValueValidationMessage=>_maxValueValidationMessage;
 
 //top button selection initialisation
@@ -67,6 +66,10 @@ double get treasuryBalance=>_treasuryBalance;
 
  num _effectiveMidMarketRateCard=00.00;
  num get effectiveMidMarketRateCard=> _effectiveMidMarketRateCard;
+
+ //time
+ String _currentTime='';
+ String get time=>_currentTime;
 
   void setSendPage(SendPages sendPage)
   {
@@ -106,13 +109,11 @@ if(_bankTransferCharge>5)
   _totalCharges=_bankTransferCharge+_payezyPlatformfees;
   _amountExchanged=_youSend - _totalCharges;
 _youReceiveBank=(_amountExchanged*_exchangeRate).truncateToDecimalPlaces(2);
-devtools.log(_youReceiveBank.toString());
 _effectiveMidMarketRateBank=(_youReceiveBank/_youSend).truncateToDecimalPlaces(2); 
   //card transfer calculations
 _cardTransferCharge=(_youSend*0.04);
 _cardAmountExchanged=_youSend-_cardTransferCharge;
 _youReceiveCard=(_cardAmountExchanged*_exchangeRate).truncateToDecimalPlaces(2);
-devtools.log(_youReceiveCard.toString());
 _effectiveMidMarketRateCard=(_youReceiveCard/_youSend).truncateToDecimalPlaces(2); 
 _expanded=true;
 notifyListeners();
@@ -133,4 +134,12 @@ notifyListeners();
     _treasuryBalance=balance; 
     notifyListeners();
   }
+ 
+  void setCurrentTime(time) 
+  {
+    _currentTime=time;
+    notifyListeners;
+    
+    print("current time is $_currentTime");
   }
+   }

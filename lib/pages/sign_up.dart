@@ -132,7 +132,6 @@ class _SignUpState extends State<SignUp> {
                                     .createUserWithEmailAndPassword(
                                         email: _email.text,
                                         password: _password.text);
-                                log('email is ${_email.text} and password is ${_password.text}');
                                 final user = FirebaseAuth.instance.currentUser;
                                 user?.updateDisplayName(displayName);
                                 await user?.sendEmailVerification();
