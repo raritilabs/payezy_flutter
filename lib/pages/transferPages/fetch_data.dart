@@ -1,10 +1,10 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:payezy/components/app_bar.dart';
 import 'package:payezy/components/custom_button.dart';
 import 'package:payezy/components/custom_container.dart';
+import 'package:payezy/functions/format_epoch_time.dart';
 import 'package:payezy/functions/get_user_transaction_history.dart';
 import 'package:payezy/themes/colors.dart';
 import 'package:payezy/themes/fonts.dart';
@@ -17,37 +17,36 @@ class FetchData extends StatefulWidget {
   State<FetchData> createState() => _FetchDataState();
 }
 
-class _FetchDataState extends State<FetchData> with SingleTickerProviderStateMixin {
-
+class _FetchDataState extends State<FetchData>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
- // late Animation<Offset> _animation;
+  // late Animation<Offset> _animation;
   late Animation<double> _animation;
- @override
+  @override
   void initState() {
     super.initState();
-    getUserTransactionHistory();
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 500), // Adjust duration as needed
     );
 
-   _animation = CurvedAnimation(parent: _controller, curve: Curves.easeIn);
-   /*Tween<Offset>(
+    _animation = CurvedAnimation(parent: _controller, curve: Curves.easeIn);
+    /*Tween<Offset>(
       begin: const Offset(0.0, -1.0), // Off-screen top
       end: Offset.zero,
     ).
     animate(CurvedAnimation(parent: _controller, curve: Curves.ease));*/
   }
-  String email=FirebaseAuth.instance.currentUser!.email.toString();
+
+  String email = FirebaseAuth.instance.currentUser!.email.toString();
   int selectedItemIndex = -1;
-  
 
   void toggleVisibility(int index) {
     setState(() {
       if (selectedItemIndex == index) {
         // If the same item is clicked again, hide the container
         selectedItemIndex = -1;
-         _controller.reverse();
+        _controller.reverse();
       } else {
         // If a different item is clicked, show its container
         selectedItemIndex = index;
@@ -55,300 +54,372 @@ class _FetchDataState extends State<FetchData> with SingleTickerProviderStateMix
       }
     });
   }
+
   @override
   Widget build(BuildContext context) {
-    final stream1=FirebaseFirestore.instance.collection('transferHistory').where('Email', isEqualTo: email).snapshots();
-final stream2=FirebaseFirestore.instance.collection('userData').where('email', isEqualTo: email).snapshots();
+    final stream = FirebaseFirestore.instance
+        .collection('userData')
+        .where('email', isEqualTo: email)
+        .snapshots();
 
-    //calling fetchDataProvider
-    //final fetchDataProvider = Provider.of<FetchDataProvider>(context,listen: true);
     return Scaffold(
-            resizeToAvoidBottomInset: false,
-
+        resizeToAvoidBottomInset: false,
         backgroundColor: mainBackgroundColor,
         appBar: const CustomAppBar(
           title: "Transfers",
         ),
-       // bottomNavigationBar: const BottomNavBar(),
+        // bottomNavigationBar: const BottomNavBar(),
         body: Padding(
-          padding: EdgeInsets.only(
-            top: 2.h,
-            left: 5.w,
-            right: 5.w,
-          ),
-          child: 
-           StreamBuilder(
+            padding: EdgeInsets.only(
+              top: 2.h,
+              left: 5.w,
+              right: 5.w,
+            ),
+            child: FutureBuilder(
 
-               ///fetches data continously
-               stream:stream1,
-               builder: (
-                 context,
-                 snapshot1,
-               ) {
-                return StreamBuilder(
-                  stream: stream2,
-                  builder: (context,snapshot2) {
-                   if (!snapshot2.hasData) return const Text('Loading...');
-                   if (!snapshot1.hasData) return const Text('Loading...');      
-                  return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        //----------------------------transfer history---------------------------------------//
-                       metrophobicText('Transfer History', size: 17.sp),
-                       SizedBox(
-                          height: 2.h,
-                        ),
-                        //----------------------------history header----------------------------------------//
-                        //padding 1.h and 3.w
-                        //main axis.space between
-                        Expanded(
-                          child: ListView.separated(
-                            separatorBuilder:
-                                (BuildContext context, int index) {
-                              return SizedBox(height: 2.h);
-                            },
-                            itemBuilder: (context, index) {
-                              return GestureDetector(
-                                onTap: () {
-                                  toggleVisibility(index);
-                                },
-                                child: CustomContainer(
-                                  child: Column(children: [
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: 1.h, horizontal: 3.w),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: .5.h),
-                                                child: Image.asset(
-                                                    'assets/indiaIcon.png'),
-                                              ),
-                                              Image.asset(
-                                                  'assets/rupeeIcon.png'),
-                                              Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 0.5.h),
-                                                child: metrophobicText(
-                                                            snapshot1.data!.docs.first['INR Amount'].toString(),
-                                                            size: 13.sp),
-                                              ),
-                                            ],
-                                          ),
-                                          Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                  horizontal: .5.w,
+                ///fetches data continously
+                future: _fetchAccountDetails(),
+                builder: (
+                  context,
+                  snapshot1,
+                ) {
+                  return FutureBuilder(
+                      future: getUserTransactionHistory(),
+                      builder: (context, snapshot2) {
+                        if (!snapshot2.hasData) return const Text('Loading...');
+                        if (!snapshot1.hasData) return const Text('Loading...');
+
+                        return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              //----------------------------transfer history---------------------------------------//
+                              metrophobicText('Transfer History', size: 17.sp),
+                              SizedBox(
+                                height: 2.h,
+                              ),
+                              //----------------------------history header----------------------------------------//
+                              //padding 1.h and 3.w
+                              //main axis.space between
+                              Expanded(
+                                child: ListView.separated(
+                                  separatorBuilder:
+                                      (BuildContext context, int index) {
+                                    return SizedBox(height: 2.h);
+                                  },
+                                  itemBuilder: (context, index) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        toggleVisibility(index);
+                                      },
+                                      child: CustomContainer(
+                                        child: Column(children: [
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 1.h, horizontal: 3.w),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              horizontal: .5.h),
+                                                      child: Image.asset(
+                                                          'assets/indiaIcon.png'),
+                                                    ),
+                                                    Image.asset(
+                                                        'assets/rupeeIcon.png'),
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              horizontal:
+                                                                  0.5.h),
+                                                      child: metrophobicText(
+                                                          snapshot2.data[
+                                                                  'extractedDetails']
+                                                                  [0]
+                                                                  ['inr_amount']
+                                                              .toString(),
+                                                          size: 13.sp),
+                                                    ),
+                                                  ],
                                                 ),
-                                                child: Image.asset(
-                                                  'assets/tranferIcon.png',
+                                                Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                        horizontal: .5.w,
+                                                      ),
+                                                      child: Image.asset(
+                                                        'assets/tranferIcon.png',
+                                                      ),
+                                                    ),
+                                                    metrophobicText(
+                                                          snapshot1.data!.docs.first['nickName'].toString().length>6?
+                                                        (snapshot1.data!.docs.first['nickName']).toString().substring(0,6):
+                                                      (snapshot1.data!.docs.first["nickName"]).toString(),
+
+                                                        
+                                                        size: 13.sp),
+                                                  ],
+                                                ),
+                                                metrophobicText(
+                                                    DateUtilsFunction
+                                                        .formatEpochTime(
+                                                      int.parse(
+                                                        snapshot2.data[
+                                                                'extractedDetails']
+                                                                [0]
+                                                                ['created_at']
+                                                            .toString(),
+                                                      ),
+                                                    ),
+                                                    size: 9.sp,
+                                                    color: lightGrey),
+                                              ],
+                                            ),
+                                          ),
+
+                                          //-----------------End of top card------------------------------------------------------//
+                                          //------------------------expands here------------------------------------------------//
+                                          Visibility(
+                                            visible: selectedItemIndex == index
+                                                ? true
+                                                : false,
+                                            child: FadeTransition(
+                                              opacity: _animation,
+                                              child: Padding(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 3.w),
+                                                child: Column(
+                                                  children: [
+                                                    SizedBox(
+                                                      height: 1.h,
+                                                    ),
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Row(
+                                                          children: [
+                                                            Padding(
+                                                              padding: EdgeInsets
+                                                                  .symmetric(
+                                                                      horizontal:
+                                                                          .5.h),
+                                                              child: Image.asset(
+                                                                  'assets/USIcon.png'),
+                                                            ),
+                                                            Padding(
+                                                              padding: EdgeInsets
+                                                                  .symmetric(
+                                                                      horizontal:
+                                                                          0.5.h),
+                                                              child: metrophobicText(
+                                                                  snapshot2
+                                                                      .data[
+                                                                          'extractedDetails']
+                                                                          [0][
+                                                                          'usd_amount']
+                                                                      .toString(),
+                                                                  size: 13.sp),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        Container(
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: yellow,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        3),
+                                                          ),
+                                                          child: Padding(
+                                                            padding: EdgeInsets
+                                                                .symmetric(
+                                                                    horizontal:
+                                                                        3.w,
+                                                                    vertical:
+                                                                        0.3.h),
+                                                            child: metrophobicText(
+                                                                snapshot2.data[
+                                                                        'extractedDetails'][0]
+                                                                    [
+                                                                    'tx_status'],color: black),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+
+                                                    //end of row one----------------------------------
+                                                    SizedBox(
+                                                      height: 2.h,
+                                                    ),
+                                                    Padding(
+                                                      padding: const EdgeInsets.all(8.0),
+                                                      child: Row(
+                                                        children: [
+                                                          Expanded(
+                                                              child: SizedBox(
+                                                            child:
+                                                                metrophobicText(
+                                                                    'Transfer ID',
+                                                                    color:
+                                                                        lightGrey,
+                                                                    size: 10.sp),
+                                                          )),
+                                                          Expanded(child: SizedBox()),
+                                                          Expanded(
+                                                              child: SizedBox(
+                                                            child:
+                                                                metrophobicText(
+                                                                    'Account No.',
+                                                                    color:
+                                                                        lightGrey,
+                                                                    size: 10.sp),
+                                                          )),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    Row(
+                                                      
+                                                      children: [
+                                                        Expanded(
+                                                            child: SizedBox(
+                                                             
+                                                          child: metrophobicText(
+                                                              snapshot2.data[
+                                                                      'extractedDetails']
+                                                                      [0][
+                                                                      'order_id']
+                                                                      ['S']
+                                                                  .toString(),
+                                                              size: 12.sp),
+                                                        )),
+                                                        
+                                                      Expanded(child: SizedBox()),
+                                                        Expanded(
+                                                            child: SizedBox(
+                                                          child: metrophobicText(
+snapshot1.data!.docs.first['accountNumber'],                  
+                                                              size: 12.sp),
+                                                        )),
+                                                      ],
+                                                    ),
+
+                                                    SizedBox(
+                                                      height: 3.h,
+                                                    ),
+
+                                                    //------------------------row 2 ends--------------------
+
+                                                    //-------------------------row 3 begins-------------------------------//
+                                                    Row(
+                                                      children: [
+                                                        Expanded(
+                                                            child: SizedBox(
+                                                          child:
+                                                              metrophobicText(
+                                                                  'IFSC Code',
+                                                                  color:
+                                                                      lightGrey,
+                                                                  size: 10.sp),
+                                                        )),
+
+                                                        Expanded(child: SizedBox()),
+                                                        Expanded(
+                                                            child: SizedBox(
+                                                          child:
+                                                              metrophobicText(
+                                                                  'Phone',
+                                                                  color:
+                                                                      lightGrey,
+                                                                  size: 10.sp),
+                                                        )),
+                                                      ],
+                                                    ),
+
+                                                    Row(
+                                                      children: [
+                                                        Expanded(
+                                                            child: SizedBox(
+                                                          child: metrophobicText(
+                                                              snapshot1
+                                                                      .data!
+                                                                      .docs
+                                                                      .first[
+                                                                  'IFSCCode'],
+                                                              size: 12.sp),
+                                                        )),
+Expanded(child: SizedBox()),
+                                                        Expanded(
+                                                            child: SizedBox(
+                                                          child: metrophobicText(
+                                                              snapshot1
+                                                                      .data!
+                                                                      .docs
+                                                                      .first[
+                                                                  'phoneNumber'],
+                                                              size: 12.sp),
+                                                        )),
+
+                                                        // Expanded(child: SizedBox()),
+                                                      ],
+                                                    ),
+
+                                                    SizedBox(height: 3.h),
+                                                    metrophobicText(
+                                                        'Please be patient,Your transfer order will be succesfully delievered within 2 hours.',
+                                                        size: 10.sp,
+                                                        color: yellow),
+                                                    SizedBox(
+                                                      height: 3.h,
+                                                    ),
+                                                    CustomButton(
+                                                      onPressed: () {},
+                                                      text: "Cancel & Refund",
+                                                      size: 16.sp,
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
-                                              metrophobicText(
-                                                  snapshot2.data!.docs.first['firstName'].toString().length>6?
-                                                 (snapshot2.data!.docs[index]['firstName']).toString().substring(0,6):
-                                                  (snapshot2.data!.docs[index]["firstName"]).toString(),
-                                                  
-                                                  size: 13.sp),
-                                            ],
+                                            ),
                                           ),
-                                         
-                                          metrophobicText(snapshot1.data!.docs.first['Time'].toString(),
-                                              size: 9.sp, color: lightGrey),
-                                        ],
+                                          SizedBox(
+                                            height: 1.h,
+                                          )
+                                        ]),
                                       ),
-                                    ),
-                                  
-                                  //-----------------End of top card------------------------------------------------------//
-                                  //------------------------expands here------------------------------------------------//
-                                    Visibility(
-                                      visible: selectedItemIndex == index
-                                          ? true
-                                          : false,
-                                      child: FadeTransition(
-                                        opacity:_animation,
-                                        child: Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 3.w),
-                                          child: Column(
-                                            children: [
-                                              SizedBox(
-                                                height: 1.h,
-                                              ),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Row(
-                                                    children: [
-                                                      Padding(
-                                                        padding:
-                                                            EdgeInsets.symmetric(
-                                                                horizontal: .5.h),
-                                                        child: Image.asset(
-                                                            'assets/USIcon.png'),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            EdgeInsets.symmetric(
-                                                                horizontal:
-                                                                    0.5.h),
-                                                        child: metrophobicText(
-                                                            snapshot1.data!.docs.first['USD Amount'].toString(),
-                                                            size: 13.sp),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  Container(
-                                                      decoration: BoxDecoration(
-                                                        color: yellow,
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                                3),
-                                                      ),
-                                                      child: Padding(
-                                                        padding:
-                                                            EdgeInsets.symmetric(
-                                                                horizontal: 3.w,
-                                                                vertical: 0.3.h),
-                                                        child: metrophobicText(
-                                                            'Processing'),
-                                                      )),
-                                                ],
-                                              ),
-                                                                              
-                                              //end of row one----------------------------------
-                                              SizedBox(
-                                                height: 3.h,
-                                              ),
-                                              Row(
-                                                children: [
-                                                  Expanded(
-                                                      child: SizedBox(
-                                                    child: metrophobicText(
-                                                        'Transfer ID',
-                                                        color: lightGrey,
-                                                        size: 10.sp),
-                                                  )),
-                                                  Expanded(
-                                                      child: SizedBox(
-                                                    child: metrophobicText(
-                                                        'Account No.',
-                                                        color: lightGrey,
-                                                        size: 10.sp),
-                                                  )),
-                                                ],
-                                              ),
-                                              Row(
-                                                children: [
-                                                  Expanded(
-                                                      child: SizedBox(
-                                                    child: metrophobicText(
-                                                        (snapshot1.data!.docs[index]['Transfer ID']).toString().substring(0,10),
-                                                          size: 12.sp),
-                                                  )),
-                                                  Expanded(
-                                                      child: SizedBox(
-                                                    child: metrophobicText(
-                                                (snapshot1.data!.docs.first['Account Number'].toString()),                                      
-                                                        size: 12.sp),
-                                                  )),
-                                                ],
-                                              ),
-                                                                              
-                                              SizedBox(
-                                                height: 3.h,
-                                              ),
-                                                                              
-                                              //------------------------row 2 ends--------------------
-                                                                              
-                                              //-------------------------row 3 begins-------------------------------//
-                                              Row(
-                                                children: [
-                                                  Expanded(
-                                                      child: SizedBox(
-                                                    child: metrophobicText(
-                                                        'IFSC Code',
-                                                        color: lightGrey,
-                                                        size: 10.sp),
-                                                  )),
-                                                                              
-                                                  Expanded(
-                                                      child: SizedBox(
-                                                    child: metrophobicText(
-                                                        'Phone',
-                                                        color: lightGrey,
-                                                        size: 10.sp),
-                                                  )),
-                                                                              
-                                                  
-                                                ],
-                                              ),
-                                                                              
-                                              Row(
-                                                children: [
-                                                  Expanded(
-                                                      child: SizedBox(
-                                                    child: metrophobicText(
-                                                       (snapshot1.data!.docs.first['IFSC'].toString()),size: 12.sp),
-                                                  )),
-                                                                              
-                                                  Expanded(
-                                                      child: SizedBox(
-                                                    child: metrophobicText(
-                                                     (snapshot1.data!.docs.first['Phone'].toString()),
-                                                       size: 12.sp),
-                                                  )),
-                                                                              
-                                                  // Expanded(child: SizedBox()),
-                                                ],
-                                              ),
-                                                                              
-                                              SizedBox(height: 3.h),
-                                              metrophobicText(
-                                                  'Please be patient,Your transfer order will be succesfully delievered within 2 hours.',
-                                                  size: 10.sp,
-                                                  color: yellow),
-                                              SizedBox(
-                                                height: 3.h,
-                                              ),
-                                              CustomButton(
-                                                onPressed: () {},
-                                                text: "Cancel & Refund",
-                                                size: 16.sp,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 1.h,
-                                    )
-                                  ]),
+                                    );
+                                  },
+                                  itemCount: snapshot2.data!.length,
                                 ),
-                              );
-                            },
-                           itemCount:snapshot1.data!.docs.length,
-                          ),
-                        ),
-                      ]
-                    
-                   
-            ); }
-           );}
-                              
-              )));}
-              
-    
+                              ),
+                            ]);
+                      });
+                })));
   }
+}
 
+Future<QuerySnapshot> _fetchAccountDetails() async {
+  String? email = FirebaseAuth.instance.currentUser!.email;
+  final querySnapshot = await FirebaseFirestore.instance
+      .collection('userData')
+      .where('email', isEqualTo: email)
+      .get();
+  final userId = querySnapshot.docs.first.id;
+  final accountDetailsSnapshot = await FirebaseFirestore.instance
+      .collection('userData')
+      .doc(userId)
+      .collection('accountDetails')
+      .get();
+  return accountDetailsSnapshot;
+}
