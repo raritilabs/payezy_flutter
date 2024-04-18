@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:payezy/pages/home_page.dart';
 import 'package:payezy/pages/login_page.dart';
 import 'package:payezy/pages/main_screen.dart';
+import 'package:payezy/pages/profilePages/help_and_support.dart';
 import 'package:payezy/pages/profilePages/profile.dart';
 import 'package:payezy/pages/sendPages/cybrid.dart';
 import 'package:payezy/pages/sendPages/enter_details.dart';
@@ -19,14 +21,16 @@ import 'package:payezy/providers/fetch_data_provider.dart';
 import 'package:payezy/providers/get_started_provider.dart';
 import 'package:payezy/providers/login_provider.dart';
 import 'package:payezy/providers/nav_provider.dart';
+import 'package:payezy/providers/profile_page_provider.dart';
 import 'package:payezy/providers/send_provider.dart';
 import 'package:payezy/services/routes.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 
-void main()  {
+void main() async {
  WidgetsFlutterBinding.ensureInitialized();
+ await dotenv.load(fileName: '.env');
   runApp(const MyApp());
 }
 
@@ -48,6 +52,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<ApiProvider>(create:(context) => ApiProvider()),
         ChangeNotifierProvider<LoginProvider>(create:(context) => LoginProvider()),
         ChangeNotifierProvider<ErrorProvider>(create:(context) => ErrorProvider()),
+        ChangeNotifierProvider<ProfilePageProvider>(create: (context)=> ProfilePageProvider())
 
       ],
     
@@ -70,6 +75,7 @@ return MaterialApp(
           mainScreen:(context)=>const MainScreen(),
           verifyEmail:(context)=>const VerifyEmail(),
           homePage:(context)=>const HomePage(),
+          helpAndSupport:(context)=>const HelpAndSupportHomePage(),
 
         }
          );

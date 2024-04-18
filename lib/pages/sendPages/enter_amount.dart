@@ -81,7 +81,7 @@ class _EnterAmountState extends State<EnterAmount> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
 //left decorative line
-            Expanded(child: customLine()),
+            Expanded(child: customLine(18)),
 //  Bank transfer button
             GestureDetector(
               onTap: () {
@@ -129,7 +129,7 @@ class _EnterAmountState extends State<EnterAmount> {
                   )),
             ),
             //right decorative line
-            Expanded(child: customLine()),
+            Expanded(child: customLine(18)),
           ],
         ),
         //space b/w button and enter the amount..

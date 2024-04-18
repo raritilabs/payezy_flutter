@@ -97,7 +97,8 @@ class _LoginState extends State<LoginPage> {
                                     email: email, password: password);
                             getStartedProvider.setUser(
                                 userCredential.user?.displayName.toString(),
-                                userCredential.user?.email);
+                                userCredential.user?.email,
+                                userCredential.user?.photoURL);
                             // getStartedProvider.setUserCredentials(userCredential);
 
                             Navigator.of(context).pushNamedAndRemoveUntil(

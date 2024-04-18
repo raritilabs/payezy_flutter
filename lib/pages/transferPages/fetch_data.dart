@@ -57,10 +57,6 @@ class _FetchDataState extends State<FetchData>
 
   @override
   Widget build(BuildContext context) {
-    final stream = FirebaseFirestore.instance
-        .collection('userData')
-        .where('email', isEqualTo: email)
-        .snapshots();
 
     return Scaffold(
         resizeToAvoidBottomInset: false,

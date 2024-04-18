@@ -1,11 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:payezy/components/app_bar.dart';
+import 'package:payezy/components/bottom_nav_bar.dart';
 import 'package:payezy/components/custom_container.dart';
-import 'package:payezy/firebase_options.dart';
 import 'package:payezy/providers/error_provider.dart';
 import 'package:payezy/providers/get_started_provider.dart';
 import 'package:payezy/providers/login_provider.dart';
@@ -14,12 +13,20 @@ import 'package:payezy/themes/colors.dart';
 import 'package:payezy/themes/fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class Profile extends StatelessWidget {
+class Profile extends StatefulWidget {
   const Profile({super.key});
 
   @override
+  State<Profile> createState() => _ProfileState();
+}
+
+class _ProfileState extends State<Profile> {
+  @override
   Widget build(BuildContext context) {
+    final Uri privacyUri=Uri.parse('https://docs.payezy.io/platform/privacy-policy');
+    final Uri termsUri=Uri.parse('https://docs.payezy.io/platform/terms-of-use');
         final getStartedProvider=Provider.of<GetStartedProvider>(context,listen: true);
         final loginProvider=Provider.of<LoginProvider>(context,listen: true);
         final errorProvider=Provider.of<ErrorProvider>(context,listen: true);//resets the sign in error
@@ -31,24 +38,16 @@ class Profile extends StatelessWidget {
 
        appBar: const CustomAppBar(title: 'Profile', isVisible: true),
       backgroundColor: mainBackgroundColor,
-    //   //bottomNavigationBar: const BottomNavBar(),
-       body:
-      FutureBuilder( 
-        future: Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform),
-        
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState){
-          case ConnectionState.done:
-return
-        Padding(
+       body:Padding(
           padding: EdgeInsets.all(5.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
-                  CircleAvatar(
-                    radius: 10.w,
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(300.0),
+                    child:Image.network(getStartedProvider.photo.isEmpty==true?'https://cdn1.iconfinder.com/data/icons/mix-color-3/502/Untitled-7-1024.png':getStartedProvider.photo,width: 10.h,), 
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(
@@ -82,13 +81,10 @@ return
                             children: [
                               Padding(
                                 padding:  EdgeInsets.only(top:1.5.h,left: 2.w,),
-                                child: metrophobicText('KYC Verification', size: 15.sp),
+                                child: metrophobicText( 'KYC Verification', size: 15.sp),
                               ),
-                              SizedBox(width: 1.w,),
-                              Padding(
-                          padding:  EdgeInsets.only(top:1.5.h,),
-                         child: Image.asset('assets/inactiveProfileIcon.png',height: 2.5.h,),
-                              )
+                             
+                             
                             ],
                           ),
                           Row(
@@ -134,7 +130,9 @@ return
                   tapTargetSize: MaterialTapTargetSize.padded,
                      padding: const MaterialStatePropertyAll(EdgeInsets.all(0)),
                 ),
-                onPressed: (){},
+                onPressed: (){
+Navigator.pushNamedAndRemoveUntil(context, '/helpandsupport', (route) => false);
+                },
                 child: metrophobicText('Support', size: 16.sp)),
               SizedBox(height: 2.h),
               TextButton(
@@ -144,7 +142,10 @@ return
                   tapTargetSize: MaterialTapTargetSize.padded,
                      padding: const MaterialStatePropertyAll(EdgeInsets.all(0)),
                 ),
-                onPressed:(){},
+                onPressed:(){
+                  launchUrl(privacyUri,
+                  mode: LaunchMode.inAppWebView);
+                },
                 child:metrophobicText('Privacy Policy', size: 16.sp)),
               SizedBox(height: 2.h),
               TextButton(
@@ -154,7 +155,11 @@ return
                   tapTargetSize: MaterialTapTargetSize.padded,
                      padding: const MaterialStatePropertyAll(EdgeInsets.all(0)),
                 ),
-                onPressed: (){},
+                onPressed: (){
+                  launchUrl(termsUri,
+                  mode: LaunchMode.inAppWebView,
+                  );
+                },
                 child: metrophobicText('Terms of Use', size: 16.sp)),
               SizedBox(height: 2.h),
               TextButton(
@@ -183,13 +188,7 @@ return
             ],
           )
             
-        );
-        default:
-              return const LinearProgressIndicator();
+        ));
         
         }
-        }
-      ),
-    );
-  }
 }

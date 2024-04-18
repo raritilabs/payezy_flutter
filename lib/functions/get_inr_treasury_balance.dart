@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'dart:developer' as devtools show log;
 
@@ -8,7 +9,7 @@ String _treasuryBalance = '';
 String get treasuryBalance => _treasuryBalance;
 
 Future<double> getInrTreasuryBalance() async {
-  String url = "https://dev-server.payezy.io/get-inr-treasury-balance";
+  String url='${dotenv.env['BACKEND_SERVER_URL']}';
 
   try {
     User? user = FirebaseAuth.instance.currentUser;
@@ -24,7 +25,7 @@ Future<double> getInrTreasuryBalance() async {
       'Authorization': 'Bearer $idToken',
     };
 
-    var response = await http.get(Uri.parse(url), headers: headers);
+    var response = await http.get(Uri.parse("$url/get-inr-treasury-balance"), headers: headers);
 
     if (response.statusCode == 200) {
       var jsonResponse = json.decode(response.body);

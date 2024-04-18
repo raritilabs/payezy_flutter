@@ -11,3 +11,5 @@ const loginPage='/login';
 const mainScreen='/mainscreen';
 const verifyEmail='/verifyemail';
 const homePage='/homepage';
+//profile page routes
+const helpAndSupport='/helpandsupport';

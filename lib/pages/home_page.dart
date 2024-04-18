@@ -14,6 +14,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
+
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,7 @@ class _HomePageState extends State<HomePage> {
               switch (snapshot.connectionState) {
                 case ConnectionState.done:
                   final user = FirebaseAuth.instance.currentUser;              
-                  if (user != null)  {
+                  if (user != null)  {  
                     return const MainScreen();
                   
                   } else {

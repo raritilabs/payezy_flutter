@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 
 Future createStripePaymentIntent() async {
-  String url = "https://dev-server.payezy.io/create-stripe-payment-intent";
+  String url =  "${dotenv.env['BACKEND_SERVER_URL']}/create-stripe-payment-intent";
 
   try {
 

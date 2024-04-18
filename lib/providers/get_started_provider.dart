@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -20,10 +21,13 @@ String _confirmPassword='';
 String get confirmPassword=>_confirmPassword;
 bool _wrongPassword=false;
 bool get wrongPassword=>_wrongPassword;
+//storing details of user, email and photo
 String _user='';
 String get user=>_user;
 String _useremail='';
 String get useremail=>_useremail;
+String _photo='';
+String get photo=>_photo;
 bool _isVisible=true;
 bool get isVisible=>_isVisible;
 late UserCredential _userCredentials;
@@ -69,9 +73,10 @@ void setWrongPasswordValidation(){
   _wrongPassword=true;
   notifyListeners();
 }
-void setUser(name,email){
+void setUser(name,email,photo){
 _user=name;
 _useremail=email;
+_photo=photo;
 notifyListeners();
 }
 void resetUser(){
@@ -109,6 +114,15 @@ void resetpendingCredentialsError(){
   _pendingCredentialEmail='';
   _pendingCredentialError=false;
 }
-
-
 }
+
+Future<QuerySnapshot> _fetchAccountDetails() async {
+  String? email = FirebaseAuth.instance.currentUser!.email;
+  final querySnapshot = await FirebaseFirestore.instance
+      .collection('userData')
+      .where('email', isEqualTo: email)
+      .get();
+
+  return querySnapshot;
+}
+

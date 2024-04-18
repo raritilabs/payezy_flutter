@@ -44,5 +44,6 @@ const signinwith='Sign in with';
 const password='Password';
 const bySigning='By signing up you confirm that you have read, accepted and agreed to Terms of Use and Privacy Policy.';
 
-
+//Help and support Page
+const query='For any other queries, please write to us at support@rariti.io';
 

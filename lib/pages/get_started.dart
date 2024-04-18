@@ -125,7 +125,8 @@ class _GetStartedState extends State<GetStarted> {
 //
                           getStartedProvider.setUser(
                               userCredential.user?.displayName.toString(),
-                              userCredential.user?.email);
+                              userCredential.user?.email,
+                              userCredential.user?.photoURL,);
                              
 //adding the user data to firebase
                           addUserData(
@@ -206,7 +207,8 @@ class _GetStartedState extends State<GetStarted> {
                             final user = await signInWithFacebook();                  
                             getStartedProvider.setUser(
                                 user!.user?.displayName.toString(),
-                                user.user?.email.toString());
+                                user.user?.email.toString(),
+                                user.user?.photoURL);
 
                                if(getStartedProvider.pendingCredentialError==true){
                               if(getStartedProvider.email==getStartedProvider.pendingCredentialEmail){
@@ -279,7 +281,8 @@ class _GetStartedState extends State<GetStarted> {
                               );
                           getStartedProvider.setUser(
                               userCredential.user?.displayName.toString(),
-                              userCredential.user?.email.toString());
+                              userCredential.user?.email.toString(),
+                              userCredential.user?.photoURL);
                           Navigator.of(context).pushNamedAndRemoveUntil(
                               mainScreen, (route) => false);
                           getStartedProvider.setUserCredentials(userCredential);
