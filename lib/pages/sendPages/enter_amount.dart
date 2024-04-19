@@ -151,7 +151,7 @@ class _EnterAmountState extends State<EnterAmount> {
             ),
             child: customTextField(
               youSend,
-              'USD',
+              sideText1: 'USD',
               label: '00.00',
               infoText: calculatemaxAllowed() == 0
                   ? ''
@@ -204,7 +204,7 @@ class _EnterAmountState extends State<EnterAmount> {
           ),
           child: customTextField(
             recipientGets,
-            'INR',
+            sideText1: 'INR',
             sidetextVisibility: true,
             //if in expanded view, check card/bank and show the details accordingly
             label: sendPageProvider.expanded

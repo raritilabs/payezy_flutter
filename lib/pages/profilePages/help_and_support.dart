@@ -3,7 +3,12 @@ import 'package:payezy/components/custom_button.dart';
 //custom app bar
 import 'package:payezy/components/custom_container.dart'; // custom main body card
 import 'package:payezy/components/custom_line.dart';
+import 'package:payezy/components/custom_radio_button.dart';
+import 'package:payezy/components/text_field.dart';
+import 'package:payezy/functions/ticket_collection_failed_transaction.dart';
+import 'package:payezy/functions/ticket_collection_feedback_or_bug.dart';
 import 'package:payezy/pages/profilePages/profile.dart';
+import 'package:payezy/providers/nav_provider.dart';
 import 'package:payezy/providers/profile_page_provider.dart';
 import 'package:payezy/services/routes.dart';
 import 'package:payezy/themes/fonts.dart';
@@ -33,7 +38,11 @@ class _HelpAndSupportHomePageState extends State<HelpAndSupportHomePage> {
           Consumer<ProfilePageProvider>(builder: (context, profilePageProvider, child) {
             
 return Scaffold(
-  
+  appBar: AppBar(
+    backgroundColor: Colors.transparent,
+    automaticallyImplyLeading: true,
+
+  ),
       backgroundColor: mainBackgroundColor,
             body: Padding(
        padding: EdgeInsets.only(left: 5.w,right:5.w,top: 3.h,),
@@ -57,12 +66,9 @@ return Scaffold(
          padding:  EdgeInsets.symmetric(horizontal: 3.w),
          child: switch(profilePageProvider.profilePage){
                 ProfilePages.createticket=>const CreateTicket(),
-                
-               
-                // TODO: Handle this case.
-                ProfilePages.exploredocs => const ExploreDocs(),
-                // TODO: Handle this case.
+                ProfilePages.failedtransaction => const FailedTransaction(),
                 ProfilePages.helpandsupport => const HelpAndSupport(),
+                     ProfilePages.feedbackorbug => const FeedbackOrBug(),
               },
             ),
           ],
@@ -84,6 +90,7 @@ class _HelpAndSupportState extends State<HelpAndSupport> {
   Widget build(BuildContext context) {
         final Uri exploreDocsUri=Uri.parse('https://docs.payezy.io/');
     final profilePageProvider=Provider.of<ProfilePageProvider>(context,listen: true);
+    final navigationProvider=Provider.of<NavigationProvider>(context,listen: true);
     return Column(
           children: [
             //Create ticket button
@@ -91,7 +98,6 @@ class _HelpAndSupportState extends State<HelpAndSupport> {
           onTap: (){
                   
                   profilePageProvider.setProfilePage(ProfilePages.createticket);         
-                    print(profilePageProvider.profilePage);
 
           },
            child: Container(
@@ -129,12 +135,31 @@ class _HelpAndSupportState extends State<HelpAndSupport> {
  //space b/w
  SizedBox(height: 2.h,),             
          //for any queries 
-         metrophobicText(query,size: 15.sp), 
+         Padding(
+           padding:  EdgeInsets.symmetric(horizontal: 3.w),
+           child: metrophobicText(query,size: 15.sp),
+         ),
+         Align(
+          alignment: Alignment.centerLeft,
+           child: TextButton(
+            onPressed: (){
+             launchUrl(Uri(scheme: 'mailto',
+             path: "support@rariti.io",
+             queryParameters: {
+              'subject':"support",
+             }));
+            },
+            child: metrophobicText('support@rariti.io',color: yellow, size: 15.sp),
+            ),
+         ), 
          SizedBox(height: 2.h,),
-         ElevatedButton(onPressed: (){
-          Navigator.pushNamedAndRemoveUntil(context, '/profile', (route) => false);
-         }, child: Text('Back'))
+         CustomButton(onPressed: (){
+                  Navigator.of(context).pushNamedAndRemoveUntil('/homepage', (route) => false);
+
+         }, text: 'Back'),
+         SizedBox(height: 2.h,),
           ],
+          
           );
   }
 }
@@ -158,41 +183,30 @@ class _CreateTicketState extends State<CreateTicket> {
         children: [
           Align(
             alignment: Alignment.centerLeft,
-            child: metrophobicText("Issue type",color: lightBlueThemeColor,size: 18.sp)),
+            child: metrophobicText("Issue type",color: greyFontThemeColor,size: 18.sp)),
             SizedBox(height: 2.h,),
           Row(
             children: [
-              GestureDetector(
-                onTap: (){
-                
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    border: Border.all(color: lightBlueThemeColor)
-                    
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: metrophobicText('Failed Transaction'),
-                  ),
-                ),
+               CustomRadioButton(radiobuttontext: 'Failed Transaction',
+               gradientcolorone:profilePageProvider.chooseButton==ChooseButton.failedtransaction?radiobuttongradientcolorone:Colors.transparent,
+               gradientcolortwo:profilePageProvider.chooseButton==ChooseButton.failedtransaction?radiobuttongradientcolortwo:Colors.transparent,
+              bulletcolor: profilePageProvider.chooseButton==ChooseButton.failedtransaction?lightBlueThemeColor:Colors.transparent,
+              onTap: (){
+                profilePageProvider.setChooseButton(ChooseButton.failedtransaction);
+              },
               ),
               SizedBox(width: 5.w,),
-               Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  border: Border.all(color: lightBlueThemeColor)
-                  
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: metrophobicText('Feedback/Bug'),
-                ),
-              ),
+               CustomRadioButton(radiobuttontext: 'Feedback/Bug',
+               gradientcolorone:profilePageProvider.chooseButton==ChooseButton.feedbackorbug?radiobuttongradientcolorone:Colors.transparent,
+               gradientcolortwo:profilePageProvider.chooseButton==ChooseButton.feedbackorbug?radiobuttongradientcolortwo:Colors.transparent,
+              bulletcolor: profilePageProvider.chooseButton==ChooseButton.feedbackorbug?lightBlueThemeColor:Colors.transparent,
+              onTap: (){
+               profilePageProvider.setChooseButton(ChooseButton.feedbackorbug);
+
+              },),
             ],
           ) , 
-          SizedBox(height: 2.h,),
+          SizedBox(height: 5.h,),
           Row(
             children: [
               SizedBox(width: 28.w,),
@@ -203,7 +217,14 @@ class _CreateTicketState extends State<CreateTicket> {
               SizedBox(width: 3.w,),
               CustomButton(onPressed: 
               (){
-                profilePageProvider.setProfilePage(ProfilePages.exploredocs);
+                //if selected button is failed transaction, then navigate accordingly
+                if(profilePageProvider.chooseButton==ChooseButton.failedtransaction){
+              profilePageProvider.setProfilePage(ProfilePages.failedtransaction);
+                }
+                else{
+          profilePageProvider.setProfilePage(ProfilePages.feedbackorbug);
+
+                }
               }
               , text: 'Proceed',color: lightBlueThemeColor,
               size: 15.sp,
@@ -218,11 +239,125 @@ class _CreateTicketState extends State<CreateTicket> {
   }
 }
 
-class ExploreDocs extends StatelessWidget {
-  const ExploreDocs({super.key});
+class FailedTransaction extends StatefulWidget {
+  const FailedTransaction({super.key});
+
+  @override
+  State<FailedTransaction> createState() => _FailedTransactionState();
+}
+
+class _FailedTransactionState extends State<FailedTransaction> {
+   late final TextEditingController _orderIdController;
+   late final TextEditingController _messageController;
+
+  @override
+  void initState() {
+    _orderIdController=TextEditingController();
+    _messageController=TextEditingController();
+    super.initState();
+  }
+  @override
+  void dispose() {
+_orderIdController.dispose();
+_messageController.dispose();
+    super.dispose();
+  }
+  @override
+  Widget build(BuildContext context) {
+    final profilePageProvider=Provider.of<ProfilePageProvider>(context,listen: true);
+    return Column(
+      children: [
+        customTextField('OrderID',
+        controller: _orderIdController
+        ),
+        SizedBox(height: 2.h,),
+        customTextField('Message',
+        controller:_messageController,
+        ),  
+                SizedBox(height: 2.h,),
+
+        Row(
+          children: [
+            Expanded(
+              child: CustomButton(onPressed: (){
+                profilePageProvider.setProfilePage(ProfilePages.createticket);
+              }, text: 'Back',color: lightBlueThemeColor,size: 15.sp,),
+            ),
+            SizedBox(width: 5.w,),
+            Expanded(
+              child: CustomButton(
+                onPressed: (){
+
+               int epochTime = DateTime.now().millisecondsSinceEpoch;
+                addFailedTransactionTicket(num.parse(epochTime.toString()), _messageController.text, _orderIdController.text, "", "Submitted", "Failed Transaction");
+              }, text: 'Create',color: lightBlueThemeColor,size: 15.sp,rightAssetValue: 'assets/nextIcon.png'),
+            ),
+          ],
+        ),
+        SizedBox(height: 2.h,),
+      ],
+    );
+  }
+}
+
+class FeedbackOrBug extends StatefulWidget {
+  const FeedbackOrBug({super.key});
+
+  @override
+  State<FeedbackOrBug> createState() => _FeedbackOrBugState();
+}
+
+class _FeedbackOrBugState extends State<FeedbackOrBug> {
+  late final TextEditingController _issueController;
+
+
+@override
+  void initState() {
+     _issueController=TextEditingController();
+    super.initState();
+  }
+@override
+  void dispose() {
+_issueController.dispose();
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+        final profilePageProvider=Provider.of<ProfilePageProvider>(context,listen: true);
+
+    return Column(
+      children: [
+         customTextField('Explain briefly the issue that you are facing.',
+         controller: _issueController),
+
+         SizedBox(height: 2.h,),
+        Row(
+          children: [
+           
+             Expanded(
+               child: CustomButton(onPressed: (){
+                      profilePageProvider.setProfilePage(ProfilePages.createticket);
+               
+                       }
+                       , text: 'Back',color: cancelButton,size: 15.sp,),
+             ),
+             SizedBox(width: 5.w),
+         Expanded(
+           child: CustomButton(onPressed: (){
+                     addBugorFeedbackReport(_issueController.text, "", "Submitted", "Feedback/Bug");
+           
+                   }
+                   , text: 'Create',
+                   size: 15.sp,
+                   rightAssetValue: 'assets/nextIcon.png'),
+         ),
+          ],
+        ),
+        SizedBox(height: 3.h,),
+       
+      ],
+    );
   }
 }

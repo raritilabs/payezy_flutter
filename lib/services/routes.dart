@@ -13,3 +13,4 @@ const verifyEmail='/verifyemail';
 const homePage='/homepage';
 //profile page routes
 const helpAndSupport='/helpandsupport';
+const reviewPage='/reviewpage';

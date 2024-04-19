@@ -66,7 +66,7 @@ class _LoginState extends State<LoginPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       //email field
-                      customTextField(email, '',
+                      customTextField(email,
                           controller: _email,
                           readOnly: true,
                           //  onChanged: (value) => emailProvider.(value),
@@ -74,7 +74,7 @@ class _LoginState extends State<LoginPage> {
                       SizedBox(
                         height: 1.h,
                       ),
-                      customTextField(password, '',
+                      customTextField(password,
                           controller: _password,
                           //   onChanged: (value) => emailProvider.setPassword(value),
                           readOnly: false, //readonly value

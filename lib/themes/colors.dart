@@ -32,3 +32,7 @@ const lightGrey = Color.fromRGBO(165, 162, 184, 1);
 
 //Transfers
 const yellow=Color.fromRGBO(249,185,89,1);
+
+//radiobutton
+const radiobuttongradientcolorone=Color.fromRGBO(56, 230, 236, 0.2);
+const radiobuttongradientcolortwo=Color.fromRGBO(51, 236, 205, 0.2);

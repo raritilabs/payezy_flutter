@@ -1,7 +1,6 @@
 import 'dart:developer' show log;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 
 void addData(String ifsc, String accountNumber, String email, String fullName, String nickName, String phoneNumber) async {
   // Reference to the 'userData' collection

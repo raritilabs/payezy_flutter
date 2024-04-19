@@ -329,7 +329,7 @@ Widget details(String title,
 }) {
   return Padding(
     padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 1.5.h),
-    child: customTextField(title, '',
+    child: customTextField(title,
         controller: controller, onChanged: onChanged,
         inputFormatters:inputFormatters,
         textInputType: textInputType,

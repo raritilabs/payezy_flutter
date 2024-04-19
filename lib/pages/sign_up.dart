@@ -64,7 +64,7 @@ class _SignUpState extends State<SignUp> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        customTextField('Full Name', '',
+                        customTextField('Full Name',
                             controller: _name,
                             label: emailProvider.email,
                             readOnly: false,
@@ -77,7 +77,7 @@ class _SignUpState extends State<SignUp> {
                           height: 3.h,
                         ),
                         //email field
-                        customTextField(email, '',
+                        customTextField(email,
                             controller: _email,
                             label: emailProvider.email,
                             readOnly: false,
@@ -89,7 +89,7 @@ class _SignUpState extends State<SignUp> {
                         SizedBox(
                           height: 3.h,
                         ),
-                        customTextField(password, '',
+                        customTextField(password,
                             controller: _password, enableSuggestions: false,
                             onFieldSubmitted: (value) {
                           emailProvider.setPassword(value);
@@ -101,7 +101,7 @@ class _SignUpState extends State<SignUp> {
                         SizedBox(
                           height: 3.h,
                         ),
-                        customTextField('Confirm Password', '',
+                        customTextField('Confirm Password',
                             controller: _confirmPassword,
                             onFieldSubmitted: (value) {
                           emailProvider.setConfirmPassword(value);

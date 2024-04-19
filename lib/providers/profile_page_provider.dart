@@ -2,8 +2,14 @@ import 'package:flutter/material.dart';
 
 enum ProfilePages{
   createticket,
-  exploredocs,
+  failedtransaction,
   helpandsupport,
+  feedbackorbug
+}
+
+enum ChooseButton{
+  failedtransaction,
+  feedbackorbug
 }
 
 class ProfilePageProvider with ChangeNotifier {
@@ -20,4 +26,13 @@ class ProfilePageProvider with ChangeNotifier {
     notifyListeners();
   }
   
+  //radio button selection
+   ChooseButton _chooseButton=ChooseButton.failedtransaction;
+   ChooseButton get chooseButton=>_chooseButton;
+
+  void setChooseButton(ChooseButton chooseButton)
+  {
+    _chooseButton=chooseButton;
+    notifyListeners();
+  }
    }

@@ -22,6 +22,7 @@ import 'package:payezy/providers/get_started_provider.dart';
 import 'package:payezy/providers/login_provider.dart';
 import 'package:payezy/providers/nav_provider.dart';
 import 'package:payezy/providers/profile_page_provider.dart';
+import 'package:payezy/providers/review_and_ratings_provider.dart';
 import 'package:payezy/providers/send_provider.dart';
 import 'package:payezy/services/routes.dart';
 import 'package:provider/provider.dart';
@@ -52,7 +53,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<ApiProvider>(create:(context) => ApiProvider()),
         ChangeNotifierProvider<LoginProvider>(create:(context) => LoginProvider()),
         ChangeNotifierProvider<ErrorProvider>(create:(context) => ErrorProvider()),
-        ChangeNotifierProvider<ProfilePageProvider>(create: (context)=> ProfilePageProvider())
+        ChangeNotifierProvider<ProfilePageProvider>(create: (context)=> ProfilePageProvider()),
+        ChangeNotifierProvider<ReviewAndRatingsProvider>(create: (context)=> ReviewAndRatingsProvider())
 
       ],
     
@@ -76,7 +78,7 @@ return MaterialApp(
           verifyEmail:(context)=>const VerifyEmail(),
           homePage:(context)=>const HomePage(),
           helpAndSupport:(context)=>const HelpAndSupportHomePage(),
-
+          reviewPage:(context)=>const ReviewPage(),
         }
          );
          

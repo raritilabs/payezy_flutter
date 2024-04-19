@@ -4,8 +4,10 @@ import 'package:payezy/themes/colors.dart';
 import 'package:payezy/themes/fonts.dart';
 import 'package:sizer/sizer.dart';
 
-Widget customTextField(String text, String sideText1,
-    {String? errorTextVal,
+Widget customTextField(String text,
+    {
+      String? sideText1='',
+      String? errorTextVal,
     String? infoText='',
     String? details = '',
     bool? detailsVisible = false,
@@ -94,7 +96,7 @@ Widget customTextField(String text, String sideText1,
                 child: Padding(
                   padding:  EdgeInsets.all(1.h),
                   child: SizedBox(
-                      child: robotoText(sideText1,
+                      child: robotoText(sideText1!,
                           size: 18.sp, color: sideTextcolor)),
                 ),
               )

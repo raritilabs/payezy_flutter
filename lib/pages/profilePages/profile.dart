@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:payezy/components/app_bar.dart';
-import 'package:payezy/components/bottom_nav_bar.dart';
 import 'package:payezy/components/custom_container.dart';
 import 'package:payezy/providers/error_provider.dart';
 import 'package:payezy/providers/get_started_provider.dart';
@@ -23,6 +22,8 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+ 
+
   @override
   Widget build(BuildContext context) {
     final Uri privacyUri=Uri.parse('https://docs.payezy.io/platform/privacy-policy');
@@ -30,7 +31,7 @@ class _ProfileState extends State<Profile> {
         final getStartedProvider=Provider.of<GetStartedProvider>(context,listen: true);
         final loginProvider=Provider.of<LoginProvider>(context,listen: true);
         final errorProvider=Provider.of<ErrorProvider>(context,listen: true);//resets the sign in error
-      
+    
 
     return 
      Scaffold(
@@ -145,6 +146,7 @@ Navigator.pushNamedAndRemoveUntil(context, '/helpandsupport', (route) => false);
                 onPressed:(){
                   launchUrl(privacyUri,
                   mode: LaunchMode.inAppWebView);
+                  
                 },
                 child:metrophobicText('Privacy Policy', size: 16.sp)),
               SizedBox(height: 2.h),
