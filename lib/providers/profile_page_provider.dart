@@ -35,4 +35,12 @@ class ProfilePageProvider with ChangeNotifier {
     _chooseButton=chooseButton;
     notifyListeners();
   }
+
+  String _orderId='';
+  String get orderId=>_orderId;
+
+  void setOrderId(value){
+_orderId=value;
+notifyListeners();
+  }
    }

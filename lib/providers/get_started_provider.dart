@@ -1,6 +1,3 @@
-import 'dart:developer';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -116,13 +113,4 @@ void resetpendingCredentialsError(){
 }
 }
 
-Future<QuerySnapshot> _fetchAccountDetails() async {
-  String? email = FirebaseAuth.instance.currentUser!.email;
-  final querySnapshot = await FirebaseFirestore.instance
-      .collection('userData')
-      .where('email', isEqualTo: email)
-      .get();
-
-  return querySnapshot;
-}
 

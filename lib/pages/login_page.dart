@@ -101,8 +101,10 @@ class _LoginState extends State<LoginPage> {
                                 userCredential.user?.photoURL);
                             // getStartedProvider.setUserCredentials(userCredential);
 
-                            Navigator.of(context).pushNamedAndRemoveUntil(
+                            if(mounted){
+                              Navigator.of(context).pushNamedAndRemoveUntil(
                                 mainScreen, (route) => false);
+                            }
                           } on FirebaseAuthException catch (e) {
                             if (e.code == 'invalid-credential') {
                               errorProvider.setError('Invalid credential');

@@ -185,7 +185,10 @@ Navigator.pushNamedAndRemoveUntil(context, '/helpandsupport', (route) => false);
                FirebaseAuth.instance.signOut();
                 }
                  getStartedProvider.resetUser();     
-              Navigator.of(context).pushNamedAndRemoveUntil(getStartedPage, (route) => false); },
+                 if(mounted){
+                   Navigator.of(context).pushNamedAndRemoveUntil(getStartedPage, (route) => false);
+                 }
+              },
               child: metrophobicText('Log out', size: 16.sp)),
             ],
           )

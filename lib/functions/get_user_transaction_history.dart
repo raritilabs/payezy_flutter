@@ -30,8 +30,6 @@ Future getUserTransactionHistory() async {
     var response = await http.post(Uri.parse(url), headers: headers,body:jsonEncode(transferDetails) );
 
     if (response.statusCode == 200) {
-         // log(response.body);
-   
    return jsonDecode(response.body);
     } else {
       // Handle error response here

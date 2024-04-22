@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:payezy/components/custom_button.dart';
 //custom app bar
@@ -7,8 +9,10 @@ import 'package:payezy/components/custom_radio_button.dart';
 import 'package:payezy/components/text_field.dart';
 import 'package:payezy/functions/ticket_collection_failed_transaction.dart';
 import 'package:payezy/functions/ticket_collection_feedback_or_bug.dart';
-import 'package:payezy/pages/profilePages/profile.dart';
-import 'package:payezy/providers/nav_provider.dart';
+import 'package:payezy/pages/profilePages/create_ticket.dart';
+import 'package:payezy/pages/profilePages/feedback_or_bug.dart';
+import 'package:payezy/pages/transferPages/fetch_data.dart';
+import 'package:payezy/providers/fetch_data_provider.dart';
 import 'package:payezy/providers/profile_page_provider.dart';
 import 'package:payezy/services/routes.dart';
 import 'package:payezy/themes/fonts.dart';
@@ -90,7 +94,6 @@ class _HelpAndSupportState extends State<HelpAndSupport> {
   Widget build(BuildContext context) {
         final Uri exploreDocsUri=Uri.parse('https://docs.payezy.io/');
     final profilePageProvider=Provider.of<ProfilePageProvider>(context,listen: true);
-    final navigationProvider=Provider.of<NavigationProvider>(context,listen: true);
     return Column(
           children: [
             //Create ticket button
@@ -165,79 +168,6 @@ class _HelpAndSupportState extends State<HelpAndSupport> {
 }
  
 
-class CreateTicket extends StatefulWidget {
-  const CreateTicket({super.key});
-
-  @override
-  State<CreateTicket> createState() => _CreateTicketState();
-}
-
-class _CreateTicketState extends State<CreateTicket> {
-  @override
-  Widget build(BuildContext context) {
-        final profilePageProvider=Provider.of<ProfilePageProvider>(context,listen: true);
-
-    return Padding(
-      padding:  EdgeInsets.symmetric(horizontal: 3.w),
-      child: Column(
-        children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: metrophobicText("Issue type",color: greyFontThemeColor,size: 18.sp)),
-            SizedBox(height: 2.h,),
-          Row(
-            children: [
-               CustomRadioButton(radiobuttontext: 'Failed Transaction',
-               gradientcolorone:profilePageProvider.chooseButton==ChooseButton.failedtransaction?radiobuttongradientcolorone:Colors.transparent,
-               gradientcolortwo:profilePageProvider.chooseButton==ChooseButton.failedtransaction?radiobuttongradientcolortwo:Colors.transparent,
-              bulletcolor: profilePageProvider.chooseButton==ChooseButton.failedtransaction?lightBlueThemeColor:Colors.transparent,
-              onTap: (){
-                profilePageProvider.setChooseButton(ChooseButton.failedtransaction);
-              },
-              ),
-              SizedBox(width: 5.w,),
-               CustomRadioButton(radiobuttontext: 'Feedback/Bug',
-               gradientcolorone:profilePageProvider.chooseButton==ChooseButton.feedbackorbug?radiobuttongradientcolorone:Colors.transparent,
-               gradientcolortwo:profilePageProvider.chooseButton==ChooseButton.feedbackorbug?radiobuttongradientcolortwo:Colors.transparent,
-              bulletcolor: profilePageProvider.chooseButton==ChooseButton.feedbackorbug?lightBlueThemeColor:Colors.transparent,
-              onTap: (){
-               profilePageProvider.setChooseButton(ChooseButton.feedbackorbug);
-
-              },),
-            ],
-          ) , 
-          SizedBox(height: 5.h,),
-          Row(
-            children: [
-              SizedBox(width: 28.w,),
-              CustomButton(onPressed: (){
-            profilePageProvider.setProfilePage(ProfilePages.helpandsupport);
-
-              }, text: 'Cancel',size: 15.sp,color: lightBlueThemeColor,),
-              SizedBox(width: 3.w,),
-              CustomButton(onPressed: 
-              (){
-                //if selected button is failed transaction, then navigate accordingly
-                if(profilePageProvider.chooseButton==ChooseButton.failedtransaction){
-              profilePageProvider.setProfilePage(ProfilePages.failedtransaction);
-                }
-                else{
-          profilePageProvider.setProfilePage(ProfilePages.feedbackorbug);
-
-                }
-              }
-              , text: 'Proceed',color: lightBlueThemeColor,
-              size: 15.sp,
-             
-                       ),
-            ],
-          ),
-          SizedBox(height: 2.h,),
-        ],
-      ),
-    );
-  }
-}
 
 class FailedTransaction extends StatefulWidget {
   const FailedTransaction({super.key});
@@ -265,10 +195,13 @@ _messageController.dispose();
   @override
   Widget build(BuildContext context) {
     final profilePageProvider=Provider.of<ProfilePageProvider>(context,listen: true);
+    final fetchDataProvider=Provider.of<FetchDataProvider>(context,listen: true);
+
     return Column(
       children: [
         customTextField('OrderID',
-        controller: _orderIdController
+        controller: _orderIdController,
+        label: profilePageProvider.orderId
         ),
         SizedBox(height: 2.h,),
         customTextField('Message',
@@ -280,7 +213,9 @@ _messageController.dispose();
           children: [
             Expanded(
               child: CustomButton(onPressed: (){
-                profilePageProvider.setProfilePage(ProfilePages.createticket);
+                // profilePageProvider.setProfilePage(ProfilePages.createticket);
+               fetchDataProvider.setTransferPage(TransferPages.transferhistory);
+              
               }, text: 'Back',color: lightBlueThemeColor,size: 15.sp,),
             ),
             SizedBox(width: 5.w,),
@@ -300,64 +235,3 @@ _messageController.dispose();
   }
 }
 
-class FeedbackOrBug extends StatefulWidget {
-  const FeedbackOrBug({super.key});
-
-  @override
-  State<FeedbackOrBug> createState() => _FeedbackOrBugState();
-}
-
-class _FeedbackOrBugState extends State<FeedbackOrBug> {
-  late final TextEditingController _issueController;
-
-
-@override
-  void initState() {
-     _issueController=TextEditingController();
-    super.initState();
-  }
-@override
-  void dispose() {
-_issueController.dispose();
-    super.dispose();
-  }
-
-
-  @override
-  Widget build(BuildContext context) {
-        final profilePageProvider=Provider.of<ProfilePageProvider>(context,listen: true);
-
-    return Column(
-      children: [
-         customTextField('Explain briefly the issue that you are facing.',
-         controller: _issueController),
-
-         SizedBox(height: 2.h,),
-        Row(
-          children: [
-           
-             Expanded(
-               child: CustomButton(onPressed: (){
-                      profilePageProvider.setProfilePage(ProfilePages.createticket);
-               
-                       }
-                       , text: 'Back',color: cancelButton,size: 15.sp,),
-             ),
-             SizedBox(width: 5.w),
-         Expanded(
-           child: CustomButton(onPressed: (){
-                     addBugorFeedbackReport(_issueController.text, "", "Submitted", "Feedback/Bug");
-           
-                   }
-                   , text: 'Create',
-                   size: 15.sp,
-                   rightAssetValue: 'assets/nextIcon.png'),
-         ),
-          ],
-        ),
-        SizedBox(height: 3.h,),
-       
-      ],
-    );
-  }
-}

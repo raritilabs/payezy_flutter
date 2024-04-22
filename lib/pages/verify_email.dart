@@ -38,8 +38,11 @@ class _VerifyEmailState extends State<VerifyEmail> {
                           children: [
                             Expanded(
                               child: CustomButton(onPressed: ()async{
+                                if(mounted){
+                             Navigator.of(context).pushNamedAndRemoveUntil(getStartedPage, (route) => false);
+
+                                }
                                 await FirebaseAuth.instance.signOut();
-                                Navigator.of(context).pushNamedAndRemoveUntil(getStartedPage, (route) => false);
                               }, text:"Back",size: 9.sp,),
                             ),
                             SizedBox(width: 2.w,),

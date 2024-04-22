@@ -19,7 +19,7 @@ class Cybrid extends StatelessWidget {
       backgroundColor: mainBackgroundColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        iconTheme: IconThemeData(color: white),
+        iconTheme: const IconThemeData(color: white),
 title: metrophobicText('Cybrid',size: 20.sp),
       ),
       body: 
@@ -63,42 +63,42 @@ super.dispose();
     return Scaffold(
       backgroundColor: mainBackgroundColor,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.transparent,
-        iconTheme: IconThemeData(color: white),
+        iconTheme: const IconThemeData(color: white),
       ),
       body: Padding(
         padding:  EdgeInsets.symmetric(horizontal: 5.w),
-        child: Container(
-          child: Column(
-            children: [
-              SizedBox(height: 15.h,),
-              metrophobicText(
-        "Transaction complete! Happy with our service? Leave a review!",size: 12.sp),
-        SizedBox(height: 5.h,),
-        Center(
-          child: RatingBar.builder(
-            initialRating: 3,
-            minRating: 1,
-            direction: Axis.horizontal,
-            allowHalfRating: true,
-            itemCount: 5,
-            itemPadding: EdgeInsets.symmetric(horizontal: 2.w),
-            itemBuilder: (context,_)=>Icon(Icons.star_outlined,color: yellow,), onRatingUpdate: (rating){
-            reviewAndRatingProvider.setRating(rating.toString());
-            }),
-          
-        ),
-        SizedBox(height: 3.h,),
-        customTextField('Your feedback',
-        controller: _feedbackController),
-        SizedBox(height: 3.h,),        
-        CustomButton(onPressed: (){
-          reviewAndRatingProvider.setReview(_feedbackController.text);
-          addReview(_feedbackController.text, reviewAndRatingProvider.ratings);
-          Navigator.of(context).pushNamed('/transfer');
-        }, text: "Submit",size: 15.sp,),
-        ],
-          ),
+        child: Column(
+          children: [
+            SizedBox(height: 15.h,),
+            metrophobicText(
+                "Tell us about your experience using our app. We are hungry for improvements.",size: 12.sp,textAlign: TextAlign.justify),
+                SizedBox(height: 5.h,),
+                Center(
+        child: RatingBar.builder(
+          initialRating: 5,
+          minRating: 1,
+          direction: Axis.horizontal,
+          allowHalfRating: true,
+          itemCount: 5,
+          itemPadding: EdgeInsets.symmetric(horizontal: 2.w),
+          itemBuilder: (context,_)=>const Icon(Icons.star_outlined,color: yellow,), onRatingUpdate: (rating){
+          reviewAndRatingProvider.setRating(rating.toString());
+          }),
+        
+                ),
+                SizedBox(height: 3.h,),
+                customTextField('Your feedback',
+                controller: _feedbackController),
+                SizedBox(height: 3.h,),        
+                CustomButton(onPressed: (){
+                  
+        reviewAndRatingProvider.setReview(_feedbackController.text);
+        addReview(_feedbackController.text, reviewAndRatingProvider.ratings);
+        Navigator.of(context).pushNamed('/transfer');
+                }, text: "Submit",size: 15.sp,),
+                ],
         ),
       ),
     );

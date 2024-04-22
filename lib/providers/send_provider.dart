@@ -115,10 +115,15 @@ _cardTransferCharge=(_youSend*0.04);
 _cardAmountExchanged=_youSend-_cardTransferCharge;
 _youReceiveCard=(_cardAmountExchanged*_exchangeRate).truncateToDecimalPlaces(2);
 _effectiveMidMarketRateCard=(_youReceiveCard/_youSend).truncateToDecimalPlaces(2); 
-_expanded=true;
 notifyListeners();
 }
-  
+
+//set expanded 
+//
+void setExpanded(bool value){
+  _expanded=value;
+  notifyListeners();
+}  
   void setnoValueValidationMessage(){
     _noValueValidationMessage=true;
     notifyListeners();
@@ -140,6 +145,5 @@ notifyListeners();
     _currentTime=time;
     notifyListeners;
     
-    print("current time is $_currentTime");
   }
    }

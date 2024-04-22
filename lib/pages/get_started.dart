@@ -138,8 +138,10 @@ class _GetStartedState extends State<GetStarted> {
                               '',
                               );
 //navigating to main page after sign in                              
+                          if(mounted){  
                           Navigator.of(context).pushNamedAndRemoveUntil(
                               mainScreen, (route) => false);}
+                        }
 //on firebaseexception
                         } on FirebaseAuthException catch (e) {
 //exception handling                
@@ -228,8 +230,10 @@ class _GetStartedState extends State<GetStarted> {
                                 );
                   
                             getStartedProvider.setUserCredentials(user);
-                            Navigator.of(context).pushNamedAndRemoveUntil(
+                            if(mounted){
+                              Navigator.of(context).pushNamedAndRemoveUntil(
                                 mainScreen, (route) => false);
+                            }
                           } on FirebaseAuthException catch (e) {
                   //exception handling                
                         if (e.code ==
@@ -283,8 +287,10 @@ class _GetStartedState extends State<GetStarted> {
                               userCredential.user?.displayName.toString(),
                               userCredential.user?.email.toString(),
                               userCredential.user?.photoURL);
-                          Navigator.of(context).pushNamedAndRemoveUntil(
+                        if(mounted){
+                            Navigator.of(context).pushNamedAndRemoveUntil(
                               mainScreen, (route) => false);
+                        }
                           getStartedProvider.setUserCredentials(userCredential);
                         } on FirebaseAuthException catch (e) {
 //exception handling                

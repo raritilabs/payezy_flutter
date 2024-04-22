@@ -65,6 +65,22 @@ String get city=>_city;
 String _bank='';
 String get bank=>_bank;
 
+bool _nickNameAvailable=false;
+bool get nickNameAvailable=>_nickNameAvailable;
+
+
+void setDetails(value){
+  _nickNameAvailable=value;
+  notifyListeners();
+}
+
+bool _expansionTileExpanded=false;
+bool get expansionTileExpanded=>_expansionTileExpanded;
+
+void setExpansionTileExpanded(value){
+_expansionTileExpanded=value;
+notifyListeners();
+}
 void setfName(String value){
   _fnameValidationMessage=false;
   _fName = value;

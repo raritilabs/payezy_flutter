@@ -79,6 +79,7 @@ return MaterialApp(
           homePage:(context)=>const HomePage(),
           helpAndSupport:(context)=>const HelpAndSupportHomePage(),
           reviewPage:(context)=>const ReviewPage(),
+          failedTransaction:(context)=>const FailedTransaction(),
         }
          );
          

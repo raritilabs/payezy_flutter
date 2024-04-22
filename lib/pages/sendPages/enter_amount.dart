@@ -62,6 +62,7 @@ class _EnterAmountState extends State<EnterAmount> {
 
   @override
   Widget build(BuildContext context) {
+    
     final sendPageProvider =
         Provider.of<SendPageProvider>(context, listen: true);
 
@@ -162,10 +163,11 @@ class _EnterAmountState extends State<EnterAmount> {
               ],
               controller: _youSend,
               sidetextVisibility: true,
-              onChanged: (value) {
+              onChanged: (youSendValue) {
+              
                 sendPageProvider.setExchangeRate(exchangeRate);
                 //setting the value of sendAmt in SendPageProvider
-                sendPageProvider.setSendAmount(value ?? 0);
+                sendPageProvider.setSendAmount(youSendValue ?? 0);
               },
               textInputType:
                   const TextInputType.numberWithOptions(decimal: true),
@@ -207,11 +209,10 @@ class _EnterAmountState extends State<EnterAmount> {
             sideText1: 'INR',
             sidetextVisibility: true,
             //if in expanded view, check card/bank and show the details accordingly
-            label: sendPageProvider.expanded
-                ? sendPageProvider.bankIsSelected
+            label:sendPageProvider.bankIsSelected
                     ? sendPageProvider.youReceiveBank.toString()
-                    : sendPageProvider.youReceiveCard.toString()
-                : '00.00',
+                    : sendPageProvider.youReceiveCard.toString(),
+                
             sideTextcolor:
                 sendPageProvider.expanded ? white : greyFontThemeColor,
             color: sendPageProvider.expanded ? white : greyFontThemeColor,
@@ -227,6 +228,20 @@ class _EnterAmountState extends State<EnterAmount> {
                 : '',
             color: Colors.red,
             size: 11.sp),
+       
+        Visibility(
+          visible: sendPageProvider.youSend!=0?true:false,
+          child: ExpansionTile(title:metrophobicText('Transaction Summary',size: 12.sp),
+            initiallyExpanded: sendPageProvider.expanded,
+            iconColor: lightBlueThemeColor,
+            collapsedIconColor: lightBlueThemeColor,
+                onExpansionChanged: (bool value){
+          sendPageProvider.setExpanded(value);
+                } 
+          
+          
+          ),
+        ),
 
         Visibility(
             visible: sendPageProvider.expanded,
@@ -268,6 +283,9 @@ class _EnterAmountState extends State<EnterAmount> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          SizedBox(
+            height: 1.h,
+          ),
           metrophobicText('Charges Breakdown', color: lightGrey, size: 10.sp),
           SizedBox(
             height: 0.5.h,
@@ -380,6 +398,9 @@ class _EnterAmountState extends State<EnterAmount> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+           SizedBox(
+            height: 5.h,
+          ),
           metrophobicText('Charges Breakdown', color: lightGrey, size: 10.sp),
           SizedBox(
             height: 0.5.h,

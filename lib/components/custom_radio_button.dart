@@ -37,7 +37,7 @@ class CustomRadioButton extends StatelessWidget {
                       colors: [
                           gradientcolorone,gradientcolortwo
                           ],
-                          stops: [0.0598,0.8582]),
+                          stops: const [0.0598,0.8582]),
                     borderRadius: BorderRadius.circular(5),
                     border: Border.all(color: lightBlueThemeColor)
                     

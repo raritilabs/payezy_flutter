@@ -14,3 +14,4 @@ const homePage='/homepage';
 //profile page routes
 const helpAndSupport='/helpandsupport';
 const reviewPage='/reviewpage';
+const failedTransaction='/failedtransaction';
