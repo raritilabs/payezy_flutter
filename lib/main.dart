@@ -12,7 +12,6 @@ import 'package:payezy/pages/sendPages/send_page.dart';
 import 'package:payezy/pages/sign_up.dart';
 import 'package:payezy/pages/splash_screen.dart';
 import 'package:payezy/pages/transferPages/fetch_data.dart';
-import 'package:payezy/pages/delete/transfer.dart';
 import 'package:payezy/pages/verify_email.dart';
 import 'package:payezy/providers/error_provider.dart';
 import 'package:payezy/providers/ifsc_validator.dart';
@@ -71,11 +70,12 @@ return MaterialApp(
           signupPage:(context)=>const SignUp(),
           getStartedPage:(context)=>const GetStarted(),
           profile:(context)=>const Profile(),
-          transfer:(context)=>const TransferPage(),
+          transfer:(context)=>const FetchData(),
           fetchData:(context)=>const FetchData(),
           loginPage:(context)=>const LoginPage(),
           mainScreen:(context)=>const MainScreen(),
           verifyEmail:(context)=>const VerifyEmail(),
+          transferHistory:(context)=>const TransferHistory(),
           homePage:(context)=>const HomePage(),
           helpAndSupport:(context)=>const HelpAndSupportHomePage(),
           reviewPage:(context)=>const ReviewPage(),

@@ -134,7 +134,12 @@ Padding(
                   controller: _nickName,
                   textInputType: TextInputType.name,
                   inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[a-zA-Z\\s]'))],//regexp to only allow letters
-                  onChanged: (value) => enterDetailsProvider.setnickName(value)), //saving the name to provider
+                  onChanged: (value) {
+                    if(enterDetailsProvider.nickNameAvailable){
+                      enterDetailsProvider.setnickName(snapshot.data!.docs[0]['nickName']);
+                    }
+                  enterDetailsProvider.setnickName(value);
+                  } ), //saving the name to provider
               textfieldWithPadding(fullname,
               label: enterDetailsProvider.nickNameAvailable==true?(snapshot.data!.docs[0]['fullName']):
               '',
@@ -148,7 +153,9 @@ Padding(
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               textInputType:TextInputType.phone,
               controller: _phone, onChanged: (value) {
-                
+                if(enterDetailsProvider.nickNameAvailable){
+               enterDetailsProvider.setPhone(snapshot.data!.docs[0]['phoneNumber']);
+                }
                     enterDetailsProvider.setPhone(int.tryParse(value)??0);
                  
               }),
@@ -156,10 +163,12 @@ Padding(
                label: enterDetailsProvider.nickNameAvailable==true?(snapshot.data!.docs[0]['email']):
               '',
               textInputType:TextInputType.emailAddress,
-              controller: _email, onChanged: (value) {
-                
-                    enterDetailsProvider.setEmail(value);
-                 
+              controller: _email, onChanged: (value) { 
+                if(enterDetailsProvider.nickNameAvailable){
+                 enterDetailsProvider.setEmail(snapshot.data!.docs[0]['email']); 
+
+                }
+              enterDetailsProvider.setEmail(value); 
               }),
               textfieldWithPadding(bankaccnum,
                label: enterDetailsProvider.nickNameAvailable==true?(snapshot.data!.docs[0]['accountNumber']):
@@ -168,7 +177,7 @@ Padding(
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                controller: _bAccountNumber, onChanged: (value) {
                                enterDetailsProvider.setBankAccNum(int.tryParse(value)??0);
-        
+                       
               }),
               textfieldWithPadding(confirmacc, 
        label: enterDetailsProvider.nickNameAvailable==true?(snapshot.data!.docs[0]['accountNumber'].toString()):
@@ -264,9 +273,15 @@ Padding(
                 child: CustomButton(
                   onPressed: ()  {
                      enterDetailsProvider.setValidationMessage(ValidationMessage.initial);
-                    // if(enterDetailsProvider.nickNameAvailable){
 
-                    // } 
+                     if(enterDetailsProvider.nickNameAvailable){
+                  enterDetailsProvider.setnickName(snapshot.data!.docs[0]['nickName']);
+                  enterDetailsProvider.setfName(snapshot.data!.docs[0]['fullName']);
+               enterDetailsProvider.setPhone(int.tryParse(snapshot.data!.docs[0]['phoneNumber'])??0);
+                  enterDetailsProvider.setEmail(snapshot.data!.docs[0]['email']);
+                  enterDetailsProvider.setBankAccNum((int.tryParse(snapshot.data!.docs[0]['accountNumber'])??0));
+                  enterDetailsProvider.setconfirmAcc((int.tryParse(snapshot.data!.docs[0]['accountNumber'])??0));
+                     } 
                    //checking if nick name is not empty
                    if (enterDetailsProvider.nickName.isEmpty) {
                       enterDetailsProvider.setValidationMessage(ValidationMessage.nicknameVM);
@@ -330,7 +345,9 @@ Padding(
                                           child: CustomButton(
                                               onPressed: () {
                                                 //add data to firestore database
-                                                addData(
+                                            if(!enterDetailsProvider.nickNameAvailable){
+                                              addData(
+                                            
                                                   enterDetailsProvider.iFSC.toString(),
                                                  enterDetailsProvider.bAccountNumber.toString(),
                                                  enterDetailsProvider.email.toString(),
@@ -338,8 +355,8 @@ Padding(
                                                   enterDetailsProvider.nickName,
                                                   enterDetailsProvider.phone.toString(),
                                                 );
-        
-                                               String formattedTime = DateUtilsFunction.formatEpochTime(epochTime);
+                                            }
+                                              String formattedTime = DateUtilsFunction.formatEpochTime(epochTime);
                                                sendPageProvider.setCurrentTime(formattedTime); 
                                               String email=FirebaseAuth.instance.currentUser!.email.toString();
                                                addTransactionDetails(sendPageProvider.youSend.toString(), 

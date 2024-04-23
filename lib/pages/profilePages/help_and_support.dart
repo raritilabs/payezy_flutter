@@ -1,20 +1,15 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:payezy/components/custom_button.dart';
 //custom app bar
 import 'package:payezy/components/custom_container.dart'; // custom main body card
 import 'package:payezy/components/custom_line.dart';
-import 'package:payezy/components/custom_radio_button.dart';
 import 'package:payezy/components/text_field.dart';
 import 'package:payezy/functions/ticket_collection_failed_transaction.dart';
-import 'package:payezy/functions/ticket_collection_feedback_or_bug.dart';
 import 'package:payezy/pages/profilePages/create_ticket.dart';
 import 'package:payezy/pages/profilePages/feedback_or_bug.dart';
-import 'package:payezy/pages/transferPages/fetch_data.dart';
 import 'package:payezy/providers/fetch_data_provider.dart';
 import 'package:payezy/providers/profile_page_provider.dart';
-import 'package:payezy/services/routes.dart';
 import 'package:payezy/themes/fonts.dart';
 import 'package:payezy/themes/string_constants.dart';
 import 'package:provider/provider.dart';

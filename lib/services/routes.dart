@@ -6,6 +6,7 @@ const signupPage = '/signup';
 const getStartedPage='/getstarted';
 const profile='/profile';
 const transfer='/transfer';
+const transferHistory='/transferhistory';
 const fetchData='/fetchData';
 const loginPage='/login';
 const mainScreen='/mainscreen';

@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:payezy/components/app_bar.dart';
-import 'package:payezy/components/custom_button.dart';
 import 'package:payezy/components/custom_container.dart';
 import 'package:payezy/components/custom_line.dart';
 import 'package:payezy/functions/format_epoch_time.dart';
@@ -42,8 +41,8 @@ class _FetchDataState extends State<FetchData> {
             ),
             child: switch(fetchDataProvider.transferPage){
                 
-              TransferPages.transferhistory => TransferHistory(),
-              TransferPages.transferissue => FailedTransaction(),
+              TransferPages.transferhistory => const TransferHistory(),
+              TransferPages.transferissue => const FailedTransaction(),
             }));
 
 }
