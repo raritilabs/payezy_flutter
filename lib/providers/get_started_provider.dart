@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -33,8 +35,8 @@ UserCredential get userCredentials=>_userCredentials;
 final String _type='';
 String get type=>_type;
 
-String _pendingCredential='';
-String get pendingCredential=>_pendingCredential;
+late AuthCredential _pendingCredential;
+AuthCredential get pendingCredential=>_pendingCredential;
 
 //pending credential email
 String _pendingCredentialEmail='';
@@ -107,7 +109,7 @@ void setPendingCredentials(value){
   }
 
 void resetpendingCredentialsError(){
-  _pendingCredential='';
+  _pendingCredential;
   _pendingCredentialEmail='';
   _pendingCredentialError=false;
 }

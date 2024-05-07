@@ -3,6 +3,9 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:payezy/pages/home_page.dart';
 import 'package:payezy/pages/login_page.dart';
 import 'package:payezy/pages/main_screen.dart';
+import 'package:payezy/pages/profilePages/create_ticket.dart';
+import 'package:payezy/pages/profilePages/failed_transaction.dart';
+import 'package:payezy/pages/profilePages/feedback_or_bug.dart';
 import 'package:payezy/pages/profilePages/help_and_support.dart';
 import 'package:payezy/pages/profilePages/profile.dart';
 import 'package:payezy/pages/sendPages/cybrid.dart';
@@ -70,7 +73,6 @@ return MaterialApp(
           signupPage:(context)=>const SignUp(),
           getStartedPage:(context)=>const GetStarted(),
           profile:(context)=>const Profile(),
-          transfer:(context)=>const FetchData(),
           fetchData:(context)=>const FetchData(),
           loginPage:(context)=>const LoginPage(),
           mainScreen:(context)=>const MainScreen(),
@@ -80,6 +82,8 @@ return MaterialApp(
           helpAndSupport:(context)=>const HelpAndSupportHomePage(),
           reviewPage:(context)=>const ReviewPage(),
           failedTransaction:(context)=>const FailedTransaction(),
+          createTicket:(context)=>const CreateTicket(),
+          feedbackOrBug:(context)=>const FeedbackOrBug(),
         }
          );
          

@@ -132,7 +132,7 @@ class _ProfileState extends State<Profile> {
                      padding: const MaterialStatePropertyAll(EdgeInsets.all(0)),
                 ),
                 onPressed: (){
-Navigator.pushNamedAndRemoveUntil(context, '/helpandsupport', (route) => false);
+Navigator.pushNamed(context, '/helpandsupport');
                 },
                 child: metrophobicText('Support', size: 16.sp)),
               SizedBox(height: 2.h),

@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:payezy/components/custom_button.dart';
@@ -26,6 +27,7 @@ class _EnterAmountState extends State<EnterAmount> {
   double maxAllowed = 2000; //to store the inr treasury balance
   double exchangeRate = 0; //initialising
   double maximumAllowed = 0; //initialising
+ // static const Channel =MethodChannel('com.cybrid.payezy');
 
   @override
   void initState() {
@@ -254,15 +256,15 @@ class _EnterAmountState extends State<EnterAmount> {
               EdgeInsets.only(bottom: 2.h, top: 4.h, left: 5.w, right: 5.w),
           child: CustomButton(
             onPressed: () {
+             // _openCybrid();
               if (sendPageProvider.youSend == 0.0) {
                 sendPageProvider.setnoValueValidationMessage(); //notifies no value is types
               } else if (sendPageProvider.youSend > maxLimit) {
                 sendPageProvider.setmaxValueValidationMessage(); // notifies maximum limit has reached
               } else {
-                sendPageProvider.setSendPage(SendPages.enterDetails);
-                      
-
+                sendPageProvider.setSendPage(SendPages.enterDetails);                  
               }
+              
             },
             text: proceed,
             size: 17.sp,
@@ -273,6 +275,13 @@ class _EnterAmountState extends State<EnterAmount> {
       ],
     );
   }
+
+  
+// Future<void> _openCybrid() async{
+//  await Channel.invokeMethod('opencybrid', <String,String>{
+//     'msg':'This is a toast'
+//   });
+// }
 
   Widget bankTransfer() {
     final sendPageProvider =

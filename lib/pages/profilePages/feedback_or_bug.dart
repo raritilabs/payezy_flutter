@@ -34,37 +34,39 @@ _issueController.dispose();
   Widget build(BuildContext context) {
         final profilePageProvider=Provider.of<ProfilePageProvider>(context,listen: true);
 
-    return Column(
-      children: [
-         customTextField('Explain briefly the issue that you are facing.',
-         controller: _issueController),
-
-         SizedBox(height: 2.h,),
-        Row(
-          children: [
-           
-             Expanded(
-               child: CustomButton(onPressed: (){
-                      profilePageProvider.setProfilePage(ProfilePages.createticket);
-               
-                       }
-                       , text: 'Back',color: cancelButton,size: 15.sp,),
-             ),
-             SizedBox(width: 5.w),
-         Expanded(
-           child: CustomButton(onPressed: (){
-                     addBugorFeedbackReport(_issueController.text, "", "Submitted", "Feedback/Bug");
-           
-                   }
-                   , text: 'Create',
-                   size: 15.sp,
-                   rightAssetValue: 'assets/nextIcon.png'),
-         ),
-          ],
-        ),
-        SizedBox(height: 3.h,),
-       
-      ],
+    return Scaffold(
+      body: Column(
+        children: [
+           customTextField('Explain briefly the issue that you are facing.',
+           controller: _issueController),
+      
+           SizedBox(height: 2.h,),
+          Row(
+            children: [
+             
+               Expanded(
+                 child: CustomButton(onPressed: (){
+                        profilePageProvider.setProfilePage(ProfilePages.createticket);
+                 
+                         }
+                         , text: 'Back',color: cancelButton,size: 15.sp,),
+               ),
+               SizedBox(width: 5.w),
+           Expanded(
+             child: CustomButton(onPressed: (){
+                       addBugorFeedbackReport(_issueController.text, "", "Submitted", "Feedback/Bug");
+             
+                     }
+                     , text: 'Create',
+                     size: 15.sp,
+                     rightAssetValue: 'assets/nextIcon.png'),
+           ),
+            ],
+          ),
+          SizedBox(height: 3.h,),
+         
+        ],
+      ),
     );
   }
 }

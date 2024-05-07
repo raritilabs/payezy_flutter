@@ -16,3 +16,5 @@ const homePage='/homepage';
 const helpAndSupport='/helpandsupport';
 const reviewPage='/reviewpage';
 const failedTransaction='/failedtransaction';
+const createTicket='/createticket';
+const feedbackOrBug='/feedbackorbug';

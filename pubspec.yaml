@@ -55,6 +55,7 @@ dependencies:
   url_launcher: ^6.2.6
   flutter_dotenv: ^5.1.0
   flutter_rating_bar: ^4.0.1
+  pigeon: ^18.0.0
   
 dev_dependencies:
   flutter_test:

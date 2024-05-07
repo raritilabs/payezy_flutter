@@ -46,7 +46,7 @@ class _GetStartedState extends State<GetStarted> {
     final getStartedProvider =
         Provider.of<GetStartedProvider>(context, listen: true);
 //calling login provider
-    final loginProvider = Provider.of<LoginProvider>(context, listen: false);
+    final loginProvider = Provider.of<LoginProvider>(context, listen: true);
 //calling error provider to set errors
         final errorProvider = Provider.of<ErrorProvider>(context, listen: true);
 
@@ -114,17 +114,17 @@ class _GetStartedState extends State<GetStarted> {
                                 getStartedProvider.resetpendingCredentialsError();
                               }
                            }
-                           else {
+                            
                              final userCredential = await signInWithGoogle();
                            
 //setting the logintype to google
-                          loginProvider.setLoginType(LoginType.google);
 
+                         // loginProvider.setLoginType(LoginType.google);
                         
 //fetching the display name and email from usercredentials
 //
                           getStartedProvider.setUser(
-                              userCredential.user?.displayName.toString(),
+                              userCredential.user?.displayName.toString(),                            
                               userCredential.user?.email,
                               userCredential.user?.photoURL,);
                              
@@ -141,7 +141,7 @@ class _GetStartedState extends State<GetStarted> {
                           if(mounted){  
                           Navigator.of(context).pushNamedAndRemoveUntil(
                               mainScreen, (route) => false);}
-                        }
+                        
 //on firebaseexception
                         } on FirebaseAuthException catch (e) {
 //exception handling                
@@ -150,47 +150,19 @@ class _GetStartedState extends State<GetStarted> {
                             // The account already exists with a different credential
 //fetch the error-causing email and credential
                            // String? email = e.email;
-                            //uthCredential? pendingCredential = e.credential;
+                            //AuthCredential? pendingCredential = e.credential;
 //logging the error
                             errorProvider.setError('User account exists with a different credential. Please try logging in by using any other provider.');
                             errorProvider.setErrorVisibility();
                             getStartedProvider.setPendingCredentials(e.credential);
+                         //   log(getStartedProvider.pendingCredential.toString());
                             getStartedProvider.setPendingCredentialsEmail(e.email);
+                         //   log(getStartedProvider.pendingCredentialEmail.toString());
                             getStartedProvider.setPendingCredentialsError();
                            
-//querying from firebase for the provider used to sign in with this email         
-                            //  QuerySnapshot query = await FirebaseFirestore
-                            //      .instance
-                            //      .collection('userData')
-                            //      .where("email", isEqualTo: email)
-                            //      .get();
-                            //  if (query.docs.isNotEmpty) {
-                            //    // Get the data from the first document and cast it to Map<String, dynamic>?
-                            //    Map<String, dynamic>? userData = query.docs.first
-                            //        .data() as Map<String, dynamic>?;
-
-                            // //   // Check if userData is not null and email is associated with facebook.com
-                            //    if (userData != null &&
-                            //        userData['providerId'] == 'facebook.com') {
-                            //      final userCredential =
-                            //          await signInWithFacebook();
-                            //      await userCredential!.user
-                            //          ?.linkWithCredential(pendingCredential!);
-                            //      Navigator.of(context).pushNamedAndRemoveUntil(
-                            //          mainScreen, (route) => false);
-                            //    }
-                            //    if (userData != null &&
-                            //        userData['providerId'] == 'twitter.com') {
-                            //      final userCredential = await signInWithTwitter();
-                            //      await userCredential.user
-                            //          ?.linkWithCredential(pendingCredential!);
-                            //      Navigator.of(context).pushNamedAndRemoveUntil(
-                            //          mainScreen, (route) => false);
-                            //   }
-                            // }
                           }
                         } catch (e) {
-                          log(e.toString());
+                        //  log(e.toString());
                           errorProvider.setError('error is $e');
                           errorProvider.setErrorVisibility();
                         }
@@ -205,43 +177,48 @@ class _GetStartedState extends State<GetStarted> {
                     CustomButton(
                         onPressed: () async {
                           try {
-                            loginProvider.setLoginType(LoginType.facebook);
-                            final user = await signInWithFacebook();                  
-                            getStartedProvider.setUser(
-                                user!.user?.displayName.toString(),
-                                user.user?.email.toString(),
-                                user.user?.photoURL);
-
-                               if(getStartedProvider.pendingCredentialError==true){
-                              if(getStartedProvider.email==getStartedProvider.pendingCredentialEmail){
-                                await user.user?.linkWithCredential(getStartedProvider.pendingCredential as AuthCredential);
-                               getStartedProvider.resetpendingCredentialsError(); 
-                              }}
-
-
-                                
-                            addUserData(
-                                'not initialised',
-                                user.user!.email.toString(),
-                                user.user!.displayName.toString(),
-                                '',
-                                '',
-                                '',
-                                );
-                  
-                            getStartedProvider.setUserCredentials(user);
-                            if(mounted){
-                              Navigator.of(context).pushNamedAndRemoveUntil(
-                                mainScreen, (route) => false);
-                            }
-                          } on FirebaseAuthException catch (e) {
+                          //check if there is a 'different account exists' error
+                           if(getStartedProvider.pendingCredentialError==true){
+                                //signing in with google
+                          final userCredential = await signInWithFacebook();
+                          //compare the current email with the stored error email and link if its the same
+                              if(userCredential?.user?.email==getStartedProvider.pendingCredentialEmail){
+                                await userCredential?.user?.linkWithCredential(getStartedProvider.pendingCredential);
+                                getStartedProvider.resetpendingCredentialsError();
+                              }
+                           }
+                            
+                             final userCredential = await signInWithFacebook();
+                           
+                        
+//fetching the display name and email from usercredentials
+//
+                          getStartedProvider.setUser(
+                              userCredential?.user?.displayName.toString(),                            
+                              userCredential?.user?.email,
+                              userCredential?.user?.photoURL,);
+                             
+//adding the user data to firebase
+                          addUserData(
+                              'not initialised',
+                              userCredential!.user!.toString(),
+                              userCredential.user!.displayName.toString(),
+                              '',
+                              '',
+                              '',
+                              );
+//navigating to main page after sign in                              
+                          if(mounted){  
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              mainScreen, (route) => false);}
+                        
+//on firebaseexception
+                        } on FirebaseAuthException catch (e) {
                   //exception handling                
                         if (e.code ==
                             'account-exists-with-different-credential') {
                           // The account already exists with a different credential
                   //fetch the error-causing email and credential
-                        //  String? email = e.email;
-                        //  AuthCredential? pendingCredential = e.credential;
                   //logging the error
                           errorProvider.setError('User account exists with a different credential. Please try logging in by using any other provider.');
                           errorProvider.setErrorVisibility();
@@ -258,40 +235,46 @@ class _GetStartedState extends State<GetStarted> {
                         size: 16.sp,
                         leftAssetValue: 'assets/metaIcon.png'),
                   ),
-
 //X login button
                   spaceBetween(
                     CustomButton(
                       onPressed: () async {
-                      
-                        loginProvider.setLoginType(LoginType.x);
-                            
                         try {
-                          UserCredential userCredential =
-                              await signInWithTwitter();
- if(getStartedProvider.pendingCredentialError==true){
+                          //check if there is a 'different account exists' error
+                           if(getStartedProvider.pendingCredentialError==true){
+                                //signing in with google
+                          final userCredential = await signInWithTwitter();
+                          //compare the current email with the stored error email and link if its the same
                               if(userCredential.user?.email==getStartedProvider.pendingCredentialEmail){
-                                await userCredential.user?.linkWithCredential(getStartedProvider.pendingCredential as AuthCredential);
+                                await userCredential.user?.linkWithCredential(getStartedProvider.pendingCredential);
                                 getStartedProvider.resetpendingCredentialsError();
                               }
- }
+                           }
+                            
+                             final userCredential = await signInWithTwitter();
+                        
+//fetching the display name and email from usercredentials
+//
+                          getStartedProvider.setUser(
+                              userCredential.user?.displayName.toString(),                            
+                              userCredential.user?.email,
+                              userCredential.user?.photoURL,);
+                             
+//adding the user data to firebase
                           addUserData(
                               'not initialised',
-                              userCredential.user!.email.toString(),
+                              userCredential.user!.toString(),
                               userCredential.user!.displayName.toString(),
                               '',
                               '',
                               '',
                               );
-                          getStartedProvider.setUser(
-                              userCredential.user?.displayName.toString(),
-                              userCredential.user?.email.toString(),
-                              userCredential.user?.photoURL);
-                        if(mounted){
-                            Navigator.of(context).pushNamedAndRemoveUntil(
-                              mainScreen, (route) => false);
-                        }
-                          getStartedProvider.setUserCredentials(userCredential);
+//navigating to main page after sign in                              
+                          if(mounted){  
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              mainScreen, (route) => false);}
+                        
+//on firebaseexception
                         } on FirebaseAuthException catch (e) {
 //exception handling                
                           if (e.code ==
@@ -302,15 +285,16 @@ class _GetStartedState extends State<GetStarted> {
                             errorProvider.setError('User account exists with a different credential. Please try logging in by using any other provider.');
                             errorProvider.setErrorVisibility();
 //fetch the error-causing email and credential
+ getStartedProvider.setPendingCredentialsError();
+                            log('value is ${getStartedProvider.pendingCredentialError}');
+                           // AuthCredential? pendingCredential = e.credential;
+                           
+ getStartedProvider.setPendingCredentials(e.credential); 
+                            log('this is ${e.credential}');
                          //String? email = e.email;
                             getStartedProvider.setPendingCredentialsEmail(e.email);
-                           // AuthCredential? pendingCredential = e.credential;
-                            getStartedProvider.setPendingCredentials(e.credential); 
-
-                            getStartedProvider.setPendingCredentialsError();
-
-                            
-                            
+                            log('email is ${e.email}');
+                           
 
 //querying from firebase for the provider used to sign in with this email      
                             }

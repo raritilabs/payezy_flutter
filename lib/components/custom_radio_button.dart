@@ -30,6 +30,7 @@ class CustomRadioButton extends StatelessWidget {
                 onTap: onTap,
                 //main border
                 child: Container(
+                  
                   decoration: BoxDecoration(
                     gradient:  LinearGradient(
                       begin: Alignment.topRight,
@@ -61,7 +62,7 @@ class CustomRadioButton extends StatelessWidget {
                        ),
                           //gap b/w
                           SizedBox(width: 1.h,),
-                        metrophobicText(radiobuttontext,size: 11.sp),
+                        metrophobicText(radiobuttontext,size: 16.sp),
                       ],
                     ),
                   ),

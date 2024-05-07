@@ -6,7 +6,7 @@ import 'package:payezy/components/custom_container.dart';
 import 'package:payezy/components/custom_line.dart';
 import 'package:payezy/functions/format_epoch_time.dart';
 import 'package:payezy/functions/get_user_transaction_history.dart';
-import 'package:payezy/pages/profilePages/help_and_support.dart';
+import 'package:payezy/pages/profilePages/failed_transaction.dart';
 import 'package:payezy/providers/fetch_data_provider.dart';
 import 'package:payezy/providers/profile_page_provider.dart';
 import 'package:payezy/themes/colors.dart';
@@ -32,7 +32,6 @@ class _FetchDataState extends State<FetchData> {
         appBar: const CustomAppBar(
           title: "Transfers",
         ),
-        // bottomNavigationBar: const BottomNavBar(),
         body: Padding(
             padding: EdgeInsets.only(
               top: 2.h,
@@ -40,7 +39,7 @@ class _FetchDataState extends State<FetchData> {
               right: 5.w,
             ),
             child: switch(fetchDataProvider.transferPage){
-                
+               
               TransferPages.transferhistory => const TransferHistory(),
               TransferPages.transferissue => const FailedTransaction(),
             }));
@@ -152,7 +151,8 @@ class _TransferHistoryState extends State<TransferHistory>
                                           padding:  EdgeInsets.symmetric(horizontal: 2.h),
                                           child: Container(
                                             decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),color: transferBodyColor),
-                                            child: Column(children: [
+                                            child: Column(
+                                              children: [
                                               Padding(
                                                 padding: EdgeInsets.symmetric(
                                                     vertical: 3.h, horizontal: 3.w),
