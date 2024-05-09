@@ -6,7 +6,7 @@ String _review='';
 String get review=>_review;
 
 //initialise rating
-String _ratings='';
+String _ratings='5';
 String get ratings=>_ratings;
 
   void setReview(review)

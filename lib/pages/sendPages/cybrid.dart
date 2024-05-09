@@ -93,11 +93,9 @@ super.dispose();
                 controller: _feedbackController),
                 SizedBox(height: 3.h,),        
                 CustomButton(onPressed: (){
-                  
         reviewAndRatingProvider.setReview(_feedbackController.text);
         addReview(_feedbackController.text, reviewAndRatingProvider.ratings);
-Navigator.pushNamed(context, '/transfer');
-
+                  Navigator.pushNamed(context, '/mainscreen');
                 }, text: "Submit",size: 15.sp,),
                 ],
         ),

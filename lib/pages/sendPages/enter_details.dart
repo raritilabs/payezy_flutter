@@ -53,6 +53,10 @@ class _EnterDetailsState extends State<EnterDetails> {
 
   @override
   Widget build(BuildContext context) {
+
+    String selectedNickname = '';
+    
+
     //provider for state management
     final enterDetailsProvider = Provider.of<EnterDetailsProvider>(
       context,listen: true
@@ -63,7 +67,6 @@ class _EnterDetailsState extends State<EnterDetails> {
 
     final ifscApiProvider=Provider.of<ApiProvider>(context,listen: true);
     int epochTime = DateTime.now().millisecondsSinceEpoch; //calculating epochtime
-    
     return FutureBuilder(
       future: _fetchAccountDetails(),
       builder: (context,snapshot) {
@@ -83,6 +86,7 @@ class _EnterDetailsState extends State<EnterDetails> {
               SizedBox(
                 height: 1.h,
               ),
+              //nickname selector
 Padding(
     padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 1.5.h),  
     child: Container(
@@ -95,17 +99,18 @@ Padding(
         padding: EdgeInsets.symmetric(
           horizontal: 0.5.w,
         ),
+        //expansion title 
         child: ExpansionTile(title:metrophobicText('Select a nick name',size: 14.sp,textAlign: TextAlign.left,color: lightBlueThemeColor),
         collapsedIconColor: lightBlueThemeColor,
         iconColor: lightBlueThemeColor,
         initiallyExpanded: enterDetailsProvider.expansionTileExpanded,
         onExpansionChanged: (bool expanded){
           enterDetailsProvider.setExpansionTileExpanded(expanded);
-          
         },
         ),
         ),),
 ),
+//expansion body
           //textfields
               Visibility(
                 visible:enterDetailsProvider.expansionTileExpanded,
@@ -121,57 +126,70 @@ Padding(
                       child: Padding(
                         padding:  EdgeInsets.symmetric(vertical: 2.h,
                         horizontal: 4.w),
-                        child: metrophobicText(snapshot.data!.docs[0]['nickName'],
-                        size: 14.sp,color: greyFontThemeColor),
+                        child: SizedBox(
+                          height: 3.h,
+                          child: ListView.builder(
+                            itemCount: snapshot.data!.docs.length,
+                            itemBuilder: (context,index){
+                                selectedNickname = snapshot.data!.docs[index]['nickName'];
+                                return GestureDetector(
+                              child: metrophobicText(selectedNickname,
+                              size: 14.sp,color: greyFontThemeColor),
+                               onTap: () {
+                                enterDetailsProvider.setIndex(index);
+                               }
+              
+                            );}
+                          ),
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),        
               textfieldWithPadding(nickname,
-              label: enterDetailsProvider.nickNameAvailable==true?(snapshot.data!.docs[0]['nickName']):
+              label: enterDetailsProvider.nickNameAvailable==true?(snapshot.data!.docs[enterDetailsProvider.index]['nickName']):
               '',
                   controller: _nickName,
                   textInputType: TextInputType.name,
                   inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[a-zA-Z\\s]'))],//regexp to only allow letters
                   onChanged: (value) {
+                   
                     if(enterDetailsProvider.nickNameAvailable){
-                      enterDetailsProvider.setnickName(snapshot.data!.docs[0]['nickName']);
+                      enterDetailsProvider.setnickName(snapshot.data!.docs[enterDetailsProvider.index]['nickName']); 
                     }
                   enterDetailsProvider.setnickName(value);
                   } ), //saving the name to provider
               textfieldWithPadding(fullname,
-              label: enterDetailsProvider.nickNameAvailable==true?(snapshot.data!.docs[0]['fullName']):
+              label: enterDetailsProvider.nickNameAvailable==true?(snapshot.data!.docs[enterDetailsProvider.index]['fullName']):
               '',
                   controller: _fName,
                   textInputType: TextInputType.name,
                   inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[a-zA-Z\\s]'))],
-                  onChanged: (value) => enterDetailsProvider.setfName(value)),
+                  onChanged: (value) => enterDetailsProvider.setfName(value)), 
               textfieldWithPadding(phone, 
-              label: enterDetailsProvider.nickNameAvailable==true?(snapshot.data!.docs[0]['phoneNumber']):
+              label: enterDetailsProvider.nickNameAvailable==true?(snapshot.data!.docs[enterDetailsProvider.index]['phoneNumber']):
               '',
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               textInputType:TextInputType.phone,
               controller: _phone, onChanged: (value) {
                 if(enterDetailsProvider.nickNameAvailable){
-               enterDetailsProvider.setPhone(snapshot.data!.docs[0]['phoneNumber']);
+               enterDetailsProvider.setPhone(snapshot.data!.docs[enterDetailsProvider.index]['phoneNumber']);
                 }
                     enterDetailsProvider.setPhone(int.tryParse(value)??0);
-                 
-              }),
+                               }),
                textfieldWithPadding(email, 
-               label: enterDetailsProvider.nickNameAvailable==true?(snapshot.data!.docs[0]['email']):
-              '',
+               label: enterDetailsProvider.nickNameAvailable==true?(snapshot.data!.docs[enterDetailsProvider.index]['email']):
+              '', 
               textInputType:TextInputType.emailAddress,
               controller: _email, onChanged: (value) { 
                 if(enterDetailsProvider.nickNameAvailable){
-                 enterDetailsProvider.setEmail(snapshot.data!.docs[0]['email']); 
-
+                 enterDetailsProvider.setEmail(snapshot.data!.docs[enterDetailsProvider.index]['email']); 
                 }
               enterDetailsProvider.setEmail(value); 
               }),
               textfieldWithPadding(bankaccnum,
-               label: enterDetailsProvider.nickNameAvailable==true?(snapshot.data!.docs[0]['accountNumber']):
+               label: enterDetailsProvider.nickNameAvailable==true?(snapshot.data!.docs[enterDetailsProvider.index]['accountNumber']):
               '',
               textInputType: TextInputType.number,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -180,7 +198,7 @@ Padding(
                        
               }),
               textfieldWithPadding(confirmacc, 
-       label: enterDetailsProvider.nickNameAvailable==true?(snapshot.data!.docs[0]['accountNumber'].toString()):
+       label: enterDetailsProvider.nickNameAvailable==true?(snapshot.data!.docs[enterDetailsProvider.index]['accountNumber'].toString()):
               '',
               obscure: true,
               textInputType: TextInputType.number,
@@ -191,7 +209,7 @@ Padding(
               }),
               textfieldWithPadding(ifsc
               ,
-               label: enterDetailsProvider.nickNameAvailable==true?(snapshot.data!.docs[0]['IFSCCode']):
+               label: enterDetailsProvider.nickNameAvailable==true?(snapshot.data!.docs[enterDetailsProvider.index]['IFSCCode']):
               '',
                   controller: _iFSC,
                   inputFormatters: [UpperCaseTextFormatter()], //converting the typed letter to uppercase

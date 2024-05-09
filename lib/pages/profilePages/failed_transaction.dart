@@ -43,7 +43,7 @@ _messageController.dispose();
       backgroundColor: mainBackgroundColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        automaticallyImplyLeading: true,
+        automaticallyImplyLeading: false,
       ),
       body: 
       Padding(
@@ -82,7 +82,7 @@ _messageController.dispose();
                 children: [
                   Expanded(
                     child: CustomButton(onPressed: (){
-                    Navigator.pushNamed(context, '/helpandsupport',);
+                    Navigator.pushNamed(context, '/createticket',);
 
                     }, text: 'Back',color: lightBlueThemeColor,size: 15.sp,),
                   ),
@@ -93,7 +93,7 @@ _messageController.dispose();
           
                      int epochTime = DateTime.now().millisecondsSinceEpoch;
                       addFailedTransactionTicket(num.parse(epochTime.toString()), _messageController.text, _orderIdController.text, "", "Submitted", "Failed Transaction");
-                   Navigator.popAndPushNamed(context, '/fetchData');
+                   Navigator.popAndPushNamed(context, '/mainscreen');
 
                     }, text: 'Create',color: lightBlueThemeColor,size: 15.sp,rightAssetValue: 'assets/nextIcon.png'),
                   ),

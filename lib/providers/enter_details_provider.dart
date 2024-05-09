@@ -125,40 +125,25 @@ _city=city;
   _bank =bank;
   notifyListeners();
 }
+ int _index = 0;
+ int get index=>_index;
 
-// void setfnameValidationMessage(){
-//     _fnameValidationMessage=true;
-//     notifyListeners();
-//  }
-
-//  void setphoneValidationMessage(){
-//     _phoneValidationMessage=true;
-//     notifyListeners();
-//  }
+  void setIndex(int newIndex) {
+    _index=newIndex;
+    notifyListeners();
+  }
 
  
-//  void setbAccountValidationMessage(){
-//     _bAccountValidationMessage=true;
-//     notifyListeners();
-//  }
-//  void setconfirmAccountValidationMessage(){
-//     _confirmAccountValidationMessage=true;
-//     notifyListeners();
-//  }
-//  void setiFSCValidationMessage(){
-//     _iFSCValidationMessage=true;
-//     notifyListeners();
-//  }
 
   void setValidationMessage(ValidationMessage validationMessage)
   {
-    _validationMessage=validationMessage;
+    _validationMessage=validationMessage; 
     notifyListeners();
   }
 
 void setVisibility(bool value){
 _visibility=value;
+notifyListeners();
 }
   
   }
-

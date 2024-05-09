@@ -93,6 +93,7 @@ class _CreateTicketState extends State<CreateTicket> {
                       }
                       else{
                                   profilePageProvider.setProfilePage(ProfilePages.feedbackorbug);
+                                  Navigator.pushNamed(context, '/feedbackorbug');
                                     
                       }
                     }

@@ -6,8 +6,6 @@ transferissue,
 }
   //navigation initialisation
 
- 
-
 class FetchDataProvider extends ChangeNotifier {
   List<bool> _visibility = [];
  TransferPages _transferPage = TransferPages.transferhistory;

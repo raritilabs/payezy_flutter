@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:payezy/components/app_bar.dart';
@@ -26,19 +27,16 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
-    final Uri privacyUri=Uri.parse('https://docs.payezy.io/platform/privacy-policy');
-    final Uri termsUri=Uri.parse('https://docs.payezy.io/platform/terms-of-use');
+    final Uri privacyUri=Uri.parse("{dotenv.env['PRIVACY_URL']}");
+    final Uri termsUri=Uri.parse("{dotenv.env['TERMS_URI']}");
         final getStartedProvider=Provider.of<GetStartedProvider>(context,listen: true);
         final loginProvider=Provider.of<LoginProvider>(context,listen: true);
         final errorProvider=Provider.of<ErrorProvider>(context,listen: true);//resets the sign in error
-    
-
     return 
      Scaffold(
-          resizeToAvoidBottomInset: false,
-
-       appBar: const CustomAppBar(title: 'Profile', isVisible: true),
-      backgroundColor: mainBackgroundColor,
+          resizeToAvoidBottomInset: false,//stops the bottom keyboard overflow
+       appBar: const CustomAppBar(title: 'Profile', isVisible: true),//custom app bar
+      backgroundColor: mainBackgroundColor,//payezy background
        body:Padding(
           padding: EdgeInsets.all(5.w),
           child: Column(
@@ -46,6 +44,7 @@ class _ProfileState extends State<Profile> {
             children: [
               Row(
                 children: [
+                  //profile image
                   ClipRRect(
                     borderRadius: BorderRadius.circular(300.0),
                     child:Image.network(getStartedProvider.photo.isEmpty==true?'https://cdn1.iconfinder.com/data/icons/mix-color-3/502/Untitled-7-1024.png':getStartedProvider.photo,width: 10.h,), 
@@ -57,17 +56,19 @@ class _ProfileState extends State<Profile> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        //username
                         metrophobicText(
                           getStartedProvider.user,
                           size: 18.sp,
                         ),
+                        //user email
                         metrophobicText(getStartedProvider.useremail, color: lightGrey),
                       ],
                     ),
                   )
                 ],
               ),
-              //-----------------------Top Section------------------------------------------------//
+              //-----------------------KYC Section------------------------------------------------//
               SizedBox(
                 height: 3.h,
               ),
@@ -122,7 +123,7 @@ class _ProfileState extends State<Profile> {
                    ),
                 ],
               ),
-              //-------------------------second section------------------------------------//
+              //-------------------------list section------------------------------------//
               SizedBox(height: 5.h),
               TextButton(
                  style:   ButtonStyle(
@@ -145,8 +146,7 @@ Navigator.pushNamed(context, '/helpandsupport');
                 ),
                 onPressed:(){
                   launchUrl(privacyUri,
-                  mode: LaunchMode.inAppWebView);
-                  
+                  mode: LaunchMode.inAppWebView);  
                 },
                 child:metrophobicText('Privacy Policy', size: 16.sp)),
               SizedBox(height: 2.h),
